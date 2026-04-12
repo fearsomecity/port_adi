@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Old root-level files (use src/ instead)
+/App.css
+/App.jsx
+/components/
+/data/
+/styles/
+/index.css
+/index.html
+/main.jsx
