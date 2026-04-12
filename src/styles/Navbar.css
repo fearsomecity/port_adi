@@ -198,11 +198,7 @@
     width: 32px;
     height: 32px;
   }
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-}
 
-@media (max-width: 768px) {
   .navbar-links {
     display: none;
   }
