@@ -283,7 +283,6 @@ export default function Hero() {
 
           {/* Mini floating card */}
           <div className="hero-deco hero-deco-card2">
-            <span className="hero-deco-card2-icon">🚀</span>
             <div>
               <div className="hero-deco-card2-text">MERN + AWS</div>
               <div className="hero-deco-card2-sub">Full-Stack Ready</div>
