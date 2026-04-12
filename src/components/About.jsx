@@ -1,27 +1,32 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Wrench, Cloud, Zap, Trophy } from "lucide-react";
 import "../styles/About.css";
 
 const highlights = [
   {
-    icon: "🔧",
+    icon: <Wrench size={24} strokeWidth={1.5} />,
     title: "Full-Stack (MERN)",
     desc: "React.js, Node.js, Express.js & MongoDB — end-to-end product development.",
+    color: "var(--clr-red)",
   },
   {
-    icon: "☁️",
+    icon: <Cloud size={24} strokeWidth={1.5} />,
     title: "Cloud & DevOps",
     desc: "AWS EC2/S3, Docker, Git — deploying scalable, containerised applications.",
+    color: "var(--clr-blue)",
   },
   {
-    icon: "🤖",
+    icon: <Zap size={24} strokeWidth={1.5} />,
     title: "AI Integration",
     desc: "Google Gemini API integration for real-time, AI-powered user experiences.",
+    color: "var(--clr-purple)",
   },
   {
-    icon: "🏆",
+    icon: <Trophy size={24} strokeWidth={1.5} />,
     title: "8.37 CGPA",
     desc: "Maintaining a strong academic record at Chitkara University, Rajpura.",
+    color: "var(--clr-green)",
   },
 ];
 
@@ -87,7 +92,7 @@ export default function About() {
                   <span className="code-punctuation">,</span>
                 </span>
                 <span className="code-line">
-                  {"  "}<span className="code-comment">// seeking internship 🚀</span>
+                  {"  "}<span className="code-comment">// seeking internship 🙃</span>
                 </span>
                 <span className="code-line">
                   <span className="code-punctuation">{"}"}</span>
@@ -126,18 +131,18 @@ export default function About() {
           >
             <div className="section-label">About Me</div>
             <h2 className="section-title">
-              Building <span>real-world</span> solutions
+              Building <span className="high-purple">real-world</span> solutions
             </h2>
 
             <p className="about-description">
-              I'm <strong>Aditya Sharma</strong>, a CS student at Chitkara
+              I'm <span className="high-purple">Aditya Sharma</span>, a CS student at Chitkara
               University, Rajpura, passionate about crafting elegant, performant
               web applications. I thrive at the intersection of beautiful
               interfaces and robust backend systems.
             </p>
             <p className="about-description">
-              With hands-on experience in the <strong>MERN stack</strong> and{" "}
-              <strong>AWS cloud services</strong>, I build production-ready
+              With hands-on experience in the <span className="high-green">MERN stack</span> and{" "}
+              <span className="high-blue">AWS cloud services</span>, I build production-ready
               applications — from AI-powered wellness platforms to IoT-driven
               smart environments.
             </p>
@@ -147,12 +152,13 @@ export default function About() {
                 <motion.div
                   key={i}
                   className="about-highlight-item"
+                  style={{ "--highlight-color": item.color }}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
                 >
-                  <span className="highlight-icon">{item.icon}</span>
+                  <span className="highlight-icon" style={{ color: item.color }}>{item.icon}</span>
                   <div className="highlight-text">
                     <strong>{item.title}</strong>
                     {item.desc}

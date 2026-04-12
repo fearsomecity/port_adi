@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
+import { Sparkles, Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 import "../styles/Navbar.css";
 
 const navLinks = [
@@ -13,6 +15,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("");
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +50,20 @@ export default function Navbar() {
               </li>
             ))}
             <li>
+              <button
+                className="theme-toggle"
+                onClick={toggleTheme}
+                title={isDark ? "Light mode" : "Dark mode"}
+                aria-label="Toggle theme"
+              >
+                {isDark ? (
+                  <Sun size={18} style={{ strokeWidth: 2 }} />
+                ) : (
+                  <Moon size={18} style={{ strokeWidth: 2 }} />
+                )}
+              </button>
+            </li>
+            <li>
               <Link
                 to="contact"
                 smooth
@@ -54,7 +71,8 @@ export default function Navbar() {
                 offset={0}
                 className="navbar-cta"
               >
-                Hire Me ✨
+                <Sparkles size={16} style={{ strokeWidth: 2.5 }} />
+                Hire Me
               </Link>
             </li>
           </ul>

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Droplets, Brain, Lightbulb } from "lucide-react";
 import { projects } from "../data/portfolioData";
 import "../styles/Projects.css";
 
@@ -9,6 +10,13 @@ function hexToRgba(hex, alpha) {
     ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${alpha})`
     : hex;
 }
+
+// Map project icons
+const iconMap = {
+  "🩸": <Droplets size={28} strokeWidth={1.5} />,
+  "🧠": <Brain size={28} strokeWidth={1.5} />,
+  "💡": <Lightbulb size={28} strokeWidth={1.5} />,
+};
 
 export default function Projects() {
   return (
@@ -45,7 +53,7 @@ export default function Projects() {
                 "--project-glow": hexToRgba(project.color, 0.08),
               }}
             >
-              <span className="project-icon">{project.icon}</span>
+              <span className="project-icon">{iconMap[project.icon] || project.icon}</span>
               <span className="project-year">{project.year}</span>
 
               <h3 className="project-title">{project.title}</h3>
@@ -66,7 +74,7 @@ export default function Projects() {
               </div>
 
               <div className="project-footer">
-                <span className="project-link-btn" style={{ color: project.color }}>
+                <span className="project-link-btn">
                   View Project ↗
                 </span>
                 <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>

@@ -1,16 +1,9 @@
 .about-section {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
 }
 
 .about-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--coral), transparent);
-  opacity: 0.4;
+  display: none;
 }
 
 .about-grid {
@@ -26,25 +19,20 @@
 }
 
 .about-code-block {
-  background: rgba(8, 8, 16, 0.8);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
   padding: 1.5rem;
   font-family: "Courier New", monospace;
   font-size: 0.85rem;
   line-height: 1.8;
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .about-code-block::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gradient-coral);
+  display: none;
 }
 
 .code-dots {
@@ -64,12 +52,19 @@
 .code-dot:nth-child(3) { background: #28c840; }
 
 .code-line { display: block; }
-.code-keyword { color: #c084fc; }
-.code-var { color: var(--coral); }
-.code-string { color: #86efac; }
-.code-property { color: #93c5fd; }
-.code-comment { color: var(--text-muted); font-style: italic; }
-.code-punctuation { color: var(--text-secondary); }
+.code-keyword { color: #8B5CF6; font-weight: 550; }
+.code-var { color: #F43F5E; font-weight: 550; }
+.code-string { color: #059669; }
+.code-property { color: #2563EB; }
+.code-comment { color: #9CA3AF; font-style: italic; }
+.code-punctuation { color: #94A3B8; }
+
+[data-theme="dark"] .code-keyword { color: #A78BFA; }
+[data-theme="dark"] .code-var { color: #F472B6; }
+[data-theme="dark"] .code-string { color: #6EE7B7; }
+[data-theme="dark"] .code-property { color: #60A5FA; }
+[data-theme="dark"] .code-comment { color: #6B7280; }
+[data-theme="dark"] .code-punctuation { color: #64748B; }
 
 /* Stats bar */
 .about-stats {
@@ -80,51 +75,37 @@
 }
 
 .about-stat-card {
-  background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
   padding: 1rem;
   text-align: center;
   transition: var(--transition);
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .about-stat-card::after {
-  content: attr(data-label);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--gradient-coral);
-  transform: scaleX(0);
-  transition: transform 0.4s ease;
-}
-
-.about-stat-card:hover::after {
-  transform: scaleX(1);
+  display: none;
 }
 
 .about-stat-card:hover {
-  border-color: var(--border-subtle);
-  box-shadow: var(--shadow-coral);
+  border-color: var(--text-secondary);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-num {
   font-family: var(--font-heading);
   font-size: 1.8rem;
-  font-weight: 800;
-  background: var(--gradient-coral);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: var(--text-primary);
   display: block;
 }
 
 .stat-label {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-top: 0.2rem;
@@ -157,17 +138,19 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
   transition: var(--transition);
   cursor: default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .about-highlight-item:hover {
-  border-color: var(--border-subtle);
-  background: rgba(255, 107, 107, 0.05);
+  border-color: var(--highlight-color);
+  background: var(--bg-surface);
   transform: translateX(6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .highlight-icon {
@@ -183,7 +166,7 @@
 }
 
 .highlight-text strong {
-  color: var(--coral-light);
+  color: var(--text-primary);
   display: block;
   font-size: 0.85rem;
   font-weight: 600;

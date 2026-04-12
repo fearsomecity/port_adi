@@ -79,11 +79,11 @@ export const certifications = [
   {
     title: "Cloud Computing Fundamentals",
     issuer: "Duke University (Coursera)",
-    icon: "☁️",
+    icon: "cloud",
   },
   {
     title: "Cloud Virtualization, Containers and APIs",
     issuer: "Duke University (Coursera)",
-    icon: "🐳",
+    icon: "box",
   },
 ];
