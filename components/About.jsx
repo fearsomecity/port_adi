@@ -1,12 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { personalInfo, education } from "../data/portfolioData";
 import "../styles/About.css";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } },
-};
 
 const highlights = [
   {
