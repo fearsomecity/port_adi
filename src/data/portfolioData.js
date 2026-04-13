@@ -46,6 +46,7 @@ export const projects = [
     ],
     color: "#FF6B6B",
     icon: "🩸",
+    link: "https://donor-link-azure.vercel.app/",
   },
   {
     title: "Euphoria – AI-Powered Mental Wellness App",
