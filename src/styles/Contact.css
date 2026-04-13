@@ -199,15 +199,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.25);
 }
 
-.edu-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 5px;
-  background: var(--primary);
-}
+
 
 .edu-icon {
   font-size: 2.5rem;
@@ -329,13 +321,7 @@
     text-align: center;
   }
 
-  .edu-card::before {
-    left: 0;
-    right: 0;
-    bottom: auto;
-    width: auto;
-    height: 4px;
-  }
+
 
   .edu-meta {
     justify-content: center;
