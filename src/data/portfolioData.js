@@ -60,6 +60,7 @@ export const projects = [
     ],
     color: "#C084FC",
     icon: "🧠",
+    link: "https://delightful-bay-07530dc00.4.azurestaticapps.net/",
   },
   {
     title: "Smart Street Light Environment",
