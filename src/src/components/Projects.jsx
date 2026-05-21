@@ -74,9 +74,21 @@ export default function Projects() {
               </div>
 
               <div className="project-footer">
-                <span className="project-link-btn">
-                  View Project ↗
-                </span>
+                {project.link ? (
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="project-link-btn"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View Project ↗
+                  </a>
+                ) : (
+                  <span className="project-link-btn disabled-btn">
+                    View Project ↗
+                  </span>
+                )}
                 <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
                   {project.tech.length} tech used
                 </span>

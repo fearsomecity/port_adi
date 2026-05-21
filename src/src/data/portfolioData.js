@@ -46,6 +46,7 @@ export const projects = [
     ],
     color: "#FF6B6B",
     icon: "🩸",
+    link: "https://donornetfrontend.vercel.app/",
   },
   {
     title: "Euphoria – AI-Powered Mental Wellness App",
@@ -59,6 +60,7 @@ export const projects = [
     ],
     color: "#C084FC",
     icon: "🧠",
+    link: "https://delightful-bay-07530dc00.4.azurestaticapps.net/",
   },
   {
     title: "Smart Street Light Environment",

@@ -177,6 +177,20 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
+.disabled-btn {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  filter: grayscale(1);
+}
+
+.disabled-btn:hover {
+  transform: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  background: var(--bg-primary) !important;
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
 [data-theme="dark"] .project-link-btn:hover {
   background: #FFFFFF;
   color: #000000;
