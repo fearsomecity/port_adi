@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Mail, Link, Globe, Phone, GraduationCap, MapPin, Calendar, Star, Cloud, Box } from "lucide-react";
+import { Mail, GraduationCap, MapPin, Calendar, Star, Cloud, Box } from "lucide-react";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { personalInfo, education, certifications } from "../data/portfolioData";
 import "../styles/Contact.css";
 
@@ -8,26 +9,20 @@ const contactItems = [
   {
     icon: <Mail size={20} strokeWidth={1.5} />,
     type: "Email",
-    value: personalInfo.email,
     href: `mailto:${personalInfo.email}`,
+    color: "var(--clr-red)",
   },
   {
-    icon: <Link size={20} strokeWidth={1.5} />,
+    icon: <FaLinkedin size={20} />,
     type: "LinkedIn",
-    value: "aditya-sharma097",
     href: personalInfo.linkedin,
+    color: "var(--clr-blue)",
   },
   {
-    icon: <Globe size={20} strokeWidth={1.5} />,
+    icon: <FaGithub size={20} />,
     type: "GitHub",
-    value: "fearsomecity",
     href: personalInfo.github,
-  },
-  {
-    icon: <Phone size={20} strokeWidth={1.5} />,
-    type: "Phone",
-    value: personalInfo.phone,
-    href: `tel:${personalInfo.phone}`,
+    color: "var(--clr-purple)",
   },
 ];
 
@@ -89,27 +84,18 @@ export default function Contact() {
               <motion.a
                 key={i}
                 href={item.href}
-                target={item.type !== "Phone" && item.type !== "Email" ? "_blank" : undefined}
+                target="_blank"
                 rel="noreferrer"
                 className="contact-link-card"
-                style={{ 
-                  "--social-color": 
-                    item.type === "Email" ? "var(--clr-red)" :
-                    item.type === "LinkedIn" ? "var(--clr-blue)" :
-                    item.type === "GitHub" ? "var(--clr-purple)" :
-                    "var(--clr-green)"
-                }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                style={{ "--social-color": item.color }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, amount: 0.05 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                whileHover={{ y: -4 }}
+                whileHover={{ scale: 1.15 }}
+                title={item.type}
               >
                 <div className="contact-link-icon">{item.icon}</div>
-                <div className="contact-link-info">
-                  <span className="contact-link-type">{item.type}</span>
-                  <span className="contact-link-value">{item.value}</span>
-                </div>
               </motion.a>
             ))}
           </div>

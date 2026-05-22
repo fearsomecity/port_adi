@@ -84,24 +84,22 @@
 
 /* Contact links */
 .contact-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: flex;
+  justify-content: center;
   gap: 1.5rem;
   margin-bottom: 3.5rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  flex-wrap: wrap;
 }
 
 .contact-link-card {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: 50%;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
@@ -129,7 +127,7 @@
 .contact-link-card:hover {
   border-color: var(--social-color);
   background: color-mix(in srgb, var(--social-color) 5%, var(--bg-surface));
-  transform: translateY(-2px);
+  transform: scale(1.1);
 }
 
 [data-theme="dark"] .contact-link-card:hover {
@@ -142,47 +140,19 @@
 }
 
 .contact-link-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--social-color) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--social-color) 30%, transparent);
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--social-color);
   flex-shrink: 0;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contact-link-card:hover .contact-link-icon {
-  background: color-mix(in srgb, var(--social-color) 20%, transparent);
-  border-color: var(--social-color);
-  transform: scale(1.05);
-}
-
-.contact-link-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  width: 100%;
-}
-
-.contact-link-type {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 600;
-}
-
-.contact-link-value {
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  word-break: break-all;
+  transform: scale(1.15);
 }
 
 /* CTA Button Area */
