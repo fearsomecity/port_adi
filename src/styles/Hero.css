@@ -520,7 +520,8 @@
   }
 
   .hero-avatar-name {
-    font-size: 1.1rem;\n  }
+    font-size: 1.1rem;
+  }
 
   .hero-cta-buttons {
     flex-direction: column;
