@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
-import { Globe as GithubIcon, Link as LinkedinIcon, Mail, Code2 } from "lucide-react";
+import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
+import { SiLeetcode } from "react-icons/si";
 import { leetcodeStats } from "../data/portfolioData";
 import "../styles/Hero.css";
 
@@ -284,7 +285,7 @@ export default function Hero() {
             title="LeetCode"
             style={{ "--social-color": "var(--clr-orange)" }}
           >
-            <Code2 size={18} strokeWidth={1.5} />
+            <SiLeetcode size={18} />
           </a>
           <a
             href="mailto:sharma.adi1217@gmail.com"
