@@ -83,12 +83,15 @@ export default function Navbar() {
           </div>
 
           <div className="navbar-right">
-            <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" className="navbar-docs">
-              <FaGithub size={18} />
-            </a>
-            <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" className="navbar-docs" title="LeetCode">
-              <SiLeetcode size={18} />
-            </a>
+            <div className="navbar-social-group">
+              <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" className="navbar-social-icon-btn" title="GitHub">
+                <FaGithub size={18} />
+              </a>
+              <div className="navbar-social-separator" />
+              <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" className="navbar-social-icon-btn" title="LeetCode">
+                <SiLeetcode size={18} />
+              </a>
+            </div>
 
             <a
               href="/resume.pdf"
