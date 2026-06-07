@@ -89,3 +89,20 @@ export const certifications = [
     icon: "box",
   },
 ];
+
+export const leetcodeStats = {
+  username: "fearsomecity",
+  profileUrl: "https://leetcode.com/u/fearsomecity/",
+  solved: 342,
+  totalQuestions: 3300,
+  easySolved: 124,
+  easyTotal: 820,
+  mediumSolved: 184,
+  mediumTotal: 1720,
+  hardSolved: 34,
+  hardTotal: 760,
+  ranking: "94,124",
+  streak: 114,
+  activeDays: 204,
+  acceptanceRate: "58.4%",
+};
