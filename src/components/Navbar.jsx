@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
 import { Sun, Moon } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { SiLeetcode } from "react-icons/si";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import SnakeTrigger from "./SnakeTrigger";
+import { leetcodeStats } from "../data/portfolioData";
 import "../styles/Navbar.css";
 
 const navLinks = [
@@ -84,6 +86,9 @@ export default function Navbar() {
             <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" className="navbar-docs">
               <FaGithub size={18} />
             </a>
+            <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" className="navbar-docs" title="LeetCode">
+              <SiLeetcode size={18} />
+            </a>
 
             <a
               href="/resume.pdf"
@@ -150,6 +155,9 @@ export default function Navbar() {
           ))}
           <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text)', textDecoration: 'none' }}>
             <FaGithub size={18} />
+          </a>
+          <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text)', textDecoration: 'none' }}>
+            <SiLeetcode size={18} />
           </a>
           <a
             href="/resume.pdf"

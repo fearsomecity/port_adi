@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
 import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
-import { SiLeetcode } from "react-icons/si";
-import { leetcodeStats } from "../data/portfolioData";
 import "../styles/Hero.css";
 
 const CANVAS_PARTICLE_COUNT = 80;
@@ -276,16 +274,6 @@ export default function Hero() {
             style={{ "--social-color": "var(--clr-blue)" }}
           >
             <LinkedinIcon size={18} strokeWidth={1.5} />
-          </a>
-          <a
-            href={leetcodeStats.profileUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="hero-social-link"
-            title="LeetCode"
-            style={{ "--social-color": "var(--clr-orange)" }}
-          >
-            <SiLeetcode size={18} />
           </a>
           <a
             href="mailto:sharma.adi1217@gmail.com"
