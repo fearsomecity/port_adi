@@ -57,6 +57,11 @@
   --space-lg: 2.5rem;
   --space-xl: 4rem;
   --space-2xl: 6rem;
+
+  /* Navbar & Component Variables */
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+  --text-h: var(--text-primary);
 }
 
 /* Dark Mode Variables — Pitch Matte Black */
@@ -93,6 +98,11 @@
   --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.6);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.7);
+
+  /* Navbar & Component Variables */
+  --bg: var(--bg-primary);
+  --text: var(--text-primary);
+  --text-h: var(--text-primary);
 }
 
 /* Typography Highlights */
