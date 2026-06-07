@@ -10,7 +10,6 @@ import "../styles/Navbar.css";
 const navLinks = [
   { label: "About", to: "about" },
   { label: "Skills", to: "skills" },
-  { label: "LeetCode", to: "leetcode" },
   { label: "Projects", to: "projects" },
   { label: "Contact", to: "contact" },
 ];
