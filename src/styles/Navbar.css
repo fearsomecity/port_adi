@@ -22,6 +22,68 @@
   background: rgba(255, 255, 255, 0.75);
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .navbar {
+    width: calc(100% - 1rem);
+    top: 1rem;
+    border-radius: 20px;
+  }
+
+  .navbar.scrolled {
+    top: 0.75rem;
+  }
+
+  .navbar-inner {
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+  }
+
+  .navbar-logo {
+    font-size: 1rem;
+  }
+
+  .navbar-links {
+    gap: 1.5rem;
+  }
+
+  .navbar-links li a {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    width: calc(100% - 0.75rem);
+    max-width: 100%;
+  }
+
+  .navbar-inner {
+    padding: 0.4rem 0.5rem;
+  }
+
+  .navbar-logo {
+    font-size: 0.9rem;
+  }
+
+  .logo-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .navbar-links {
+    gap: 1rem;
+  }
+
+  .navbar-links li a {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+
+  .navbar-right {
+    gap: 0.75rem;
+  }
+}
+
 .navbar-inner {
   display: flex;
   align-items: center;

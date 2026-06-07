@@ -41,7 +41,25 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
   --radius-pill: 100px;
+}
 
+/* Mobile Base Styles */
+@media (max-width: 768px) {
+  :root {
+    --space-xl: 3rem;
+    --space-2xl: 4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+  }
+}
+
+:root {
   /* Vibrant Accents */
   --clr-red: #ff5f57;
   --clr-yellow: #febc2e;
@@ -226,6 +244,18 @@ a {
   padding: 0 2rem;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
 /* Section Headings */
 .section-label {
   font-family: var(--font-body);
@@ -296,6 +326,14 @@ a {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
+@media (max-width: 480px) {
+  .btn-primary {
+    width: 100%;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
+
 [data-theme="dark"] .btn-primary {
   background: #0A0A0A;
   color: #FFFFFF;
@@ -337,6 +375,14 @@ a {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
+@media (max-width: 480px) {
+  .btn-outline {
+    width: 100%;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
+
 [data-theme="dark"] .btn-outline:hover {
   background: #FFFFFF;
   color: #000000;
@@ -372,6 +418,14 @@ a {
   background: var(--bg-secondary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 480px) {
+  .btn-resume {
+    width: 100%;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.85rem;
+  }
 }
 
 [data-theme="dark"] .btn-resume {
@@ -414,6 +468,18 @@ section {
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  section {
+    padding: var(--space-xl) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: var(--space-lg) 0;
+  }
+}
+
 section > .container {
   width: 100%;
 }
@@ -425,10 +491,49 @@ section > .container {
   gap: 3rem;
 }
 
+@media (max-width: 1024px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2 {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-2 {
+    gap: 1.5rem;
+  }
+}
+
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-3 {
+    gap: 1rem;
+  }
 }
 
 @media (max-width: 900px) {

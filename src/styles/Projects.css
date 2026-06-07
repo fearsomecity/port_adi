@@ -16,6 +16,78 @@
   gap: 1.75rem;
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .project-card {
+    padding: 1.5rem;
+  }
+
+  .project-title {
+    font-size: 1rem;
+  }
+
+  .project-description {
+    font-size: 0.85rem;
+  }
+
+  .project-bullets {
+    min-height: auto;
+  }
+
+  .project-bullets li {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-grid {
+    gap: 1rem;
+  }
+
+  .project-card {
+    padding: 1.25rem;
+  }
+
+  .project-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-year {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .project-tech-pills {
+    min-height: auto;
+    gap: 0.35rem;
+  }
+
+  .project-tech-pill {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.65rem;
+  }
+
+  .project-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
 .project-card {
   background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
   backdrop-filter: blur(16px);
