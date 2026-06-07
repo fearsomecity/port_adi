@@ -188,3 +188,60 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+@media (max-width: 768px) {
+  .about-grid {
+    gap: 2rem;
+  }
+  .about-code-block {
+    padding: 1.25rem;
+    font-size: 0.75rem;
+  }
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .about-stat-card {
+    padding: 0.75rem;
+  }
+  .stat-num {
+    font-size: 1.5rem;
+  }
+  .about-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+  .about-highlights {
+    gap: 0.5rem;
+  }
+  .about-highlight-item {
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-code-block {
+    padding: 1rem;
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+  .code-dots {
+    margin-bottom: 0.75rem;
+  }
+  .code-dot {
+    width: 8px;
+    height: 8px;
+  }
+  .about-stats {
+    grid-template-columns: 1fr;
+  }
+  .about-description {
+    font-size: 0.9rem;
+  }
+  .highlight-icon {
+    font-size: 1rem;
+  }
+  .highlight-text {
+    font-size: 0.8rem;
+  }
+}

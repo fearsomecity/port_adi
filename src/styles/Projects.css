@@ -203,11 +203,65 @@
 @media (max-width: 1000px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .project-card {
+    padding: 1.5rem;
+  }
+  .project-title {
+    font-size: 1rem;
+  }
+  .project-description {
+    font-size: 0.85rem;
   }
 }
 
 @media (max-width: 640px) {
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .project-card {
+    padding: 1.25rem;
+  }
+  .project-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+  .project-year {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
+  .project-title {
+    font-size: 0.95rem;
+    min-height: auto;
+  }
+  .project-bullets {
+    min-height: auto;
+  }
+  .project-tech-pill {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-card {
+    padding: 1rem;
+  }
+  .project-description {
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+  .project-link-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
   }
 }

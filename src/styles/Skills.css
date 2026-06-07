@@ -147,8 +147,72 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .skills-section {
+    padding: 4rem 1.5rem;
+  }
+  .skills-header {
+    margin-bottom: 3rem;
+  }
   .skills-bento {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .card-languages, .card-frontend, .card-backend, .card-database, .card-toolsplatforms, .card-corecs {
+    grid-column: span 1;
+    min-height: 160px;
+  }
+  .skill-card-content {
+    padding: 1.5rem;
+  }
+  .skill-cat-header {
+    margin-bottom: 1rem;
+  }
+  .skill-cat-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .skills-section {
+    padding: 3rem 1rem;
+  }
+  .skills-header {
+    margin-bottom: 2rem;
+  }
+  .skills-bento {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .skill-bento-card {
+    min-height: 150px;
+  }
+  .skill-card-content {
+    padding: 1.25rem;
+  }
+  .skill-cat-name {
+    font-size: 1.1rem;
+  }
+  .skill-pills {
+    gap: 0.5rem;
+  }
+  .skill-pill {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skill-card-content {
+    padding: 1rem;
+  }
+  .skill-cat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  .skill-cat-name {
+    font-size: 1rem;
   }
 }
