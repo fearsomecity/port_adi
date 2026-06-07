@@ -95,17 +95,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--social-color) 15%, var(--bg-surface)), var(--bg-surface));
+  border: 2px solid color-mix(in srgb, var(--social-color) 30%, transparent);
   border-radius: 50%;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
   overflow: hidden;
   text-decoration: none;
-  color: inherit;
+  color: var(--social-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .contact-link-card::before {
@@ -115,19 +116,22 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--social-color) 10%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--social-color) 20%, transparent), transparent);
   transition: left 0.6s ease;
   pointer-events: none;
 }
 
 [data-theme="dark"] .contact-link-card {
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid color-mix(in srgb, var(--social-color) 40%, rgba(255, 255, 255, 0.1));
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .contact-link-card:hover {
   border-color: var(--social-color);
-  background: color-mix(in srgb, var(--social-color) 5%, var(--bg-surface));
-  transform: scale(1.1);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--social-color) 25%, var(--bg-surface)), color-mix(in srgb, var(--social-color) 10%, var(--bg-surface)));
+  transform: scale(1.15) translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 }
 
 [data-theme="dark"] .contact-link-card:hover {
@@ -370,8 +374,8 @@
     margin-bottom: 2.5rem;
   }
   .contact-link-card {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
   }
   .contact-bg-text {
     font-size: clamp(2rem, 6vw, 4rem);
@@ -419,12 +423,13 @@
   }
   .contact-links {
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 1rem;
     margin-bottom: 2rem;
   }
   .contact-link-card {
-    width: 44px;
-    height: 44px;
+    width: 58px;
+    height: 58px;
+    font-size: 1.8rem;
   }
   .contact-bg-text {
     font-size: clamp(1.5rem, 5vw, 2.5rem);
@@ -478,10 +483,11 @@
 
 @media (max-width: 480px) {
   .contact-links {
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
   .contact-link-card {
-    width: 40px;
-    height: 40px;
+    width: 54px;
+    height: 54px;
+    font-size: 1.6rem;
   }
 }
