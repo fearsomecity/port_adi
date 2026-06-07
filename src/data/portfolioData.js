@@ -91,8 +91,8 @@ export const certifications = [
 ];
 
 export const leetcodeStats = {
-  username: "fearsomecity",
-  profileUrl: "https://leetcode.com/u/fearsomecity/",
+  username: "Stoic_97",
+  profileUrl: "https://leetcode.com/u/Stoic_97/",
   solved: 342,
   totalQuestions: 3300,
   easySolved: 124,
