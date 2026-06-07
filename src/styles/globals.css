@@ -49,6 +49,14 @@
   --clr-purple: #c084fc;
   --clr-blue: #60a5fa;
   --clr-orange: #fb923c;
+
+  /* ── Spacing System ── */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
 }
 
 /* Dark Mode Variables — Pitch Matte Black */
@@ -115,6 +123,53 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+/* ── Skeleton Shimmer ── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--border-light) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+  border-radius: var(--radius);
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #2a2a2a 50%,
+    #1a1a1a 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s infinite linear;
+}
+
+/* ── Section Fade-In Utility ── */
+@keyframes section-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-section {
+  animation: section-fade-in 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 /* Scrollbar */
@@ -207,18 +262,21 @@ a {
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 2rem;
+  padding: 0.75rem 1.5rem;
+  width: 170px;
   background: var(--primary);
   color: var(--text-on-primary);
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
   letter-spacing: 0.02em;
+  box-sizing: border-box;
 }
 
 .btn-primary:hover {
@@ -244,18 +302,21 @@ a {
 .btn-outline {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 2rem;
+  padding: 0.75rem 1.5rem;
+  width: 170px;
   background: transparent;
   color: var(--text-primary);
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   border: 1px solid var(--text-primary);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
   letter-spacing: 0.02em;
+  box-sizing: border-box;
 }
 
 .btn-outline:hover {
@@ -271,6 +332,46 @@ a {
   color: #000000;
   border-color: #FFFFFF;
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+}
+
+/* Resume / CV Download Button */
+.btn-resume {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.5rem;
+  width: 170px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1.5px dashed var(--border-light);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.btn-resume:hover {
+  border-style: solid;
+  border-color: var(--text-primary);
+  background: var(--bg-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .btn-resume {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .btn-resume:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* Pill Tag */
@@ -297,7 +398,7 @@ a {
 /* Section padding */
 section {
   min-height: auto;
-  padding: 6rem 0;
+  padding: var(--space-2xl) 0;
   position: relative;
   display: flex;
   align-items: center;

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
-import { TypeAnimation } from "react-type-animation";
 import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
 import "../styles/Hero.css";
 
@@ -140,7 +139,48 @@ function AnimatedText({ text, className }) {
   );
 }
 
+// Premium word-flip animation — blur + vertical slide
+const ROLES = [
+  "Full-Stack Developer",
+  "MERN Stack Engineer",
+  "Cloud & AWS Enthusiast",
+  "CS Student @ Chitkara",
+];
+
+function RollingText() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % ROLES.length);
+    }, 2600);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="hero-rolling-wrapper">
+      {/* Clipped word container */}
+      <div className="hero-rolling-clip">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={index}
+            initial={{ y: 20, opacity: 0, filter: "blur(6px)" }}
+            animate={{ y: 0,  opacity: 1, filter: "blur(0px)" }}
+            exit={  { y: -20, opacity: 0, filter: "blur(6px)" }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="hero-rolling-word"
+          >
+            {ROLES[index]}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 export default function Hero() {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <section className="hero" id="hero">
       <ParticleCanvas />
@@ -161,15 +201,7 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         >
-          <motion.div
-            className="hero-badge"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-          >
-            <span className="status-dot"></span>
-            Available for Internship
-          </motion.div>
+
 
           <h1 className="hero-name">
             <AnimatedText text="Aditya" className="hero-name-first" />
@@ -177,21 +209,7 @@ export default function Hero() {
           </h1>
 
           <div className="hero-typewriter">
-            <TypeAnimation
-              sequence={[
-                "Full-Stack Developer",
-                1800,
-                "MERN Stack Engineer",
-                1800,
-                "Cloud & AWS Enthusiast",
-                1800,
-                "CS Student @ Chitkara",
-                1800,
-              ]}
-              wrapper="span"
-              speed={50}
-              repeat={Infinity}
-            />
+            <RollingText />
           </div>
 
           <motion.p
@@ -208,18 +226,31 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            className="hero-cta"
+            className="hero-cta-container"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-          <Link to="projects" smooth duration={700} offset={0}>
-            <button className="btn-primary">View Projects →</button>
-          </Link>
-          <Link to="contact" smooth duration={700} offset={0}>
-            <button className="btn-outline">Get In Touch</button>
-          </Link>
-        </motion.div>
+            <div className="hero-cta-buttons">
+              <Link to="projects" smooth duration={700} offset={0}>
+                <button className="btn-primary">View Projects →</button>
+              </Link>
+              <Link to="contact" smooth duration={700} offset={0}>
+                <button className="btn-outline">Get In Touch</button>
+              </Link>
+            </div>
+            <div className="hero-cta-cv">
+              <a
+                href="/resume.pdf"
+                download
+                className="btn-resume-circle"
+                title="Download CV"
+              >
+                <span className="cv-icon">↓</span>
+                <span className="cv-text">CV</span>
+              </a>
+            </div>
+          </motion.div>
 
         <motion.div
           className="hero-socials"
@@ -273,10 +304,21 @@ export default function Hero() {
 
         <div className="hero-avatar-card">
           <div className="hero-avatar-image-container">
+            {/* Skeleton shown until image loads */}
+            {!imgLoaded && (
+              <div
+                className="skeleton"
+                style={{ width: "100%", height: "100%", borderRadius: "inherit", position: "absolute", inset: 0 }}
+              />
+            )}
             <img 
               src="/profile.jpg" 
               alt="Aditya Sharma - Full-Stack Developer Portfolio Profile" 
-              className="hero-avatar-image" 
+              className="hero-avatar-image"
+              decoding="async"
+              loading="eager"
+              onLoad={() => setImgLoaded(true)}
+              style={{ opacity: imgLoaded ? 1 : 0, transition: "opacity 0.5s ease" }}
             />
           </div>
             <div className="hero-avatar-name">Aditya Sharma</div>

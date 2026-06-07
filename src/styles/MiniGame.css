@@ -1,0 +1,169 @@
+/* ── Mini Game Section ────────────────────────────── */
+.mg-section {
+  padding: var(--space-2xl) 0;
+}
+
+.mg-header {
+  margin-bottom: 3rem;
+}
+
+.mg-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  max-width: 480px;
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.mg-card {
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* ── Score bar ────────────────────────────────────── */
+.mg-scorebar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.mg-score-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+
+.mg-score-item strong {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-left: 0.3rem;
+}
+
+.mg-score-sep {
+  color: var(--text-muted);
+}
+
+/* ── Canvas area ──────────────────────────────────── */
+.mg-canvas-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  aspect-ratio: 1;
+}
+
+.mg-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+/* ── Overlay ──────────────────────────────────────── */
+.mg-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: color-mix(in srgb, var(--bg-primary) 80%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.mg-overlay-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.mg-overlay-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.mg-start-btn {
+  margin-top: 0.75rem;
+  padding: 0.65rem 2rem;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.04em;
+}
+
+.mg-start-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* ── D-pad (mobile controls) ──────────────────────── */
+.mg-dpad {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 700px) {
+  .mg-dpad {
+    display: flex;
+  }
+}
+
+.mg-dpad-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mg-dpad-center {
+  width: 44px;
+  height: 44px;
+}
+
+.mg-dpad-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mg-dpad-btn:active {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  transform: scale(0.92);
+}
