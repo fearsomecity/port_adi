@@ -94,7 +94,7 @@ export default function Navbar() {
             </div>
 
             <a
-              href="/resume.pdf"
+              href="/ADI-RESUME.pdf"
               download
               className="navbar-cv"
               title="Download Resume"
@@ -163,7 +163,7 @@ export default function Navbar() {
             <SiLeetcode size={18} />
           </a>
           <a
-            href="/resume.pdf"
+            href="/ADI-RESUME.pdf"
             download
             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 600, color: 'var(--text-h)', textDecoration: 'none', borderTop: '1px solid var(--border)' }}
           >
