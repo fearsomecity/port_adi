@@ -23,6 +23,9 @@ export default function CustomCursor() {
     const move = (e) => {
       el.style.setProperty("--cx", `${e.clientX}px`);
       el.style.setProperty("--cy", `${e.clientY}px`);
+      if (!el.classList.contains("cursor--visible")) {
+        el.classList.add("cursor--visible");
+      }
     };
 
     const show = () => el.classList.add("cursor--visible");

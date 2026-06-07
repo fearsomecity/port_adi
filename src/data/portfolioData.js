@@ -7,7 +7,7 @@ export const personalInfo = {
   linkedin: "https://www.linkedin.com/in/aditya-sharma097",
   github: "https://github.com/fearsomecity",
   summary:
-    "CS student at Chitkara University with hands-on experience in full-stack development (MERN) and cloud deployment (AWS). Seeking a software engineering internship in full-stack, backend, or cloud engineering.",
+    "Computer Science student at Chitkara University proficient in Java, React.js, and Node.js. Experienced in building full-stack MERN applications, cloud-deployed systems, and AI-integrated products. Passionate about algorithms, system design, and building intelligent, data-driven solutions at scale.",
 };
 
 export const education = {

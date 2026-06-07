@@ -218,11 +218,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.7 }}
           >
-            CS student at Chitkara University with hands-on experience in{" "}
-            <span className="high-red">
-              full-stack development (MERN)
-            </span>{" "}
-            and <span className="high-blue">cloud deployment (AWS)</span>. Building products that matter.
+            Computer Science student at Chitkara University proficient in Java, React.js, and Node.js. Experienced in building full-stack MERN applications, cloud-deployed systems, and AI-integrated products. Passionate about algorithms, system design, and building intelligent, data-driven solutions at scale.
           </motion.p>
 
           <motion.div
