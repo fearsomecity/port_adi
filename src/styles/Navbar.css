@@ -254,12 +254,14 @@
 
 /* Dark Mode */
 [data-theme="dark"] .navbar {
-  background: rgba(20, 20, 20, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 30, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
 }
 
 [data-theme="dark"] .navbar.scrolled {
-  background: rgba(20, 20, 20, 0.75);
+  background: rgba(30, 30, 30, 0.65);
 }
 
 @media (max-width: 850px) {
