@@ -233,43 +233,66 @@
   gap: 0.4rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--primary);
-  background: var(--bg-primary);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: var(--transition);
   cursor: pointer;
   padding: 0.65rem 1.6rem;
   border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--primary);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.02),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .project-link-btn:hover {
-  background: #000000;
-  color: #FFFFFF;
-  border-color: #000000;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--project-color);
+  border-color: var(--project-color);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.05),
+    0 0 15px var(--project-glow);
 }
 
 .disabled-btn {
-  opacity: 0.5;
+  opacity: 0.35;
   cursor: not-allowed !important;
   filter: grayscale(1);
 }
 
 .disabled-btn:hover {
   transform: none !important;
-  box-shadow: var(--shadow-sm) !important;
-  background: var(--bg-primary) !important;
-  color: var(--primary) !important;
-  border-color: var(--primary) !important;
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--text-primary) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="dark"] .project-link-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
 }
 
 [data-theme="dark"] .project-link-btn:hover {
-  background: #FFFFFF;
-  color: #000000;
-  border-color: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--project-color);
+  border-color: var(--project-color);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.25),
+    0 0 20px var(--project-glow);
+}
+
+[data-theme="dark"] .disabled-btn:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 @media (max-width: 1000px) {
