@@ -52,7 +52,8 @@ const SLEEP_SWELL = [0,0,0,1,1,1,1,0];
    CAT SPRITE COMPONENT
    ═══════════════════════════════════════════════════════════════════════════ */
 
-function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, landSquash }) {
+function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, landSquash, angryPhase }) {
+  const bodyFill = "#222"; // body stays black; only eyes turn red when angry
 
   // ── pick leg frame ───────────────────────────────────────────────────────
   let legs = IDLE_LEGS;
@@ -125,21 +126,18 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
         shapeRendering: "crispEdges",
         transform: isMovingLeft ? "scaleX(-1)" : "scaleX(1)",
         transition: "transform 0.3s ease",
-        filter: state === "angry"
-          ? "drop-shadow(0 0 4px #ff0000) drop-shadow(0 0 8px rgba(255,0,0,0.7))"
-          : "none",
       }}
     >
       {/* ── TAIL (CSS sway, angry thrash) ── */}
       <g className={`cat-tail-sway${state === "angry" ? " cat-tail-angry" : ""}`}>
-        <rect x="2" y="7" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
-        <rect x="3" y="6" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
-        <rect x="4" y="5" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
+        <rect x="2" y="7" width="1" height="2" fill={bodyFill} />
+        <rect x="3" y="6" width="1" height="2" fill={bodyFill} />
+        <rect x="4" y="5" width="1" height="2" fill={bodyFill} />
         <rect x="4" y="5" width="1" height="1" fill="#FFF" />  {/* white tip */}
       </g>
 
       {/* ── BODY ── */}
-      <rect x={bX} y={bY} width={bW} height={bH} fill={state === "angry" ? "#3a0000" : "#222"} />
+      <rect x={bX} y={bY} width={bW} height={bH} fill={bodyFill} />
       {/* upper-body connector (follows body Y) */}
       {!landSquash && <rect x="6" y={bY - 1} width="4" height="1" fill={state === "angry" ? "#3a0000" : "#222"} />}
       {/* sleep belly swell */}
@@ -162,7 +160,7 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
       <rect x={L.flfg.x} y={L.flfg.y + L.flfg.h} width="1" height="1" fill="#FFF" />
 
       {/* ── HEAD ── */}
-      <rect x="9" y="4" width="5" height="5" fill={state === "angry" ? "#3a0000" : "#222"} />
+      <rect x="9" y="4" width="5" height="5" fill={bodyFill} />
 
       {/* ── EARS (ear tip above head; twitched ear disappears = flattened) ── */}
       <g fill="#222">
@@ -236,10 +234,12 @@ export default function PixelPet() {
   const [refuseBubble, setRefuseBubble]= useState(false);
 
   // ── pixel animation state ──────────────────────────────────────────────────
-  const [animFrame,  setAnimFrame]  = useState(0);
-  const [isBlinking, setIsBlinking] = useState(0);   // 0=open, 1=half, 2=closed
-  const [earTwitch,  setEarTwitch]  = useState(null); // null | 'left' | 'right'
-  const [landSquash, setLandSquash] = useState(false);
+  const [animFrame,   setAnimFrame]   = useState(0);
+  const [isBlinking,  setIsBlinking]  = useState(0);    // 0=open, 1=half, 2=closed
+  const [earTwitch,   setEarTwitch]   = useState(null); // null | 'left' | 'right'
+  const [landSquash,  setLandSquash]  = useState(false);
+  const [angryPhase,  setAngryPhase]  = useState(null); // null | 'intro' | 'loop'
+  const [angryParticles, setAngryParticles] = useState([]);
 
   // ── refs ───────────────────────────────────────────────────────────────────
   const petRef         = useRef(null);
@@ -252,8 +252,26 @@ export default function PixelPet() {
   const lastTimeRef    = useRef(0);
   const blinkTimerRef  = useRef(null);
   const earTimerRef    = useRef(null);
+  const angrySpawnRef  = useRef(null);
 
   useEffect(() => { posRef.current = { x: posX, y: posY }; }, [posX, posY]);
+
+  // ── ANGRY PARTICLE SPAWNER ─────────────────────────────────────────────────
+  useEffect(() => {
+    if (state !== "angry") { setAngryParticles([]); clearInterval(angrySpawnRef.current); return; }
+    angrySpawnRef.current = setInterval(() => {
+      setAngryParticles(prev => [
+        ...prev,
+        {
+          id: Math.random(),
+          x:  20 + Math.random() * 30,
+          vx: (Math.random() - 0.5) * 40,
+          vy: 20 + Math.random() * 30,
+        },
+      ].slice(-8));
+    }, 200);
+    return () => clearInterval(angrySpawnRef.current);
+  }, [state]);
 
   const hoverMessages = [
     "Hi, I am Tinker",
@@ -396,11 +414,20 @@ export default function PixelPet() {
           clearInterval(timer);
           setPosX(x); setPosY(0);
           setIsDropping(false); setIsThrown(false);
-          // Landing squash + angry
+          // Landing squash + angry sequence
           setLandSquash(true);
-          setTimeout(() => setLandSquash(false), 280);
+          setTimeout(() => setLandSquash(false), 300);
+          setAngryPhase("intro");
           setState("angry");
-          setTimeout(() => setState("idle"), 2800);
+          // Spawn burst of sparks on impact
+          setAngryParticles(Array.from({ length: 8 }, (_, i) => ({
+            id: Math.random() + i,
+            x: 10 + Math.random() * 50,
+            vx: (Math.random() - 0.5) * 60,
+            vy: 30 + Math.random() * 40,
+          })));
+          setTimeout(() => setAngryPhase("loop"), 450);
+          setTimeout(() => { setState("idle"); setAngryPhase(null); }, 1500);
           return;
         }
         vY *= bounce;
@@ -526,7 +553,20 @@ export default function PixelPet() {
     if (refuseBubble) return { x:[0,-4,4,-4,4,0], scaleY:0.95, scaleX:1.05 };
     switch (state) {
       case "held":      return { y:0, scaleY:1.25, scaleX:0.85 };
-      case "angry":     return { x:[0,-3,3,-3,3,0], scaleY:[0.78,0.78,0.78,0.78,0.78], scaleX:[1.22,1.22,1.22,1.22,1.22] };
+      case "angry":
+        if (angryPhase === "intro") return {
+          // Dramatic stomp entry: squash → explode up → slam down → inflate in rage
+          y:      [0, -28, -10, 6, 0],
+          scaleX: [1.3, 0.75, 1.1, 0.85, 1.25],
+          scaleY: [0.6, 1.45, 0.85, 1.15, 0.82],
+          rotate: [0, -8, 6, -4, 0],
+        };
+        // looping rage vibration
+        return {
+          x:      [0, -5, 5, -4, 4, -3, 3, 0],
+          scaleX: [1.25, 1.28, 1.22, 1.28, 1.22, 1.26, 1.23, 1.25],
+          scaleY: [0.80, 0.77, 0.83, 0.77, 0.83, 0.79, 0.81, 0.80],
+        };
       case "playing":   return { y:[0,-35,-45,-35,0], rotate:[0,180,360,360,360], scaleY:[1,.7,1.2,1.2,.8,1], scaleX:[1,1.3,.8,.8,1.2,1] };
       case "pouncing":  return { y:[0,2,0,-25,-28,0,3,0], x:isMovingLeft?[0,-2,-5,-20,-35,-45,-46,-45]:[0,2,5,20,35,45,46,45], scaleY:[1,.6,.7,1.4,1.3,.7,.9,1], scaleX:[1,1.4,1.3,.7,.8,1.4,1.1,1] };
       case "chasing":   return { y:[0,-3,0,-3,0], scaleY:[1,.9,1.05,.9,1], scaleX:[1,1.08,.95,1.08,1] };
@@ -543,7 +583,9 @@ export default function PixelPet() {
     if (refuseBubble) return { duration:0.5 };
     switch (state) {
       case "held":      return { duration:0.2 };
-      case "angry":     return { repeat:Infinity, duration:0.15 };
+      case "angry":
+        if (angryPhase === "intro") return { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] };
+        return { repeat: Infinity, duration: 0.18, ease: "easeInOut" };
       case "playing":   return { duration:1.2, ease:"easeInOut" };
       case "pouncing":  return { duration:1.8, ease:[.25,1,.5,1] };
       case "chasing":   return { repeat:Infinity, duration:0.5, ease:"linear" };
@@ -558,7 +600,7 @@ export default function PixelPet() {
   return (
     <div
       ref={petRef}
-      className={`pixel-pet-container ${isDragging ? "dragging" : ""} ${isDropping || isThrown ? "dropping" : ""}`}
+      className={`pixel-pet-container ${isDragging ? "dragging" : ""} ${isDropping || isThrown ? "dropping" : ""} ${state === "angry" ? "pet-angry" : ""}`}
       style={{
         right:  `${posX}px`,
         bottom: `calc(0.5rem + ${posY}px)`,
@@ -586,8 +628,26 @@ export default function PixelPet() {
       {/* Throw trail */}
       {isThrown && <div className="pet-throw-trail" />}
 
+      {/* Angry spark particles */}
+      <AnimatePresence>
+        {state === "angry" && angryParticles.map(p => (
+          <motion.div
+            key={p.id}
+            className="pet-spark"
+            style={{ left: `${p.x}px`, bottom: "56px" }}
+            initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+            animate={{ opacity: 0, x: p.vx, y: -p.vy, scale: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+          />
+        ))}
+      </AnimatePresence>
+
       {/* Cat sprite */}
-      <motion.div animate={getAnimProps()} transition={getTransProps()}>
+      <motion.div
+        animate={getAnimProps()}
+        transition={getTransProps()}
+      >
         <CatSprite
           state={state}
           isMovingLeft={isMovingLeft}
@@ -595,6 +655,7 @@ export default function PixelPet() {
           isBlinking={isBlinking}
           earTwitch={earTwitch}
           landSquash={landSquash}
+          angryPhase={angryPhase}
         />
       </motion.div>
 
