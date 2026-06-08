@@ -237,8 +237,8 @@ export default function Hero() {
             </div>
             <div className="hero-cta-cv">
               <a
-                href="/Resume.pdf"
-                download="Resume.pdf"
+                href="/Aditya_Resume.pdf"
+                download="Aditya_Resume.pdf"
                 className="btn-resume-circle"
                 title="Download CV"
               >
