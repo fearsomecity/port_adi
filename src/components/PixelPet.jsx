@@ -554,7 +554,7 @@ export default function PixelPet() {
       {/* Angry speech */}
       {state === "angry" && (
         <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
-          <TypewriterText text="How dare you!! 😡" speed={50} />
+          <TypewriterText text="How dare you!!" speed={50} />
         </div>
       )}
 
