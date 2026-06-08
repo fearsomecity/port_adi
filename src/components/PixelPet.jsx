@@ -255,7 +255,8 @@ export default function PixelPet() {
   useEffect(() => { posRef.current = { x: posX, y: posY }; }, [posX, posY]);
 
   const hoverMessages = [
-    "Hi, I am Tinker",
+    "Hello human!",
+    "I am Tinker",
     "Nice to meet you!!",
     "Click me — I might backflip!",
   ];
