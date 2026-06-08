@@ -222,7 +222,9 @@ function TypewriterText({ text, speed = 50 }) {
 
 export default function PixelPet() {
   // ── core state ─────────────────────────────────────────────────────────────
-  const [state, setState]               = useState("idle");
+  const [state, setState]               = useState("sleeping");
+  const [hasAwoken, setHasAwoken]       = useState(false);
+  const [isHovered, setIsHovered]       = useState(false);
   const [posX,  setPosX]               = useState(100);   // offset from right
   const [posY,  setPosY]               = useState(0);     // height from bottom
   const [isMovingLeft, setIsMovingLeft] = useState(true);
@@ -320,6 +322,8 @@ export default function PixelPet() {
 
   // ── STATE ENGINE (idle / walk / sleep / self-play) ─────────────────────────
   useEffect(() => {
+    if (!hasAwoken) return;
+
     const interval = setInterval(() => {
       if (["playing","pouncing","chasing","held","angry"].includes(state)
           || isDropping || isThrown || hoverSeqIdx !== -1) return;
@@ -336,7 +340,7 @@ export default function PixelPet() {
       } else setState("sleeping");
     }, 5000);
     return () => clearInterval(interval);
-  }, [state, isDropping, isThrown, hoverSeqIdx]);
+  }, [state, isDropping, isThrown, hoverSeqIdx, hasAwoken]);
 
   // ── WALKING POSITION TICKER ────────────────────────────────────────────────
   useEffect(() => {
@@ -414,6 +418,10 @@ export default function PixelPet() {
   // ── DRAG SHARED LOGIC ─────────────────────────────────────────────────────
   const startDrag = useCallback((cx, cy) => {
     if (isDropping || isThrown) return;
+    if (!hasAwoken) {
+      setHasAwoken(true);
+      setIsHovered(false);
+    }
     isDraggingRef.current = true;
     setIsDragging(true);
     setState("held");
@@ -423,7 +431,7 @@ export default function PixelPet() {
     lastPosRef.current    = { x: cx, y: cy };
     lastTimeRef.current   = performance.now();
     velocityRef.current   = { x: 0, y: 0 };
-  }, [isDropping, isThrown]);
+  }, [isDropping, isThrown, hasAwoken]);
 
   const moveDrag = useCallback((cx, cy) => {
     if (!isDraggingRef.current) return;
@@ -505,7 +513,15 @@ export default function PixelPet() {
 
   // ── CLICK / HOVER ─────────────────────────────────────────────────────────
   const handlePetClick = (e) => {
-    if (["held","angry","ball","playing"].includes(state) || refuseBubble || isDropping || isThrown) return;
+    if (isDropping || isThrown) return;
+    if (!hasAwoken) {
+      setHasAwoken(true);
+      setIsHovered(false);
+      setState("idle");
+      setHoverSeqIdx(0); // Trigger hello human sequence
+      return;
+    }
+    if (["held","angry","ball","playing"].includes(state) || refuseBubble) return;
     setHoverSeqIdx(-1);
     if (Math.random() < 0.6) {
       setState("playing");
@@ -518,10 +534,17 @@ export default function PixelPet() {
 
   const handleMouseEnter = () => {
     if (["held","angry"].includes(state) || isDropping || isThrown) return;
+    if (!hasAwoken) {
+      setIsHovered(true);
+      return;
+    }
     setHoverSeqIdx(0);
   };
 
-  const handleMouseLeave = () => setHoverSeqIdx(-1);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setHoverSeqIdx(-1);
+  };
 
   // ── FRAMER MOTION ANIMATION PROPS ─────────────────────────────────────────
   const getAnimProps = () => {
@@ -693,6 +716,13 @@ export default function PixelPet() {
       {state === "angry" && (
         <div className="pet-speech" style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
           <TypewriterText text="How dare you!!" speed={50} />
+        </div>
+      )}
+
+      {/* Sleep hover bubble */}
+      {!hasAwoken && isHovered && (
+        <div className="pet-speech" style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
+          <TypewriterText text="Zzz... (Click to wake me)" speed={50} />
         </div>
       )}
 
