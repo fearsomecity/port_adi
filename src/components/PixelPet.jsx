@@ -18,31 +18,32 @@ import "../styles/PixelPet.css";
 // ── 4-frame trot walk cycle ────────────────────────────────────────────────
 //  A-stride: diagonal pair flfg+blbg swings (forward/raised)
 //  B-stride: diagonal pair flbg+blfg swings
+//  h:1 = short stubby legs; raised leg sits 1px higher (y=11 vs y=12)
 const WALK_FRAMES = [
   /* 0 – A-stride contact */
-  { bodyDY:  0, flfg:{x:10,y:11,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:4,y:11,h:2} },
+  { bodyDY:  0, flfg:{x:10,y:11,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:4,y:11,h:1} },
   /* 1 – mid-stride, body rises */
-  { bodyDY: -1, flfg:{x: 9,y:12,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:5,y:12,h:2} },
+  { bodyDY: -1, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
   /* 2 – B-stride contact */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:2}, flbg:{x:10,y:11,h:2}, blfg:{x:4,y:11,h:2}, blbg:{x:5,y:12,h:2} },
+  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:10,y:11,h:1}, blfg:{x:4,y:11,h:1}, blbg:{x:5,y:12,h:1} },
   /* 3 – mid-stride, body rises */
-  { bodyDY: -1, flfg:{x: 9,y:12,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:5,y:12,h:2} },
+  { bodyDY: -1, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
 ];
 
 // ── 4-frame gallop / chasing run (exaggerated reach) ──────────────────────
 const RUN_FRAMES = [
   /* 0 – full extension A */
-  { bodyDY: -2, flfg:{x:11,y:10,h:3}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:3,y:10,h:3} },
+  { bodyDY: -2, flfg:{x:11,y:11,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:3,y:11,h:1} },
   /* 1 – gather */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:5,y:12,h:2} },
+  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
   /* 2 – full extension B */
-  { bodyDY: -2, flfg:{x: 9,y:12,h:2}, flbg:{x:11,y:10,h:3}, blfg:{x:3,y:10,h:3}, blbg:{x:5,y:12,h:2} },
+  { bodyDY: -2, flfg:{x: 9,y:12,h:1}, flbg:{x:11,y:11,h:1}, blfg:{x:3,y:11,h:1}, blbg:{x:5,y:12,h:1} },
   /* 3 – gather */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:5,y:12,h:2} },
+  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
 ];
 
 // ── static rest leg positions ──────────────────────────────────────────────
-const IDLE_LEGS = { flfg:{x:9,y:12,h:2}, flbg:{x:8,y:12,h:2}, blfg:{x:6,y:12,h:2}, blbg:{x:5,y:12,h:2} };
+const IDLE_LEGS = { flfg:{x:9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} };
 
 // ── sleep belly-swell over 8 frames (1 = extra belly pixel) ───────────────
 const SLEEP_SWELL = [0,0,0,1,1,1,1,0];
@@ -125,22 +126,22 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
         transform: isMovingLeft ? "scaleX(-1)" : "scaleX(1)",
         transition: "transform 0.3s ease",
         filter: state === "angry"
-          ? "drop-shadow(0 0 2px rgba(239,68,68,.9)) sepia(.3) saturate(2.5) hue-rotate(-50deg)"
+          ? "drop-shadow(0 0 4px #ff0000) drop-shadow(0 0 8px rgba(255,0,0,0.7))"
           : "none",
       }}
     >
       {/* ── TAIL (CSS sway, angry thrash) ── */}
       <g className={`cat-tail-sway${state === "angry" ? " cat-tail-angry" : ""}`}>
-        <rect x="2" y="7" width="1" height="2" fill="#222" />
-        <rect x="3" y="6" width="1" height="2" fill="#222" />
-        <rect x="4" y="5" width="1" height="2" fill="#222" />
+        <rect x="2" y="7" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
+        <rect x="3" y="6" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
+        <rect x="4" y="5" width="1" height="2" fill={state === "angry" ? "#3a0000" : "#222"} />
         <rect x="4" y="5" width="1" height="1" fill="#FFF" />  {/* white tip */}
       </g>
 
       {/* ── BODY ── */}
-      <rect x={bX} y={bY} width={bW} height={bH} fill="#222" />
+      <rect x={bX} y={bY} width={bW} height={bH} fill={state === "angry" ? "#3a0000" : "#222"} />
       {/* upper-body connector (follows body Y) */}
-      {!landSquash && <rect x="6" y={bY - 1} width="4" height="1" fill="#222" />}
+      {!landSquash && <rect x="6" y={bY - 1} width="4" height="1" fill={state === "angry" ? "#3a0000" : "#222"} />}
       {/* sleep belly swell */}
       {bellySwell    && <rect x="5" y={bY + bH} width="6" height="1" fill="#222" />}
       {/* bottom shadow stripe */}
@@ -161,7 +162,7 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
       <rect x={L.flfg.x} y={L.flfg.y + L.flfg.h} width="1" height="1" fill="#FFF" />
 
       {/* ── HEAD ── */}
-      <rect x="9" y="4" width="5" height="5" fill="#222" />
+      <rect x="9" y="4" width="5" height="5" fill={state === "angry" ? "#3a0000" : "#222"} />
 
       {/* ── EARS (ear tip above head; twitched ear disappears = flattened) ── */}
       <g fill="#222">
