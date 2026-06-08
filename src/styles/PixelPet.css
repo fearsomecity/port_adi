@@ -1,3 +1,4 @@
+/* ── Container ────────────────────────────────────────────────────────────── */
 .pixel-pet-container {
   position: fixed;
   bottom: 0.5rem;
@@ -16,88 +17,70 @@
   transition: none !important;
 }
 
-/* Realistic leg swing animation keyframes */
-@keyframes swingLegs {
-  0% {
-    transform: rotate(-25deg);
-  }
-  100% {
-    transform: rotate(25deg);
-  }
+/* ── Tail CSS animation ───────────────────────────────────────────────────── */
+/* transform-box: fill-box  →  transform-origin relative to element's own bbox */
+/* origin: right bottom     →  tail base (where it meets the body)             */
+.cat-tail-sway {
+  transform-box: fill-box;
+  transform-origin: right bottom;
+  animation: tailSway 2.2s ease-in-out infinite;
 }
 
-.cat-legs-walking .leg-group-front-fg,
-.cat-legs-walking .leg-group-back-bg {
-  animation: swingLegs 0.18s infinite alternate ease-in-out;
+/* angry = fast thrash */
+.cat-tail-angry {
+  animation: tailAngry 0.22s ease-in-out infinite !important;
 }
 
-.cat-legs-walking .leg-group-front-bg,
-.cat-legs-walking .leg-group-back-fg {
-  animation: swingLegs 0.18s infinite alternate-reverse ease-in-out;
+@keyframes tailSway {
+  0%, 100% { transform: rotate(0deg); }
+  35%       { transform: rotate(26deg); }
+  70%       { transform: rotate(-20deg); }
 }
 
-/* Sleep particles */
+@keyframes tailAngry {
+  0%, 100% { transform: rotate(-38deg); }
+  50%       { transform: rotate(38deg); }
+}
+
+/* ── Sleeping Zzz particles ──────────────────────────────────────────────── */
 .pet-z {
   position: absolute;
   top: -10px;
   font-family: "Courier New", monospace;
   font-weight: bold;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-muted, #888);
   user-select: none;
   pointer-events: none;
   text-transform: lowercase;
 }
 
-/* Heart particles */
-.pet-heart {
-  position: absolute;
-  top: -15px;
-  font-size: 1.1rem;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Pixelated Pet Speech Bubble */
+/* ── Speech bubble ───────────────────────────────────────────────────────── */
 .pet-speech {
   position: absolute;
   top: -32px;
-  background: #000000;
-  border: 2px solid #FFFFFF;
-  border-radius: 0px; /* blocky */
+  background: #000;
+  border: 2px solid #FFF;
+  border-radius: 0px;
   padding: 0.35rem 0.6rem;
   font-family: sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #FFF;
   white-space: normal;
-  box-shadow: 3px 3px 0px #000000;
-  
-  /* Fluid entrance and fade-out animations */
+  box-shadow: 3px 3px 0px #000;
   animation: pixelSpeechFade 2.8s ease-in-out forwards;
   pointer-events: none;
 }
 
 @keyframes pixelSpeechFade {
-  0% { 
-    opacity: 0; 
-    transform: scale(0.8) translateY(4px); 
-  }
-  12% { 
-    opacity: 1; 
-    transform: scale(1) translateY(0); 
-  }
-  88% { 
-    opacity: 1; 
-    transform: scale(1) translateY(0); 
-  }
-  100% { 
-    opacity: 0; 
-    transform: scale(0.8) translateY(-4px); 
-  }
+  0%   { opacity: 0; transform: scale(0.8) translateY(4px);  }
+  12%  { opacity: 1; transform: scale(1)   translateY(0);    }
+  88%  { opacity: 1; transform: scale(1)   translateY(0);    }
+  100% { opacity: 0; transform: scale(0.8) translateY(-4px); }
 }
 
-/* Play Toy Ball */
+/* ── Toy ball ────────────────────────────────────────────────────────────── */
 .pet-toy-ball {
   position: absolute;
   width: 12px;
@@ -110,7 +93,7 @@
   z-index: 9999;
 }
 
-/* Throw trail — motion blur streaks while Tinker is airborne */
+/* ── Throw trail (motion blur while airborne) ─────────────────────────────── */
 .pet-throw-trail {
   position: absolute;
   inset: 0;
@@ -122,6 +105,6 @@
 }
 
 @keyframes throwTrailPulse {
-  0%  { opacity: 0.6; transform: scaleX(1.4) scaleY(0.7); }
+  0%   { opacity: 0.6; transform: scaleX(1.4) scaleY(0.7); }
   100% { opacity: 0.2; transform: scaleX(0.8) scaleY(1.1); }
 }
