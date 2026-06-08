@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Wrench, Cloud, Zap, Trophy } from "lucide-react";
 import "../styles/About.css";
 
@@ -31,8 +31,16 @@ const highlights = [
 ];
 
 export default function About() {
+  const { scrollY } = useScroll();
+  const yBlob1 = useTransform(scrollY, [0, 1500], [0, -120]);
+  const yBlob2 = useTransform(scrollY, [0, 1500], [0, 100]);
+
   return (
     <section className="about-section" id="about">
+      {/* Background blobs for parallax */}
+      <motion.div style={{ y: yBlob1 }} className="about-parallax-blob blob-purple" />
+      <motion.div style={{ y: yBlob2 }} className="about-parallax-blob blob-blue" />
+
       <div className="container">
         <div className="about-grid">
           {/* Left: Code Block */}
