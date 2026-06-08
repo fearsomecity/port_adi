@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/PixelPet.css";
 
 // SVG Pixel Art Cat (16x16 grid)
-// Rendered crisp using shape-rendering="crispEdges"
 function CatSprite({ state, isMovingLeft }) {
   return (
     <svg
@@ -14,12 +13,15 @@ function CatSprite({ state, isMovingLeft }) {
         shapeRendering: "crispEdges",
         transform: isMovingLeft ? "scaleX(-1)" : "scaleX(1)",
         transition: "transform 0.3s ease, filter 0.3s ease",
-        filter: state === "angry" ? "drop-shadow(0px 0px 1px rgba(239, 68, 68, 0.8)) sepia(0.3) saturate(2.5) hue-rotate(-50deg)" : "none",
+        filter:
+          state === "angry"
+            ? "drop-shadow(0px 0px 1px rgba(239, 68, 68, 0.8)) sepia(0.3) saturate(2.5) hue-rotate(-50deg)"
+            : "none",
       }}
     >
-      {/* Tuxedo Cat Black Body (Slightly rounder, less rigid block) */}
+      {/* Tuxedo Cat Black Body */}
       <g fill="#222222">
-        {/* Tail (curves upwards cute) */}
+        {/* Tail */}
         <rect x="2" y="7" width="1" height="2" />
         <rect x="3" y="6" width="1" height="2" />
         <rect x="4" y="5" width="1" height="2" />
@@ -39,9 +41,9 @@ function CatSprite({ state, isMovingLeft }) {
         <rect x="5" y="11" width="5" height="1" />
       </g>
 
-      {/* Shorter, Cuter Legs with Swing Hinges (All 4 Legs) */}
+      {/* All 4 Legs with Swing Hinges */}
       <g className={state === "walking" || state === "chasing" ? "cat-legs-walking" : ""}>
-        {/* Back-Right Leg (Background, darker shadow) */}
+        {/* Back-Right Leg (Background) */}
         <g className="leg-group-back-bg" style={{ transformOrigin: "5.5px 12px" }}>
           <rect x="5" y="12" width="1" height="2" fill="#0c0c0c" />
           <rect x="5" y="13" width="1" height="1" fill="#dddddd" />
@@ -53,7 +55,7 @@ function CatSprite({ state, isMovingLeft }) {
           <rect x="6" y="13" width="1" height="1" fill="#FFFFFF" />
         </g>
 
-        {/* Front-Right Leg (Background, darker shadow) */}
+        {/* Front-Right Leg (Background) */}
         <g className="leg-group-front-bg" style={{ transformOrigin: "8.5px 12px" }}>
           <rect x="8" y="12" width="1" height="2" fill="#0c0c0c" />
           <rect x="8" y="13" width="1" height="1" fill="#dddddd" />
@@ -66,12 +68,19 @@ function CatSprite({ state, isMovingLeft }) {
         </g>
       </g>
 
-      {/* Big White Eyes with Black Pupils */}
+      {/* Eyes */}
       {state === "sleeping" ? (
-        // Closed Eyes
         <g fill="#444444">
           <rect x="10" y="6" width="1" height="1" />
           <rect x="12" y="6" width="1" height="1" />
+        </g>
+      ) : state === "angry" ? (
+        // Angry eyes — squinted/angled
+        <g fill="#FF3333">
+          <rect x="9" y="5" width="2" height="1" />
+          <rect x="9" y="6" width="1" height="1" />
+          <rect x="12" y="5" width="2" height="1" />
+          <rect x="13" y="6" width="1" height="1" />
         </g>
       ) : (
         // Big White Shiny Eyes
@@ -89,6 +98,15 @@ function CatSprite({ state, isMovingLeft }) {
       {/* Pink Nose */}
       <rect x="11" y="7" width="1" height="1" fill="#F472B6" />
 
+      {/* Angry mouth */}
+      {state === "angry" && (
+        <g fill="#FF3333">
+          <rect x="10" y="8" width="1" height="1" />
+          <rect x="12" y="8" width="1" height="1" />
+          <rect x="11" y="9" width="2" height="1" />
+        </g>
+      )}
+
       {/* White Chest & Snout Mask & Tail Tip */}
       <g fill="#FFFFFF">
         <rect x="4" y="5" width="1" height="1" /> {/* Tail Tip */}
@@ -100,7 +118,7 @@ function CatSprite({ state, isMovingLeft }) {
   );
 }
 
-// Retro Typewriter text effect (safe from React double-mount interval racing)
+// Retro Typewriter text effect
 function TypewriterText({ text, speed = 50 }) {
   const [index, setIndex] = useState(0);
 
@@ -121,40 +139,49 @@ function TypewriterText({ text, speed = 50 }) {
 }
 
 export default function PixelPet() {
-  const [state, setState] = useState("idle"); // idle, walking, sleeping, playing, pouncing, chasing, held, angry, ball
-  const [posX, setPosX] = useState(100); // offset from right (px)
-  const [posY, setPosY] = useState(0); // height offset from bottom (px)
+  const [state, setState] = useState("idle");
+  const [posX, setPosX] = useState(100);   // offset from right (px)
+  const [posY, setPosY] = useState(0);     // height offset from bottom (px)
   const [isMovingLeft, setIsMovingLeft] = useState(true);
   const [zs, setZs] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isDropping, setIsDropping] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [hoverSequenceIdx, setHoverSequenceIdx] = useState(-1); // -1 means not hovered
+  const [hoverSequenceIdx, setHoverSequenceIdx] = useState(-1);
+  const [refuseBubble, setRefuseBubble] = useState(false);
+  const [isThrown, setIsThrown] = useState(false);
+
+  // Refs for drag (avoids stale closure issues in touch/mouse handlers)
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const posRef = useRef({ x: posX, y: posY });
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const lastPosRef = useRef({ x: 0, y: 0 });
+  const lastTimeRef = useRef(0);
+  const isDraggingRef = useRef(false);
   const petRef = useRef(null);
 
+  // Keep posRef in sync
+  useEffect(() => { posRef.current = { x: posX, y: posY }; }, [posX, posY]);
+
   const hoverMessages = [
-    "Hi ,I am Tinker",
-    "Nice to meet you !!",
-    "If you click on me, I might do a backflip."
+    "Hi, I am Tinker 🐱",
+    "Nice to meet you!!",
+    "Click me — I might do a backflip!",
   ];
 
-  // Hover sequence timer
+  // ─── Hover sequence timer ──────────────────────────────────────────────────
   useEffect(() => {
     if (hoverSequenceIdx === -1) return;
     if (hoverSequenceIdx >= hoverMessages.length) return;
-
     const timer = setTimeout(() => {
       setHoverSequenceIdx((prev) => prev + 1);
-    }, 2800); // Show each message for 2.8s
-
+    }, 2800);
     return () => clearTimeout(timer);
   }, [hoverSequenceIdx]);
 
-  // States engine
+  // ─── State engine (idle / walk / sleep / play) ────────────────────────────
   useEffect(() => {
     const interval = setInterval(() => {
-      // Don't interrupt active play, held, dropping, angry, or hovered states
       if (
         state === "playing" ||
         state === "pouncing" ||
@@ -163,21 +190,17 @@ export default function PixelPet() {
         state === "angry" ||
         state === "ball" ||
         isDropping ||
+        isThrown ||
         hoverSequenceIdx !== -1
-      ) {
-        return;
-      }
+      ) return;
 
       const rand = Math.random();
       if (rand < 0.25) {
         setState("idle");
       } else if (rand < 0.5) {
         setState("walking");
-        // Pick new random direction/destination
-        const direction = Math.random() > 0.5;
-        setIsMovingLeft(direction);
+        setIsMovingLeft(Math.random() > 0.5);
       } else if (rand < 0.75) {
-        // Randomly play by herself!
         const plays = ["pouncing", "chasing", "ball"];
         const playType = plays[Math.floor(Math.random() * plays.length)];
         setState(playType);
@@ -188,246 +211,258 @@ export default function PixelPet() {
         setState("sleeping");
       }
     }, 5000);
-
     return () => clearInterval(interval);
-  }, [state, isDropping, hoverSequenceIdx]);
+  }, [state, isDropping, isThrown, hoverSequenceIdx]);
 
-  // Walking & chasing motion logic
+  // ─── Walking / chasing motion ─────────────────────────────────────────────
   useEffect(() => {
     if (state !== "walking" && state !== "chasing") return;
-    if (hoverSequenceIdx !== -1) return; // Freeze walking during conversation
+    if (hoverSequenceIdx !== -1) return;
 
     const intervalTime = state === "chasing" ? 30 : 40;
     const walkInterval = setInterval(() => {
       setPosX((prev) => {
-        let step = state === "chasing" ? 3 : 2.2;
+        const step = state === "chasing" ? 3 : 2.2;
         const maxBoundary = window.innerWidth - 100;
         const minBoundary = 20;
 
         if (state === "chasing") {
           setIsMovingLeft((m) => !m);
-          return prev + (Math.random() > 0.5 ? step : -step);
+          return Math.max(minBoundary, Math.min(maxBoundary, prev + (Math.random() > 0.5 ? step : -step)));
         }
 
         if (isMovingLeft) {
-          if (prev >= maxBoundary) {
-            setIsMovingLeft(false);
-            return prev - step;
-          }
+          if (prev >= maxBoundary) { setIsMovingLeft(false); return prev - step; }
           return prev + step;
         } else {
-          if (prev <= minBoundary) {
-            setIsMovingLeft(true);
-            return prev + step;
-          }
+          if (prev <= minBoundary) { setIsMovingLeft(true); return prev + step; }
           return prev - step;
         }
       });
     }, intervalTime);
-
     return () => clearInterval(walkInterval);
   }, [state, isMovingLeft, hoverSequenceIdx]);
 
-  // Zzz sleeping particles logic
+  // ─── Zzz particles ────────────────────────────────────────────────────────
   useEffect(() => {
-    if (state !== "sleeping" || hoverSequenceIdx !== -1) {
-      setZs([]);
-      return;
-    }
-
+    if (state !== "sleeping" || hoverSequenceIdx !== -1) { setZs([]); return; }
     const zInterval = setInterval(() => {
       setZs((prev) => [
         ...prev,
-        {
-          id: Math.random(),
-          x: Math.random() * 20 + 20,
-          y: 0,
-        },
-      ].slice(-3)); // Keep max 3 Zs
+        { id: Math.random(), x: Math.random() * 20 + 20, y: 0 },
+      ].slice(-3));
     }, 1500);
-
     return () => clearInterval(zInterval);
   }, [state, hoverSequenceIdx]);
 
-  // Drag handlers
-  const handleMouseDown = (e) => {
-    if (e.button !== 0) return; // Left click only
-    if (isDropping) return; // Ignore input while dropping
+  // ─── Physics: drop / throw ────────────────────────────────────────────────
+  const launchPhysics = useCallback((startHeight, velX, velY) => {
+    setIsDropping(true);
+    setIsThrown(true);
+
+    let currentHeight = startHeight;
+    let currentX = posRef.current.x;
+    let vX = velX;   // horizontal velocity (px per frame, positive = moves left on screen i.e. posX increases)
+    let vY = velY;   // vertical velocity (px per frame, positive = going up)
+    const gravity = 1.5;
+    const bounce = -0.38;
+    const friction = 0.85;
+
+    const dropTimer = setInterval(() => {
+      vY -= gravity;          // gravity pulls down (reduces upward vel)
+      currentHeight += vY;    // posY is height from bottom
+      currentX += vX;         // posX is offset from right
+
+      // Clamp horizontal bounds
+      const maxX = window.innerWidth - 70;
+      const minX = 20;
+      if (currentX > maxX) { currentX = maxX; vX *= -0.5; }
+      if (currentX < minX) { currentX = minX; vX *= -0.5; }
+
+      if (currentHeight <= 0) {
+        currentHeight = 0;
+        vX *= friction;         // skid on landing
+        if (Math.abs(vY) < 2.5) {
+          // Settled — land angry
+          clearInterval(dropTimer);
+          setPosX(currentX);
+          setPosY(0);
+          setIsDropping(false);
+          setIsThrown(false);
+          setState("angry");
+          setTimeout(() => setState("idle"), 2500);
+          return;
+        }
+        vY = vY * bounce;       // bounce
+      }
+
+      setPosX(currentX);
+      setPosY(currentHeight);
+    }, 16);
+  }, []);
+
+  // ─── Shared drag-start logic (mouse + touch) ──────────────────────────────
+  const startDrag = useCallback((clientX, clientY) => {
+    if (isDropping || isThrown) return;
+    isDraggingRef.current = true;
     setIsDragging(true);
     setState("held");
-    setHoverSequenceIdx(-1); // Cancel hover chat when picked up
-    setDragStart({
-      x: e.clientX,
-      y: e.clientY,
-    });
-    setDragOffset({
-      x: posX,
-      y: posY,
-    });
+    setHoverSequenceIdx(-1);
+    dragStartRef.current = { x: clientX, y: clientY };
+    dragOffsetRef.current = { x: posRef.current.x, y: posRef.current.y };
+    lastPosRef.current = { x: clientX, y: clientY };
+    lastTimeRef.current = performance.now();
+    velocityRef.current = { x: 0, y: 0 };
+  }, [isDropping, isThrown]);
+
+  // ─── Shared drag-move logic ───────────────────────────────────────────────
+  const moveDrag = useCallback((clientX, clientY) => {
+    if (!isDraggingRef.current) return;
+
+    const now = performance.now();
+    const dt = Math.max(1, now - lastTimeRef.current);
+
+    // Velocity in px/ms → convert to px/frame (≈16ms)
+    const rawVX = (clientX - lastPosRef.current.x) / dt * 16;
+    const rawVY = (clientY - lastPosRef.current.y) / dt * 16;
+
+    // Smooth velocity with EMA
+    velocityRef.current = {
+      x: velocityRef.current.x * 0.6 + rawVX * 0.4,
+      y: velocityRef.current.y * 0.6 + rawVY * 0.4,
+    };
+
+    lastPosRef.current = { x: clientX, y: clientY };
+    lastTimeRef.current = now;
+
+    const deltaX = dragStartRef.current.x - clientX;
+    const deltaY = dragStartRef.current.y - clientY;
+
+    const newPosX = Math.max(20, Math.min(window.innerWidth - 100, dragOffsetRef.current.x + deltaX));
+    const newPosY = Math.max(0, dragOffsetRef.current.y + deltaY);
+    setPosX(newPosX);
+    setPosY(newPosY);
+  }, []);
+
+  // ─── Shared drag-end logic ────────────────────────────────────────────────
+  const endDrag = useCallback(() => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    setIsDragging(false);
+
+    const currentHeight = posRef.current.y;
+    const vel = velocityRef.current;
+
+    // Compute throw speed (magnitude)
+    const speed = Math.sqrt(vel.x * vel.x + vel.y * vel.y);
+
+    if (currentHeight > 20 || speed > 3) {
+      // Thrown or dropped from height — apply physics
+      // posX increases to the left, so horizontal throw:
+      // if user flicked right (vel.x positive on screen), posX decreases
+      const throwVX = -vel.x;          // screen-right flick → posX decreases
+      const throwVY = -vel.y * 0.8;   // screen-up flick → height increases (posY up)
+
+      launchPhysics(currentHeight, throwVX, throwVY);
+    } else {
+      // Just placed gently
+      setPosY(0);
+      setState("idle");
+    }
+  }, [launchPhysics]);
+
+  // ─── Mouse events ─────────────────────────────────────────────────────────
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
     e.preventDefault();
+    startDrag(e.clientX, e.clientY);
   };
 
   useEffect(() => {
     if (!isDragging) return;
-
-    const handleMouseMove = (e) => {
-      const deltaX = dragStart.x - e.clientX;
-      const deltaY = dragStart.y - e.clientY;
-
-      const newPosX = Math.max(20, Math.min(window.innerWidth - 100, dragOffset.x + deltaX));
-      const newPosY = Math.max(0, dragOffset.y + deltaY);
-
-      setPosX(newPosX);
-      setPosY(newPosY);
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-
-      if (posY > 20) {
-        // Cat fell from a height! Physics drop sequence:
-        setIsDropping(true);
-        let currentHeight = posY;
-        let velocity = 0;
-        const gravity = 1.4;
-        const bounce = -0.35;
-
-        const dropTimer = setInterval(() => {
-          velocity += gravity;
-          currentHeight -= velocity;
-
-          if (currentHeight <= 0) {
-            currentHeight = 0;
-            if (Math.abs(velocity) < 2.5) {
-              clearInterval(dropTimer);
-              // Landed! Become angry!
-              setState("angry");
-              setIsDropping(false);
-              setPosY(0);
-              setTimeout(() => {
-                setState("idle");
-              }, 2500);
-            } else {
-              velocity = velocity * bounce; // Bounce slightly
-            }
-          }
-          setPosY(currentHeight);
-        }, 16);
-      } else {
-        // Simple place down
-        setPosY(0);
-        setState("idle");
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    const onMove = (e) => moveDrag(e.clientX, e.clientY);
+    const onUp = () => endDrag();
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
     };
-  }, [isDragging, dragStart, dragOffset, posX, posY]);
+  }, [isDragging, moveDrag, endDrag]);
 
-  const [refuseBubble, setRefuseBubble] = useState(false);
+  // ─── Touch events ─────────────────────────────────────────────────────────
+  const handleTouchStart = (e) => {
+    e.preventDefault(); // Prevent scroll
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+  };
 
+  useEffect(() => {
+    const el = petRef.current;
+    if (!el) return;
+
+    const onTouchMove = (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      moveDrag(touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = (e) => {
+      e.preventDefault();
+      endDrag();
+    };
+
+    el.addEventListener("touchstart", handleTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: false });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: false });
+
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [moveDrag, endDrag]);
+
+  // ─── Click / hover handlers ───────────────────────────────────────────────
   const handlePetClick = (e) => {
-    if (state === "held" || state === "angry" || state === "ball" || state === "playing" || refuseBubble) return;
+    if (state === "held" || state === "angry" || state === "ball" || state === "playing" || refuseBubble || isDropping || isThrown) return;
+    setHoverSequenceIdx(-1);
 
-    setHoverSequenceIdx(-1); // Cancel hover chat when interacting
-
-    // 60% chance to backflip, 40% to refuse
     if (Math.random() < 0.6) {
       setState("playing");
-      setTimeout(() => {
-        setState("idle");
-      }, 1200);
+      setTimeout(() => setState("idle"), 1200);
     } else {
-      // Refusal sequence: shakes head
       setRefuseBubble(true);
-      setTimeout(() => {
-        setRefuseBubble(false);
-      }, 2000);
+      setTimeout(() => setRefuseBubble(false), 2000);
     }
   };
 
   const handleMouseEnter = () => {
-    if (state === "held" || state === "angry" || isDropping) return;
-    setHoverSequenceIdx(0); // Start chat sequence
+    if (state === "held" || state === "angry" || isDropping || isThrown) return;
+    setHoverSequenceIdx(0);
   };
 
   const handleMouseLeave = () => {
-    setHoverSequenceIdx(-1); // Close chat sequence
+    setHoverSequenceIdx(-1);
   };
 
-  // Determine appropriate Squash & Stretch / Jump animations based on active states
+  // ─── Framer Motion animation props ───────────────────────────────────────
   const getAnimationProps = () => {
-    if (refuseBubble) {
-      // Shakes back and forth horizontally to indicate refusal
-      return {
-        x: [0, -4, 4, -4, 4, 0],
-        scaleY: 0.95,
-        scaleX: 1.05,
-      };
-    }
+    if (refuseBubble) return { x: [0, -4, 4, -4, 4, 0], scaleY: 0.95, scaleX: 1.05 };
 
     switch (state) {
-      case "held":
-        // Dangles leg details and stretches down
-        return {
-          y: 0,
-          scaleY: 1.25,
-          scaleX: 0.85,
-        };
-      case "angry":
-        // vibrates with grumpiness
-        return {
-          x: [0, -3, 3, -3, 3, 0],
-          scaleY: [0.75, 0.75, 0.75, 0.75, 0.75],
-          scaleX: [1.25, 1.25, 1.25, 1.25, 1.25],
-        };
-      case "playing":
-        // Excited Backflip
-        return {
-          y: [0, -35, -45, -35, 0],
-          rotate: [0, 180, 360, 360, 360],
-          scaleY: [1, 0.7, 1.2, 1.2, 0.8, 1],
-          scaleX: [1, 1.3, 0.8, 0.8, 1.2, 1],
-        };
-      case "pouncing":
-        return {
-          y: [0, 2, 0, -25, -28, 0, 3, 0],
-          x: isMovingLeft ? [0, -2, -5, -20, -35, -45, -46, -45] : [0, 2, 5, 20, 35, 45, 46, 45],
-          scaleY: [1, 0.6, 0.7, 1.4, 1.3, 0.7, 0.9, 1],
-          scaleX: [1, 1.4, 1.3, 0.7, 0.8, 1.4, 1.1, 1],
-        };
-      case "chasing":
-        return {
-          y: [0, -4, 0, -4, 0],
-          scaleY: [1, 0.85, 1.05, 0.85, 1],
-          scaleX: [1, 1.1, 0.9, 1.1, 1],
-        };
-      case "ball":
-        // Coordinated swat: crouches/winds up, swats forward, leaps/pounces to follow, squashes, recovers
-        return {
-          x: isMovingLeft ? [0, 8, -6, -35, -45, -45] : [0, -8, 6, 35, 45, 45],
-          y: [0, 0, -2, -18, 0, 0],
-          scaleY: [1, 0.7, 1.2, 1.2, 0.7, 1],
-          scaleX: [1, 1.3, 0.8, 0.8, 1.3, 1],
-        };
-      case "walking":
-        return {
-          y: [0, -3, 0, -3, 0],
-          scaleY: [1, 0.92, 1.03, 0.92, 1],
-          scaleX: [1, 1.05, 0.95, 1.05, 1],
-        };
-      case "sleeping":
-        return {
-          scaleY: [1, 0.94, 1],
-          scaleX: [1, 1.03, 1],
-        };
+      case "held":      return { y: 0, scaleY: 1.25, scaleX: 0.85 };
+      case "angry":     return { x: [0, -3, 3, -3, 3, 0], scaleY: [0.75, 0.75, 0.75, 0.75, 0.75], scaleX: [1.25, 1.25, 1.25, 1.25, 1.25] };
+      case "playing":   return { y: [0, -35, -45, -35, 0], rotate: [0, 180, 360, 360, 360], scaleY: [1, 0.7, 1.2, 1.2, 0.8, 1], scaleX: [1, 1.3, 0.8, 0.8, 1.2, 1] };
+      case "pouncing":  return { y: [0, 2, 0, -25, -28, 0, 3, 0], x: isMovingLeft ? [0, -2, -5, -20, -35, -45, -46, -45] : [0, 2, 5, 20, 35, 45, 46, 45], scaleY: [1, 0.6, 0.7, 1.4, 1.3, 0.7, 0.9, 1], scaleX: [1, 1.4, 1.3, 0.7, 0.8, 1.4, 1.1, 1] };
+      case "chasing":   return { y: [0, -4, 0, -4, 0], scaleY: [1, 0.85, 1.05, 0.85, 1], scaleX: [1, 1.1, 0.9, 1.1, 1] };
+      case "ball":      return { x: isMovingLeft ? [0, 8, -6, -35, -45, -45] : [0, -8, 6, 35, 45, 45], y: [0, 0, -2, -18, 0, 0], scaleY: [1, 0.7, 1.2, 1.2, 0.7, 1], scaleX: [1, 1.3, 0.8, 0.8, 1.3, 1] };
+      case "walking":   return { y: [0, -3, 0, -3, 0], scaleY: [1, 0.92, 1.03, 0.92, 1], scaleX: [1, 1.05, 0.95, 1.05, 1] };
+      case "sleeping":  return { scaleY: [1, 0.94, 1], scaleX: [1, 1.03, 1] };
       case "idle":
       default:
-        // Bob softly if talking or breathing
         return hoverSequenceIdx !== -1
           ? { scaleY: [1, 0.97, 1], scaleX: [1, 1.03, 1] }
           : { scaleY: [1, 0.96, 1], scaleX: [1, 1.02, 1] };
@@ -435,27 +470,16 @@ export default function PixelPet() {
   };
 
   const getTransitionProps = () => {
-    if (refuseBubble) {
-      return { duration: 0.5 };
-    }
-
+    if (refuseBubble) return { duration: 0.5 };
     switch (state) {
-      case "held":
-        return { duration: 0.2 };
-      case "angry":
-        return { repeat: Infinity, duration: 0.15 };
-      case "playing":
-        return { duration: 1.2, ease: "easeInOut" };
-      case "pouncing":
-        return { duration: 1.8, ease: [0.25, 1, 0.5, 1] };
-      case "chasing":
-        return { repeat: Infinity, duration: 0.6, ease: "linear" };
-      case "ball":
-        return { duration: 2.2, ease: [0.25, 1, 0.5, 1] };
-      case "walking":
-        return { repeat: Infinity, duration: 0.8, ease: "easeInOut" };
-      case "sleeping":
-        return { repeat: Infinity, duration: 2.2, ease: "easeInOut" };
+      case "held":      return { duration: 0.2 };
+      case "angry":     return { repeat: Infinity, duration: 0.15 };
+      case "playing":   return { duration: 1.2, ease: "easeInOut" };
+      case "pouncing":  return { duration: 1.8, ease: [0.25, 1, 0.5, 1] };
+      case "chasing":   return { repeat: Infinity, duration: 0.6, ease: "linear" };
+      case "ball":      return { duration: 2.2, ease: [0.25, 1, 0.5, 1] };
+      case "walking":   return { repeat: Infinity, duration: 0.8, ease: "easeInOut" };
+      case "sleeping":  return { repeat: Infinity, duration: 2.2, ease: "easeInOut" };
       case "idle":
       default:
         return { repeat: Infinity, duration: hoverSequenceIdx !== -1 ? 1.4 : 1.8, ease: "easeInOut" };
@@ -465,11 +489,12 @@ export default function PixelPet() {
   return (
     <div
       ref={petRef}
-      className={`pixel-pet-container ${isDragging ? "dragging" : ""} ${isDropping ? "dropping" : ""}`}
+      className={`pixel-pet-container ${isDragging ? "dragging" : ""} ${isDropping || isThrown ? "dropping" : ""}`}
       style={{
         right: `${posX}px`,
         bottom: `calc(0.5rem + ${posY}px)`,
-        cursor: isDragging ? "grabbing" : "grab"
+        cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "none", // critical — prevent browser scroll hijacking touch
       }}
       onMouseDown={handleMouseDown}
       onClick={handlePetClick}
@@ -494,20 +519,21 @@ export default function PixelPet() {
           ))}
       </AnimatePresence>
 
+      {/* Throw trail effect */}
+      {isThrown && (
+        <div className="pet-throw-trail" />
+      )}
 
-      {/* Play Toy Ball Object */}
+      {/* Play Toy Ball */}
       {state === "ball" && (
         <motion.div
           className="pet-toy-ball"
           animate={{
             x: isMovingLeft ? [0, -10, -55, -50, -48, -48] : [0, 10, 55, 50, 48, 48],
             y: [0, -4, -14, -1, 0, 0],
-            rotate: [0, 90, 720, 900, 950, 950]
+            rotate: [0, 90, 720, 900, 950, 950],
           }}
-          transition={{
-            duration: 2.2,
-            ease: [0.15, 0.85, 0.45, 1]
-          }}
+          transition={{ duration: 2.2, ease: [0.15, 0.85, 0.45, 1] }}
         />
       )}
 
@@ -525,13 +551,18 @@ export default function PixelPet() {
         </div>
       )}
 
-
+      {/* Angry speech */}
+      {state === "angry" && (
+        <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
+          <TypewriterText text="How dare you!! 😡" speed={50} />
+        </div>
+      )}
 
       {/* Hover message sequence */}
-      {hoverSequenceIdx !== -1 && hoverSequenceIdx < hoverMessages.length && !refuseBubble && state !== "playing" && (
+      {hoverSequenceIdx !== -1 && hoverSequenceIdx < hoverMessages.length && !refuseBubble && state !== "playing" && state !== "angry" && (
         <div
           className="pet-speech"
-          key={hoverSequenceIdx} // Force re-render key for fade-in animations
+          key={hoverSequenceIdx}
           style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}
         >
           <TypewriterText text={hoverMessages[hoverSequenceIdx]} speed={50} />

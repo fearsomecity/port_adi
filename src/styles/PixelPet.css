@@ -109,3 +109,19 @@
   pointer-events: none;
   z-index: 9999;
 }
+
+/* Throw trail — motion blur streaks while Tinker is airborne */
+.pet-throw-trail {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.18) 0%, transparent 70%);
+  animation: throwTrailPulse 0.12s infinite alternate ease-in-out;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes throwTrailPulse {
+  0%  { opacity: 0.6; transform: scaleX(1.4) scaleY(0.7); }
+  100% { opacity: 0.2; transform: scaleX(0.8) scaleY(1.1); }
+}
