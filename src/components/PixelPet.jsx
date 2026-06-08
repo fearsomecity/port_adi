@@ -46,7 +46,7 @@ function CatSprite({ state, isMovingLeft }) {
         <rect x="10" y="13" width="1" height="2" className="leg-4" />
       </g>
 
-      {/* Green/Yellow Eyes (Stands out on black head) */}
+      {/* Big White Eyes with Black Pupils */}
       {state === "sleeping" ? (
         // Closed Eyes
         <g fill="#444444">
@@ -54,10 +54,19 @@ function CatSprite({ state, isMovingLeft }) {
           <rect x="13" y="7" width="1" height="1" />
         </g>
       ) : (
-        // Glowing Green Eyes
-        <g fill="#A3E635">
-          <rect x="11" y="6" width="1" height="2" />
-          <rect x="13" y="6" width="1" height="2" />
+        // Big White Shiny Eyes
+        <g>
+          {/* Left Eye: White base, black pupil */}
+          <rect x="10" y="6" width="2" height="2" fill="#FFFFFF" />
+          <rect x="11" y="6" width="1" height="2" fill="#000000" />
+          {/* Shine highlight */}
+          <rect x="10" y="6" width="1" height="1" fill="#FFFFFF" />
+
+          {/* Right Eye: White base, black pupil */}
+          <rect x="13" y="6" width="2" height="2" fill="#FFFFFF" />
+          <rect x="13" y="6" width="1" height="2" fill="#000000" />
+          {/* Shine highlight */}
+          <rect x="14" y="6" width="1" height="1" fill="#FFFFFF" />
         </g>
       )}
 
