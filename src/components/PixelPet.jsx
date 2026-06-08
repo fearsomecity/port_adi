@@ -521,16 +521,11 @@ export default function PixelPet() {
       {/* Refusal Bubble */}
       {refuseBubble && (
         <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
-          <TypewriterText text="Nah not in the mood" speed={50} />
+          <TypewriterText text="Nah not in the mood." speed={50} />
         </div>
       )}
 
-      {/* Backflip Bubble */}
-      {state === "playing" && (
-        <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
-          <TypewriterText text="I am a ninja" speed={60} />
-        </div>
-      )}
+
 
       {/* Hover message sequence */}
       {hoverSequenceIdx !== -1 && hoverSequenceIdx < hoverMessages.length && !refuseBubble && state !== "playing" && (
