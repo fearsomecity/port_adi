@@ -216,26 +216,7 @@
   transform: translateY(-2px);
 }
 
-/* Background Glow */
-.skill-card-glow {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    300px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
-    color-mix(in srgb, var(--bento-color) 20%, transparent),
-    transparent 80%
-  );
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 1;
-}
 
-.skill-bento-card:hover .skill-card-glow {
-  opacity: 1;
-}
 
 .skill-bento-card:hover {
   border-color: var(--bento-color);

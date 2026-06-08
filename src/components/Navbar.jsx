@@ -5,7 +5,6 @@ import { FaGithub } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
-import { useToast } from "../context/ToastContext";
 import SnakeTrigger from "./SnakeTrigger";
 import { leetcodeStats } from "../data/portfolioData";
 import "../styles/Navbar.css";
@@ -22,7 +21,6 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("");
   const { isDark, toggleTheme } = useTheme();
-  const { showToast } = useToast();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -100,7 +98,6 @@ export default function Navbar() {
               download="Aditya_Resume.pdf"
               className="navbar-cv"
               title="Download Resume"
-              onClick={() => showToast("Aditya_Resume.pdf downloaded successfully! 📄✨")}
             >
               ↓ CV
             </a>
@@ -169,7 +166,6 @@ export default function Navbar() {
             href="/Aditya_Resume.pdf"
             download="Aditya_Resume.pdf"
             style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 600, color: 'var(--text-h)', textDecoration: 'none', borderTop: '1px solid var(--border)' }}
-            onClick={() => showToast("Aditya_Resume.pdf downloaded successfully! 📄✨")}
           >
             ↓ Download CV
           </a>

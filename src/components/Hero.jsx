@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
 import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
 import Magnetic from "./Magnetic";
-import { useToast } from "../context/ToastContext";
 import "../styles/Hero.css";
 
 const CANVAS_PARTICLE_COUNT = 80;
@@ -182,7 +181,6 @@ function RollingText() {
 
 export default function Hero() {
   const [imgLoaded, setImgLoaded] = useState(false);
-  const { showToast } = useToast();
 
   return (
     <section className="hero" id="hero">
@@ -245,7 +243,6 @@ export default function Hero() {
                   download="Aditya_Resume.pdf"
                   className="btn-resume-circle"
                   title="Download CV"
-                  onClick={() => showToast("Aditya_Resume.pdf downloaded successfully! 📄✨")}
                 >
                   <span className="cv-icon">↓</span>
                   <span className="cv-text">CV</span>
