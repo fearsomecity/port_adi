@@ -92,7 +92,7 @@ export default function About() {
                   <span className="code-punctuation">,</span>
                 </span>
                 <span className="code-line">
-                  {"  "}<span className="code-comment">// seeking internship 🙃</span>
+                  {"  "}<span className="code-comment">// seeking internship</span>
                 </span>
                 <span className="code-line">
                   <span className="code-punctuation">{"}"}</span>
