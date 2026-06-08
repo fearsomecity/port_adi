@@ -16,10 +16,60 @@ const navLinks = [
   { label: "Contact", to: "contact" },
 ];
 
+function NavbarCat({ isHovered }) {
+  return (
+    <div 
+      className={`navbar-pet ${isHovered ? "pet-awake" : "pet-sleeping"}`}
+      style={{
+        position: "absolute",
+        top: "-25px",
+        left: "24px",
+        pointerEvents: "none",
+        zIndex: 100,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+      }}
+    >
+      <svg
+        width="26"
+        height="26"
+        viewBox="0 0 12 12"
+        style={{ shapeRendering: "crispEdges" }}
+      >
+        {/* Tuxedo Cat Black Body */}
+        <g fill="#222222">
+          <rect x="2" y="6" width="7" height="4" />
+          <rect x="7" y="3" width="4" height="4" />
+          <rect x="7" y="2" width="1" height="1" />
+          <rect x="10" y="2" width="1" height="1" />
+          <rect x="1" y="8" width="1" height="2" className="navbar-pet-tail" />
+        </g>
+        <g fill="#FFFFFF">
+          <rect x="7" y="6" width="2" height="1" />
+          <rect x="3" y="10" width="1" height="1" />
+          <rect x="7" y="10" width="1" height="1" />
+        </g>
+        {!isHovered ? (
+          <rect x="8" y="4" width="1" height="1" fill="#444444" />
+        ) : (
+          <g fill="#A3E635">
+            <rect x="8" y="4" width="1" height="1" />
+            <rect x="10" y="4" width="1" height="1" />
+          </g>
+        )}
+        <rect x="9" y="5" width="1" height="1" fill="#F472B6" />
+      </svg>
+      {isHovered && <div className="navbar-pet-bubble">Meow!</div>}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("");
+  const [socialHovered, setSocialHovered] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   const { scrollYProgress } = useScroll();
@@ -83,7 +133,13 @@ export default function Navbar() {
           </div>
 
           <div className="navbar-right">
-            <div className="navbar-social-group">
+            <div 
+              className="navbar-social-group"
+              onMouseEnter={() => setSocialHovered(true)}
+              onMouseLeave={() => setSocialHovered(false)}
+              style={{ position: "relative" }}
+            >
+              <NavbarCat isHovered={socialHovered} />
               <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" className="navbar-social-icon-btn" title="GitHub">
                 <FaGithub size={18} />
               </a>

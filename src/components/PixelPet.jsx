@@ -16,10 +16,9 @@ function CatSprite({ state, isMovingLeft }) {
         transition: "transform 0.3s ease",
       }}
     >
-      {/* Cat body pixels */}
-      {/* Main Orange Body */}
-      <g fill="#FB923C">
-        {/* Tail (depends on state for wagging) */}
+      {/* Tuxedo Cat Body (Black) */}
+      <g fill="#222222">
+        {/* Tail */}
         <rect x="1" y="8" width="1" height="3" />
         <rect x="2" y="7" width="1" height="2" />
         
@@ -33,41 +32,46 @@ function CatSprite({ state, isMovingLeft }) {
         <rect x="14" y="4" width="1" height="1" /> {/* Right Ear */}
       </g>
 
-      {/* Darker Orange Shadow/Details */}
-      <g fill="#EA580C">
+      {/* Dark Details (Pure black #000000 for shadow) */}
+      <g fill="#000000">
         <rect x="3" y="11" width="7" height="2" />
         <rect x="10" y="9" width="1" height="1" />
       </g>
 
-      {/* Cat Legs (Walk Animation keyframes handled by shifting these rects) */}
-      <g fill="#E05A10" className={state === "walking" ? "cat-legs-walking" : ""}>
+      {/* Cat Legs */}
+      <g fill="#151515" className={state === "walking" ? "cat-legs-walking" : ""}>
         <rect x="4" y="13" width="1" height="2" className="leg-1" />
         <rect x="6" y="13" width="1" height="2" className="leg-2" />
         <rect x="8" y="13" width="1" height="2" className="leg-3" />
         <rect x="10" y="13" width="1" height="2" className="leg-4" />
       </g>
 
-      {/* Eyes */}
+      {/* Green/Yellow Eyes (Stands out on black head) */}
       {state === "sleeping" ? (
         // Closed Eyes
-        <g fill="#9A3412">
+        <g fill="#444444">
           <rect x="11" y="7" width="1" height="1" />
           <rect x="13" y="7" width="1" height="1" />
         </g>
       ) : (
-        // Open Eyes
-        <g fill="#000000">
+        // Glowing Green Eyes
+        <g fill="#A3E635">
           <rect x="11" y="6" width="1" height="2" />
           <rect x="13" y="6" width="1" height="2" />
         </g>
       )}
 
-      {/* Nose/Snout */}
+      {/* Pink Nose */}
       <rect x="12" y="8" width="1" height="1" fill="#F472B6" />
 
-      {/* White Paws/Chest */}
-      <g fill="#FFF">
-        <rect x="10" y="8" width="1" height="1" />
+      {/* White Chest, Tuxedo Mask (snout patch), Paws, and Tail Tip */}
+      <g fill="#FFFFFF">
+        <rect x="1" y="8" width="1" height="1" /> {/* Tail Tip */}
+        <rect x="10" y="8" width="1" height="1" /> {/* Chest patch */}
+        <rect x="11" y="8" width="3" height="2" /> {/* Muzzle white mask */}
+        <rect x="12" y="7" width="1" height="1" />
+        
+        {/* White Paws */}
         <rect x="4" y="14" width="1" height="1" className="paw-1" />
         <rect x="6" y="14" width="1" height="1" className="paw-2" />
         <rect x="8" y="14" width="1" height="1" className="paw-3" />
