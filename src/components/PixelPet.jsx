@@ -321,14 +321,14 @@ export default function PixelPet() {
   // ── STATE ENGINE (idle / walk / sleep / self-play) ─────────────────────────
   useEffect(() => {
     const interval = setInterval(() => {
-      if (["playing","pouncing","chasing","held","angry","ball"].includes(state)
+      if (["playing","pouncing","chasing","held","angry"].includes(state)
           || isDropping || isThrown || hoverSeqIdx !== -1) return;
 
       const r = Math.random();
       if      (r < 0.25) setState("idle");
       else if (r < 0.5)  { setState("walking"); setIsMovingLeft(Math.random() > 0.5); }
       else if (r < 0.75) {
-        const plays = ["pouncing","chasing","ball"];
+        const plays = ["pouncing","chasing"];
         const p = plays[Math.floor(Math.random() * plays.length)];
         setState(p);
         setTimeout(() => setState("idle"),
@@ -530,7 +530,6 @@ export default function PixelPet() {
       case "playing":   return { y:[0,-35,-45,-35,0], rotate:[0,180,360,360,360], scaleY:[1,.7,1.2,1.2,.8,1], scaleX:[1,1.3,.8,.8,1.2,1] };
       case "pouncing":  return { y:[0,2,0,-25,-28,0,3,0], x:isMovingLeft?[0,-2,-5,-20,-35,-45,-46,-45]:[0,2,5,20,35,45,46,45], scaleY:[1,.6,.7,1.4,1.3,.7,.9,1], scaleX:[1,1.4,1.3,.7,.8,1.4,1.1,1] };
       case "chasing":   return { y:[0,-3,0,-3,0], scaleY:[1,.9,1.05,.9,1], scaleX:[1,1.08,.95,1.08,1] };
-      case "ball":      return { x:isMovingLeft?[0,8,-6,-35,-45,-45]:[0,-8,6,35,45,45], y:[0,0,-2,-18,0,0], scaleY:[1,.7,1.2,1.2,.7,1], scaleX:[1,1.3,.8,.8,1.3,1] };
       case "walking":   return { y:[0,-1,0,-1,0], scaleY:[1,1.01,1,1.01,1] };
       case "sleeping":  return { scaleY:[1,.94,1], scaleX:[1,1.03,1] };
       default:
@@ -548,7 +547,6 @@ export default function PixelPet() {
       case "playing":   return { duration:1.2, ease:"easeInOut" };
       case "pouncing":  return { duration:1.8, ease:[.25,1,.5,1] };
       case "chasing":   return { repeat:Infinity, duration:0.5, ease:"linear" };
-      case "ball":      return { duration:2.2, ease:[.25,1,.5,1] };
       case "walking":   return { repeat:Infinity, duration:0.7, ease:"easeInOut" };
       case "sleeping":  return { repeat:Infinity, duration:2.4, ease:"easeInOut" };
       default:
@@ -587,18 +585,6 @@ export default function PixelPet() {
 
       {/* Throw trail */}
       {isThrown && <div className="pet-throw-trail" />}
-
-      {/* Toy ball */}
-      {state === "ball" && (
-        <motion.div className="pet-toy-ball"
-          animate={{
-            x: isMovingLeft ? [0,-10,-55,-50,-48,-48] : [0,10,55,50,48,48],
-            y: [0,-4,-14,-1,0,0],
-            rotate: [0,90,720,900,950,950],
-          }}
-          transition={{ duration:2.2, ease:[.15,.85,.45,1] }}
-        />
-      )}
 
       {/* Cat sprite */}
       <motion.div animate={getAnimProps()} transition={getTransProps()}>
