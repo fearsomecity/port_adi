@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-scroll";
 import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
+import Magnetic from "./Magnetic";
+import { useToast } from "../context/ToastContext";
 import "../styles/Hero.css";
 
 const CANVAS_PARTICLE_COUNT = 80;
@@ -180,6 +182,7 @@ function RollingText() {
 
 export default function Hero() {
   const [imgLoaded, setImgLoaded] = useState(false);
+  const { showToast } = useToast();
 
   return (
     <section className="hero" id="hero">
@@ -236,18 +239,21 @@ export default function Hero() {
               </Link>
             </div>
             <div className="hero-cta-cv">
-              <a
-                href="/Aditya_Resume.pdf"
-                download="Aditya_Resume.pdf"
-                className="btn-resume-circle"
-                title="Download CV"
-              >
-                <span className="cv-icon">↓</span>
-                <span className="cv-text">CV</span>
-              </a>
+              <Magnetic>
+                <a
+                  href="/Aditya_Resume.pdf"
+                  download="Aditya_Resume.pdf"
+                  className="btn-resume-circle"
+                  title="Download CV"
+                  onClick={() => showToast("Aditya_Resume.pdf downloaded successfully! 📄✨")}
+                >
+                  <span className="cv-icon">↓</span>
+                  <span className="cv-text">CV</span>
+                </a>
+              </Magnetic>
             </div>
           </motion.div>
-
+ 
         <motion.div
           className="hero-socials"
           initial={{ opacity: 0 }}
@@ -255,34 +261,40 @@ export default function Hero() {
           transition={{ delay: 1, duration: 0.6 }}
         >
           <span className="hero-socials-label">Find me on</span>
-          <a
-            href="https://github.com/fearsomecity"
-            target="_blank"
-            rel="noreferrer"
-            className="hero-social-link"
-            title="GitHub"
-            style={{ "--social-color": "var(--clr-purple)" }}
-          >
-            <GithubIcon size={18} strokeWidth={1.5} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/aditya-sharma097"
-            target="_blank"
-            rel="noreferrer"
-            className="hero-social-link"
-            title="LinkedIn"
-            style={{ "--social-color": "var(--clr-blue)" }}
-          >
-            <LinkedinIcon size={18} strokeWidth={1.5} />
-          </a>
-          <a
-            href="mailto:sharma.adi1217@gmail.com"
-            className="hero-social-link"
-            title="Email"
-            style={{ "--social-color": "var(--clr-red)" }}
-          >
-            <Mail size={18} strokeWidth={1.5} />
-          </a>
+          <Magnetic>
+            <a
+              href="https://github.com/fearsomecity"
+              target="_blank"
+              rel="noreferrer"
+              className="hero-social-link"
+              title="GitHub"
+              style={{ "--social-color": "var(--clr-purple)" }}
+            >
+              <GithubIcon size={18} strokeWidth={1.5} />
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <a
+              href="https://www.linkedin.com/in/aditya-sharma097"
+              target="_blank"
+              rel="noreferrer"
+              className="hero-social-link"
+              title="LinkedIn"
+              style={{ "--social-color": "var(--clr-blue)" }}
+            >
+              <LinkedinIcon size={18} strokeWidth={1.5} />
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <a
+              href="mailto:sharma.adi1217@gmail.com"
+              className="hero-social-link"
+              title="Email"
+              style={{ "--social-color": "var(--clr-red)" }}
+            >
+              <Mail size={18} strokeWidth={1.5} />
+            </a>
+          </Magnetic>
         </motion.div>
       </motion.div>
 

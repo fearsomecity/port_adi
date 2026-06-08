@@ -138,18 +138,30 @@ export default function About() {
               Building <span className="high-purple">real-world</span> solutions
             </h2>
 
-            <p className="about-description">
+            <motion.p
+              className="about-description"
+              initial={{ opacity: 0.2, y: 15, filter: "blur(3px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               I'm <span className="high-purple">Aditya Sharma</span>, a CS student at Chitkara
               University, Rajpura, passionate about crafting elegant, performant
               web applications. I thrive at the intersection of beautiful
               interfaces and robust backend systems.
-            </p>
-            <p className="about-description">
+            </motion.p>
+            <motion.p
+              className="about-description"
+              initial={{ opacity: 0.2, y: 15, filter: "blur(3px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
               With hands-on experience in the <span className="high-green">MERN stack</span> and{" "}
               <span className="high-blue">AWS cloud services</span>, I build production-ready
               applications — from AI-powered wellness platforms to IoT-driven
               smart environments.
-            </p>
+            </motion.p>
 
             <div className="about-highlights">
               {highlights.map((item, i) => (

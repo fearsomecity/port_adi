@@ -219,20 +219,22 @@
 /* Background Glow */
 .skill-card-glow {
   position: absolute;
-  width: 150px;
-  height: 150px;
-  background: var(--bento-color);
-  filter: blur(80px);
-  border-radius: 50%;
-  top: -75px;
-  right: -75px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    300px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    color-mix(in srgb, var(--bento-color) 20%, transparent),
+    transparent 80%
+  );
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  z-index: 1;
 }
 
 .skill-bento-card:hover .skill-card-glow {
-  opacity: 0.15;
+  opacity: 1;
 }
 
 .skill-bento-card:hover {
