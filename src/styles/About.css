@@ -4,36 +4,6 @@
   overflow: hidden;
 }
 
-.about-parallax-blob {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(100px);
-  border-radius: 50%;
-  opacity: 0.12;
-  will-change: transform;
-}
-
-.blob-purple {
-  width: 350px;
-  height: 350px;
-  background: var(--clr-purple);
-  top: 10%;
-  left: -5%;
-}
-
-.blob-blue {
-  width: 450px;
-  height: 450px;
-  background: var(--clr-blue);
-  bottom: -5%;
-  right: -5%;
-}
-
-[data-theme="dark"] .about-parallax-blob {
-  opacity: 0.07;
-}
-
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1.2fr;

@@ -32,22 +32,18 @@ const highlights = [
 
 export default function About() {
   const { scrollY } = useScroll();
-  const yBlob1 = useTransform(scrollY, [0, 1500], [0, -120]);
-  const yBlob2 = useTransform(scrollY, [0, 1500], [0, 100]);
+  const yCard = useTransform(scrollY, [100, 1200], [0, 45]);
 
   return (
     <section className="about-section" id="about">
-      {/* Background blobs for parallax */}
-      <motion.div style={{ y: yBlob1 }} className="about-parallax-blob blob-purple" />
-      <motion.div style={{ y: yBlob2 }} className="about-parallax-blob blob-blue" />
-
       <div className="container">
         <div className="about-grid">
           {/* Left: Code Block */}
           <motion.div
+            style={{ y: yCard }}
             className="about-visual"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           >
