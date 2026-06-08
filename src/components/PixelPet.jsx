@@ -120,7 +120,7 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
 
   return (
     <svg
-      width="72" height="72"
+      width="52" height="52"
       viewBox="0 0 16 16"
       style={{
         shapeRendering: "crispEdges",
@@ -524,12 +524,12 @@ export default function PixelPet() {
 
   // ── FRAMER MOTION ANIMATION PROPS ─────────────────────────────────────────
   const getAnimProps = () => {
-    if (refuseBubble) return { x:[0,-4,4,-4,4,0], scaleY:0.95, scaleX:1.05 };
+    if (refuseBubble) return { x:[0,-4,4,-4,4,0], y: 0, rotate: 0, scaleY:0.95, scaleX:1.05 };
     switch (state) {
-      case "held":      return { y:0, scaleY:1.25, scaleX:0.85 };
+      case "held":      return { x: 0, y:0, rotate: 0, scaleY:1.25, scaleX:0.85 };
       case "angry":
         if (angryPhase === "intro") return {
-          // Dramatic stomp entry: squash → explode up → slam down → inflate in rage
+          x: 0,
           y:      [0, -28, -10, 6, 0],
           scaleX: [1.3, 0.75, 1.1, 0.85, 1.25],
           scaleY: [0.6, 1.45, 0.85, 1.15, 0.82],
@@ -538,35 +538,98 @@ export default function PixelPet() {
         // looping rage vibration
         return {
           x:      [0, -5, 5, -4, 4, -3, 3, 0],
+          y:      0,
           scaleX: [1.25, 1.28, 1.22, 1.28, 1.22, 1.26, 1.23, 1.25],
           scaleY: [0.80, 0.77, 0.83, 0.77, 0.83, 0.79, 0.81, 0.80],
+          rotate: 0,
         };
-      case "playing":   return { y:[0,-35,-45,-35,0], rotate:[0,180,360,360,360], scaleY:[1,.7,1.2,1.2,.8,1], scaleX:[1,1.3,.8,.8,1.2,1] };
-      case "pouncing":  return { y:[0,2,0,-25,-28,0,3,0], x:isMovingLeft?[0,-2,-5,-20,-35,-45,-46,-45]:[0,2,5,20,35,45,46,45], scaleY:[1,.6,.7,1.4,1.3,.7,.9,1], scaleX:[1,1.4,1.3,.7,.8,1.4,1.1,1] };
-      case "chasing":   return { y:[0,-3,0,-3,0], scaleY:[1,.9,1.05,.9,1], scaleX:[1,1.08,.95,1.08,1] };
-      case "walking":   return { y:[0,-1,0,-1,0], scaleY:[1,1.01,1,1.01,1] };
-      case "sleeping":  return { scaleY:[1,.94,1], scaleX:[1,1.03,1] };
+      case "playing":   return { x: 0, y:[0,-35,-45,-35,0], rotate:[0,180,360,360,360], scaleY:[1,.7,1.2,1.2,.8,1], scaleX:[1,1.3,.8,.8,1.2,1] };
+      case "pouncing":  return { y:[0,2,0,-25,-28,0,3,0], x:isMovingLeft?[0,-2,-5,-20,-35,-45,-46,-45]:[0,2,5,20,35,45,46,45], rotate: 0, scaleY:[1,.6,.7,1.4,1.3,.7,.9,1], scaleX:[1,1.4,1.3,.7,.8,1.4,1.1,1] };
+      case "chasing":   return { x: 0, y:[0,-3,0,-3,0], rotate: 0, scaleY:[1,.9,1.05,.9,1], scaleX:[1,1.08,.95,1.08,1] };
+      case "walking":   return { x: 0, y:[0,-1,0,-1,0], rotate: 0, scaleY:[1,1.01,1,1.01,1] };
+      case "sleeping":  return { x: 0, y: 0, rotate: 0, scaleY:[1,.94,1], scaleX:[1,1.03,1] };
       default:
         return hoverSeqIdx !== -1
-          ? { scaleY:[1,.97,1], scaleX:[1,1.03,1] }
-          : { scaleY:[1,.96,1], scaleX:[1,1.02,1] };
+          ? { x: 0, y: 0, rotate: 0, scaleY:[1,.97,1], scaleX:[1,1.03,1] }
+          : { x: 0, y: 0, rotate: 0, scaleY:[1,.96,1], scaleX:[1,1.02,1] };
     }
   };
 
   const getTransProps = () => {
-    if (refuseBubble) return { duration:0.5 };
+    const defaultRepeatTransition = {
+      repeat: Infinity,
+      duration: hoverSeqIdx !== -1 ? 1.4 : 1.8,
+      ease: "easeInOut"
+    };
+
+    if (refuseBubble) return {
+      x: { duration: 0.5 },
+      scaleY: { duration: 0.5 },
+      scaleX: { duration: 0.5 },
+      y: { duration: 0.2 },
+      rotate: { duration: 0.2 }
+    };
+
     switch (state) {
-      case "held":      return { duration:0.2 };
+      case "held":      return { duration: 0.2 };
       case "angry":
-        if (angryPhase === "intro") return { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] };
-        return { repeat: Infinity, duration: 0.18, ease: "easeInOut" };
-      case "playing":   return { duration:1.2, ease:"easeInOut" };
-      case "pouncing":  return { duration:1.8, ease:[.25,1,.5,1] };
-      case "chasing":   return { repeat:Infinity, duration:0.5, ease:"linear" };
-      case "walking":   return { repeat:Infinity, duration:0.7, ease:"easeInOut" };
-      case "sleeping":  return { repeat:Infinity, duration:2.4, ease:"easeInOut" };
+        if (angryPhase === "intro") return {
+          y: { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] },
+          scaleX: { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] },
+          scaleY: { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] },
+          rotate: { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] },
+          x: { duration: 0.2 }
+        };
+        return {
+          x: { repeat: Infinity, duration: 0.18, ease: "easeInOut" },
+          scaleX: { repeat: Infinity, duration: 0.18, ease: "easeInOut" },
+          scaleY: { repeat: Infinity, duration: 0.18, ease: "easeInOut" },
+          y: { duration: 0.2 },
+          rotate: { duration: 0.2 }
+        };
+      case "playing":   return {
+        y: { duration: 1.2, ease: "easeInOut" },
+        rotate: { duration: 1.2, ease: "easeInOut" },
+        scaleY: { duration: 1.2, ease: "easeInOut" },
+        scaleX: { duration: 1.2, ease: "easeInOut" },
+        x: { duration: 0.2 }
+      };
+      case "pouncing":  return {
+        y: { duration: 1.8, ease: [.25, 1, .5, 1] },
+        x: { duration: 1.8, ease: [.25, 1, .5, 1] },
+        scaleY: { duration: 1.8, ease: [.25, 1, .5, 1] },
+        scaleX: { duration: 1.8, ease: [.25, 1, .5, 1] },
+        rotate: { duration: 0.2 }
+      };
+      case "chasing":   return {
+        y: { repeat: Infinity, duration: 0.5, ease: "linear" },
+        scaleY: { repeat: Infinity, duration: 0.5, ease: "linear" },
+        scaleX: { repeat: Infinity, duration: 0.5, ease: "linear" },
+        x: { duration: 0.2 },
+        rotate: { duration: 0.2 }
+      };
+      case "walking":   return {
+        y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
+        scaleY: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
+        scaleX: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
+        x: { duration: 0.2 },
+        rotate: { duration: 0.2 }
+      };
+      case "sleeping":  return {
+        scaleY: { repeat: Infinity, duration: 2.4, ease: "easeInOut" },
+        scaleX: { repeat: Infinity, duration: 2.4, ease: "easeInOut" },
+        x: { duration: 0.2 },
+        y: { duration: 0.2 },
+        rotate: { duration: 0.2 }
+      };
       default:
-        return { repeat:Infinity, duration:hoverSeqIdx !== -1 ? 1.4 : 1.8, ease:"easeInOut" };
+        return {
+          scaleY: defaultRepeatTransition,
+          scaleX: defaultRepeatTransition,
+          x: { duration: 0.2 },
+          y: { duration: 0.2 },
+          rotate: { duration: 0.2 }
+        };
     }
   };
 
