@@ -239,7 +239,6 @@ export default function PixelPet() {
   const [earTwitch,   setEarTwitch]   = useState(null); // null | 'left' | 'right'
   const [landSquash,  setLandSquash]  = useState(false);
   const [angryPhase,  setAngryPhase]  = useState(null); // null | 'intro' | 'loop'
-  const [angryParticles, setAngryParticles] = useState([]);
 
   // ── refs ───────────────────────────────────────────────────────────────────
   const petRef         = useRef(null);
@@ -252,26 +251,8 @@ export default function PixelPet() {
   const lastTimeRef    = useRef(0);
   const blinkTimerRef  = useRef(null);
   const earTimerRef    = useRef(null);
-  const angrySpawnRef  = useRef(null);
 
   useEffect(() => { posRef.current = { x: posX, y: posY }; }, [posX, posY]);
-
-  // ── ANGRY PARTICLE SPAWNER ─────────────────────────────────────────────────
-  useEffect(() => {
-    if (state !== "angry") { setAngryParticles([]); clearInterval(angrySpawnRef.current); return; }
-    angrySpawnRef.current = setInterval(() => {
-      setAngryParticles(prev => [
-        ...prev,
-        {
-          id: Math.random(),
-          x:  20 + Math.random() * 30,
-          vx: (Math.random() - 0.5) * 40,
-          vy: 20 + Math.random() * 30,
-        },
-      ].slice(-8));
-    }, 200);
-    return () => clearInterval(angrySpawnRef.current);
-  }, [state]);
 
   const hoverMessages = [
     "Hi, I am Tinker",
@@ -419,13 +400,6 @@ export default function PixelPet() {
           setTimeout(() => setLandSquash(false), 300);
           setAngryPhase("intro");
           setState("angry");
-          // Spawn burst of sparks on impact
-          setAngryParticles(Array.from({ length: 8 }, (_, i) => ({
-            id: Math.random() + i,
-            x: 10 + Math.random() * 50,
-            vx: (Math.random() - 0.5) * 60,
-            vy: 30 + Math.random() * 40,
-          })));
           setTimeout(() => setAngryPhase("loop"), 450);
           setTimeout(() => { setState("idle"); setAngryPhase(null); }, 1500);
           return;
@@ -627,21 +601,6 @@ export default function PixelPet() {
 
       {/* Throw trail */}
       {isThrown && <div className="pet-throw-trail" />}
-
-      {/* Angry spark particles */}
-      <AnimatePresence>
-        {state === "angry" && angryParticles.map(p => (
-          <motion.div
-            key={p.id}
-            className="pet-spark"
-            style={{ left: `${p.x}px`, bottom: "56px" }}
-            initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            animate={{ opacity: 0, x: p.vx, y: -p.vy, scale: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-          />
-        ))}
-      </AnimatePresence>
 
       {/* Cat sprite */}
       <motion.div
