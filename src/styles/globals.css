@@ -313,24 +313,35 @@ a {
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   width: 170px;
-  background: var(--primary);
-  color: var(--text-on-primary);
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.9rem;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: var(--transition);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: 0.02em;
   box-sizing: border-box;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn-primary:hover {
-  background: #000000;
-  color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
 }
 
 @media (max-width: 480px) {
@@ -342,16 +353,20 @@ a {
 }
 
 [data-theme="dark"] .btn-primary {
-  background: #0A0A0A;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="dark"] .btn-primary:hover {
-  background: #FFFFFF;
-  color: #000000;
-  border-color: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-outline {
@@ -361,25 +376,35 @@ a {
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   width: 170px;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.03);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid var(--text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: var(--transition);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   letter-spacing: 0.02em;
   box-sizing: border-box;
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.01),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn-outline:hover {
-  background: #000000;
-  color: #FFFFFF;
-  border-color: #000000;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: scale(1.02);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-outline:active {
+  transform: scale(0.97);
 }
 
 @media (max-width: 480px) {
@@ -390,11 +415,21 @@ a {
   }
 }
 
+[data-theme="dark"] .btn-outline {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
 [data-theme="dark"] .btn-outline:hover {
-  background: #FFFFFF;
-  color: #000000;
-  border-color: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Resume / CV Download Button */
