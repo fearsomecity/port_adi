@@ -8,31 +8,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: right 0.04s linear;
+  transition: right 0.05s ease-out;
 }
 
-/* Leg walk animation keyframes */
-@keyframes walkLegs {
-  0%, 100% {
-    transform: translateY(0);
+.pixel-pet-container.dragging,
+.pixel-pet-container.dropping {
+  transition: none !important;
+}
+
+/* Realistic leg swing animation keyframes */
+@keyframes swingLegs {
+  0% {
+    transform: rotate(-25deg);
   }
-  50% {
-    transform: translateY(-1.5px);
+  100% {
+    transform: rotate(25deg);
   }
 }
 
-.cat-legs-walking .leg-1,
-.cat-legs-walking .paw-1,
-.cat-legs-walking .leg-3,
-.cat-legs-walking .paw-3 {
-  animation: walkLegs 0.25s infinite alternate ease-in-out;
+.cat-legs-walking .leg-group-front-fg,
+.cat-legs-walking .leg-group-back-bg {
+  animation: swingLegs 0.18s infinite alternate ease-in-out;
 }
 
-.cat-legs-walking .leg-2,
-.cat-legs-walking .paw-2,
-.cat-legs-walking .leg-4,
-.cat-legs-walking .paw-4 {
-  animation: walkLegs 0.25s infinite alternate-reverse ease-in-out;
+.cat-legs-walking .leg-group-front-bg,
+.cat-legs-walking .leg-group-back-fg {
+  animation: swingLegs 0.18s infinite alternate-reverse ease-in-out;
 }
 
 /* Sleep particles */
@@ -57,25 +58,54 @@
   user-select: none;
 }
 
-/* Pet Speech Bubble */
+/* Pixelated Pet Speech Bubble */
 .pet-speech {
   position: absolute;
-  top: -30px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 0.25rem 0.6rem;
-  font-family: var(--font-body);
-  font-size: 0.65rem;
+  top: -32px;
+  background: #000000;
+  border: 2px solid #FFFFFF;
+  border-radius: 0px; /* blocky */
+  padding: 0.35rem 0.6rem;
+  font-family: sans-serif;
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
-  animation: speechFade 3s forwards ease-in-out;
+  color: #FFFFFF;
+  white-space: normal;
+  box-shadow: 3px 3px 0px #000000;
+  
+  /* Fluid entrance and fade-out animations */
+  animation: pixelSpeechFade 2.8s ease-in-out forwards;
   pointer-events: none;
 }
 
-@keyframes speechFade {
-  0% { opacity: 0; transform: scale(0.8) translateY(5px); }
-  10%, 90% { opacity: 1; transform: scale(1) translateY(0); }
-  100% { opacity: 0; transform: scale(0.8) translateY(-5px); }
+@keyframes pixelSpeechFade {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.8) translateY(4px); 
+  }
+  12% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+  88% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(0.8) translateY(-4px); 
+  }
+}
+
+/* Play Toy Ball */
+.pet-toy-ball {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #F43F5E;
+  border-radius: 50%;
+  border: 1px solid #BE123C;
+  bottom: 8px;
+  pointer-events: none;
+  z-index: 9999;
 }
