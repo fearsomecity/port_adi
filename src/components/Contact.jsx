@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Mail, GraduationCap, MapPin, Calendar, Star, Cloud, Box } from "lucide-react";
+import { GraduationCap, MapPin, Calendar, Star, Cloud, Box, Mail } from "lucide-react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { personalInfo, education, certifications } from "../data/portfolioData";
+import SolarSystem from "./SolarSystem";
 import "../styles/Contact.css";
 
 const contactItems = [
@@ -47,128 +48,155 @@ export default function Contact() {
 
       <div className="container">
         <div className="contact-inner">
-          <motion.div
-            className="contact-header"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="section-label">Contact</div>
-          </motion.div>
-
-          <motion.h2
-            className="contact-title"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-          >
-            Let's Build<br />
-            <span>Something Great</span>
-          </motion.h2>
-
-          <motion.p
-            className="contact-subtitle"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            I'm actively seeking <strong style={{ color: "var(--text-primary)" }}>software engineering internships</strong> in <strong style={{ color: "var(--text-primary)" }}>full-stack</strong>, <strong style={{ color: "var(--text-primary)" }}>backend</strong>, or <strong style={{ color: "var(--text-primary)" }}>cloud engineering</strong>. Let's talk!
-          </motion.p>
-
-          {/* Contact link cards */}
-          <div className="contact-links">
-            {contactItems.map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                className="contact-link-card"
-                style={{ "--social-color": item.color }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.05 }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                whileHover={{ scale: 1.15 }}
-                title={item.type}
+          <div className="contact-hero-grid">
+            {/* Left: Text Content */}
+            <div className="contact-hero-left">
+              <motion.div
+                className="contact-header"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.7 }}
               >
-                <div className="contact-link-icon">{item.icon}</div>
-              </motion.a>
-            ))}
+                <div className="section-label">Contact</div>
+              </motion.div>
+
+              <motion.h2
+                className="contact-title"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+              >
+                Let's Build<br />
+                <span>Something Great</span>
+              </motion.h2>
+
+              <motion.p
+                className="contact-subtitle"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+              >
+                I'm actively seeking <strong style={{ color: "var(--text-primary)" }}>software engineering internships</strong> in <strong style={{ color: "var(--text-primary)" }}>full-stack</strong>, <strong style={{ color: "var(--text-primary)" }}>backend</strong>, or <strong style={{ color: "var(--text-primary)" }}>cloud engineering</strong>. Let's talk!
+              </motion.p>
+
+              {/* Contact link cards */}
+              <div className="contact-links">
+                {contactItems.map((item, i) => (
+                  <motion.a
+                    key={i}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="contact-link-card"
+                    style={{ "--social-color": item.color }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.05 }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    whileHover={{ scale: 1.15 }}
+                    title={item.type}
+                  >
+                    <div className="contact-link-icon">{item.icon}</div>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Animated Orbital Decoration */}
+            <motion.div
+              className="contact-hero-right"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SolarSystem size={320} />
+            </motion.div>
           </div>
 
 
 
-          {/* Education Card */}
-          <motion.div
-            className="contact-edu"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.05 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
-          >
-            <div className="section-label" style={{ justifyContent: "center", marginBottom: "1.5rem" }}>
-              Education
-            </div>
+          {/* Education & Certifications Side-by-Side Container */}
+          <div className="edu-certs-container">
+            {/* Education Card */}
+            <motion.div
+              className="edu-section"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ delay: 0.2, duration: 0.7 }}
+            >
+              <div className="section-label" style={{ marginBottom: "1.5rem" }}>
+                Education
+              </div>
 
-            <div className="edu-card">
-              <span className="edu-icon">
-                <GraduationCap size={44} strokeWidth={1.5} />
-              </span>
-              <div className="edu-info">
-                <div className="edu-degree">{education.degree}</div>
-                <div className="edu-university">{education.university}</div>
-                <div className="edu-meta">
-                  <span className="edu-meta-item">
-                    <MapPin size={16} strokeWidth={1.5} style={{ color: "var(--clr-red)" }} /> 
-                    {education.location}
-                  </span>
-                  <span className="edu-meta-item">
-                    <Calendar size={16} strokeWidth={1.5} style={{ color: "var(--clr-blue)" }} />
-                    {education.duration}
-                  </span>
-                  <span className="edu-gpa">
-                    <Star size={18} fill="var(--clr-yellow)" strokeWidth={0} />
-                    {education.gpa} CGPA
-                  </span>
+              <div className="edu-card">
+                <span className="edu-icon">
+                  <GraduationCap size={44} strokeWidth={1.5} />
+                </span>
+                <div className="edu-info">
+                  <div className="edu-degree">{education.degree}</div>
+                  <div className="edu-university">{education.university}</div>
+                  <div className="edu-meta">
+                    <span className="edu-meta-item">
+                      <MapPin size={16} strokeWidth={1.5} style={{ color: "var(--clr-red)" }} /> 
+                      {education.location}
+                    </span>
+                    <span className="edu-meta-item">
+                      <Calendar size={16} strokeWidth={1.5} style={{ color: "var(--clr-blue)" }} />
+                      {education.duration}
+                    </span>
+                    <span className="edu-gpa">
+                      <Star size={18} fill="var(--clr-yellow)" strokeWidth={0} />
+                      {education.gpa} CGPA
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Certs */}
-            <div className="section-label" style={{ justifyContent: "center", margin: "2.5rem 0 1.5rem" }}>
-              Certifications
-            </div>
+            {/* Certifications Card */}
+            <motion.div
+              className="certs-section"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
+              <div className="section-label" style={{ marginBottom: "1.5rem" }}>
+                Certifications
+              </div>
 
-            <div className="certs-grid">
-              {certifications.map((cert, i) => {
-                const Icon = cert.icon === "cloud" ? Cloud : Box;
-                return (
-                  <motion.div
-                    key={i}
-                    className="cert-card"
-                    style={{ "--cert-color": i % 2 === 0 ? "var(--clr-blue)" : "var(--clr-yellow)" }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, amount: 0.05 }}
-                    transition={{ delay: i * 0.12, duration: 0.5 }}
-                    whileHover={{ y: -4 }}
-                  >
-                    <span className="cert-icon" style={{ color: i % 2 === 0 ? "var(--clr-blue)" : "var(--clr-yellow)" }}>
-                      <Icon size={24} strokeWidth={1.5} />
-                    </span>
-                    <div>
-                      <div className="cert-title">{cert.title}</div>
-                      <div className="cert-issuer">{cert.issuer}</div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
+              <div className="certs-grid">
+                {certifications.map((cert, i) => {
+                  const Icon = cert.icon === "cloud" ? Cloud : Box;
+                  return (
+                    <motion.div
+                      key={i}
+                      className="cert-card"
+                      style={{ "--cert-color": i % 2 === 0 ? "var(--clr-blue)" : "var(--clr-yellow)" }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, amount: 0.05 }}
+                      transition={{ delay: i * 0.12, duration: 0.5 }}
+                      whileHover={{ y: -4 }}
+                    >
+                      <span className="cert-icon" style={{ color: i % 2 === 0 ? "var(--clr-blue)" : "var(--clr-yellow)" }}>
+                        <Icon size={24} strokeWidth={1.5} />
+                      </span>
+                      <div>
+                        <div className="cert-title">{cert.title}</div>
+                        <div className="cert-issuer">{cert.issuer}</div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
