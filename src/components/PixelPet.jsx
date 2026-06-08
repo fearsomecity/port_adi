@@ -21,32 +21,32 @@ import "../styles/PixelPet.css";
 //  h:1 = short stubby legs; raised leg sits 1px higher (y=11 vs y=12)
 const WALK_FRAMES = [
   /* 0 – A-stride contact */
-  { bodyDY:  0, flfg:{x:10,y:11,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:4,y:11,h:1} },
+  { bodyDY: 0, flfg: { x: 10, y: 11, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 4, y: 11, h: 1 } },
   /* 1 – mid-stride, body rises */
-  { bodyDY: -1, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: -1, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
   /* 2 – B-stride contact */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:10,y:11,h:1}, blfg:{x:4,y:11,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: 0, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 10, y: 11, h: 1 }, blfg: { x: 4, y: 11, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
   /* 3 – mid-stride, body rises */
-  { bodyDY: -1, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: -1, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
 ];
 
 // ── 4-frame gallop / chasing run (exaggerated reach) ──────────────────────
 const RUN_FRAMES = [
   /* 0 – full extension A */
-  { bodyDY: -2, flfg:{x:11,y:11,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:3,y:11,h:1} },
+  { bodyDY: -2, flfg: { x: 11, y: 11, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 3, y: 11, h: 1 } },
   /* 1 – gather */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: 0, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
   /* 2 – full extension B */
-  { bodyDY: -2, flfg:{x: 9,y:12,h:1}, flbg:{x:11,y:11,h:1}, blfg:{x:3,y:11,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: -2, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 11, y: 11, h: 1 }, blfg: { x: 3, y: 11, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
   /* 3 – gather */
-  { bodyDY:  0, flfg:{x: 9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} },
+  { bodyDY: 0, flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 5, y: 12, h: 1 } },
 ];
 
 // ── static rest leg positions ──────────────────────────────────────────────
-const IDLE_LEGS = { flfg:{x:9,y:12,h:1}, flbg:{x:8,y:12,h:1}, blfg:{x:6,y:12,h:1}, blbg:{x:5,y:12,h:1} };
+const IDLE_LEGS = { flfg: { x: 9, y: 12, h: 1 }, flbg: { x: 8, y: 12, h: 1 }, blfg: { x: 6, y: 12, h: 1 }, blbg: { x: 5, y: 12, h: 1 } };
 
 // ── sleep belly-swell over 8 frames (1 = extra belly pixel) ───────────────
-const SLEEP_SWELL = [0,0,0,1,1,1,1,0];
+const SLEEP_SWELL = [0, 0, 0, 1, 1, 1, 1, 0];
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CAT SPRITE COMPONENT
@@ -67,14 +67,14 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
   }
 
   const BY = 8 + bodyDY;
-  const L  = legs;
+  const L = legs;
   const bellySwell = state === "sleeping" && SLEEP_SWELL[animFrame % 8] === 1;
 
   // landing squash: widen + shorten body
-  const bX = landSquash ? 4  : 5;
-  const bY = landSquash ? 9  : BY;
-  const bW = landSquash ? 7  : 6;
-  const bH = landSquash ? 3  : 4;
+  const bX = landSquash ? 4 : 5;
+  const bY = landSquash ? 9 : BY;
+  const bW = landSquash ? 7 : 6;
+  const bH = landSquash ? 3 : 4;
 
   // ── eye rendering ────────────────────────────────────────────────────────
   const Eyes = () => {
@@ -86,31 +86,31 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
     );
     if (state === "angry") return (
       <g>
-        <rect x="9"  y="5" width="2" height="1" fill="#FF2222" />
-        <rect x="9"  y="6" width="1" height="1" fill="#FF2222" />
+        <rect x="9" y="5" width="2" height="1" fill="#FF2222" />
+        <rect x="9" y="6" width="1" height="1" fill="#FF2222" />
         <rect x="12" y="5" width="2" height="1" fill="#FF2222" />
         <rect x="13" y="6" width="1" height="1" fill="#FF2222" />
       </g>
     );
     if (isBlinking === 2) return (           // fully closed
       <g fill="#333">
-        <rect x="9"  y="6" width="2" height="1" />
+        <rect x="9" y="6" width="2" height="1" />
         <rect x="12" y="6" width="2" height="1" />
       </g>
     );
     if (isBlinking === 1) return (           // half-lid
       <g>
-        <rect x="9"  y="5" width="2" height="2" fill="#FFF" />
-        <rect x="9"  y="6" width="2" height="1" fill="#333" />
+        <rect x="9" y="5" width="2" height="2" fill="#FFF" />
+        <rect x="9" y="6" width="2" height="1" fill="#333" />
         <rect x="12" y="5" width="2" height="2" fill="#FFF" />
         <rect x="12" y="6" width="2" height="1" fill="#333" />
       </g>
     );
     return (                                 // open
       <g>
-        <rect x="9"  y="5" width="2" height="2" fill="#FFF" />
+        <rect x="9" y="5" width="2" height="2" fill="#FFF" />
         <rect x="10" y="5" width="1" height="2" fill="#000" />
-        <rect x="9"  y="5" width="1" height="1" fill="#FFF" />
+        <rect x="9" y="5" width="1" height="1" fill="#FFF" />
         <rect x="12" y="5" width="2" height="2" fill="#FFF" />
         <rect x="12" y="5" width="1" height="2" fill="#000" />
         <rect x="13" y="5" width="1" height="1" fill="#FFF" />
@@ -141,7 +141,7 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
       {/* upper-body connector (follows body Y) */}
       {!landSquash && <rect x="6" y={bY - 1} width="4" height="1" fill={state === "angry" ? "#3a0000" : "#222"} />}
       {/* sleep belly swell */}
-      {bellySwell    && <rect x="5" y={bY + bH} width="6" height="1" fill="#222" />}
+      {bellySwell && <rect x="5" y={bY + bH} width="6" height="1" fill="#222" />}
       {/* bottom shadow stripe */}
       <rect x="5" y={bY + bH - 1} width="5" height="1" fill="#000" />
 
@@ -164,13 +164,13 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
 
       {/* ── EARS (ear tip above head; twitched ear disappears = flattened) ── */}
       <g fill="#222">
-        {earTwitch !== "left"  && <rect x="9"  y="3" width="1" height="1" />}
+        {earTwitch !== "left" && <rect x="9" y="3" width="1" height="1" />}
         {earTwitch !== "right" && <rect x="13" y="3" width="1" height="1" />}
       </g>
       {/* Pink inner ear (visible when not angry/sleeping) */}
       {state !== "angry" && state !== "sleeping" && (
         <g fill="#F4A0C0">
-          {earTwitch !== "left"  && <rect x="9"  y="4" width="1" height="1" />}
+          {earTwitch !== "left" && <rect x="9" y="4" width="1" height="1" />}
           {earTwitch !== "right" && <rect x="13" y="4" width="1" height="1" />}
         </g>
       )}
@@ -192,7 +192,7 @@ function CatSprite({ state, isMovingLeft, animFrame, isBlinking, earTwitch, land
 
       {/* ── WHITE CHEST + MUZZLE ── */}
       <g fill="#FFF">
-        <rect x="9"  y="8" width="1" height="2" />  {/* chest stripe */}
+        <rect x="9" y="8" width="1" height="2" />  {/* chest stripe */}
         <rect x="10" y="7" width="3" height="2" />  {/* muzzle */}
         <rect x="11" y="6" width="1" height="1" />  {/* muzzle bridge */}
       </g>
@@ -222,44 +222,44 @@ function TypewriterText({ text, speed = 50 }) {
 
 export default function PixelPet() {
   // ── core state ─────────────────────────────────────────────────────────────
-  const [state, setState]               = useState("sleeping");
-  const [hasAwoken, setHasAwoken]       = useState(false);
-  const [isHovered, setIsHovered]       = useState(false);
-  const [posX,  setPosX]               = useState(100);   // offset from right
-  const [posY,  setPosY]               = useState(0);     // height from bottom
+  const [state, setState] = useState("sleeping");
+  const [hasAwoken, setHasAwoken] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [posX, setPosX] = useState(100);   // offset from right
+  const [posY, setPosY] = useState(0);     // height from bottom
   const [isMovingLeft, setIsMovingLeft] = useState(true);
-  const [zs,    setZs]                 = useState([]);
-  const [isDragging, setIsDragging]    = useState(false);
-  const [isDropping, setIsDropping]    = useState(false);
-  const [isThrown,   setIsThrown]      = useState(false);
-  const [hoverSeqIdx, setHoverSeqIdx]  = useState(-1);
-  const [refuseBubble, setRefuseBubble]= useState(false);
+  const [zs, setZs] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isDropping, setIsDropping] = useState(false);
+  const [isThrown, setIsThrown] = useState(false);
+  const [hoverSeqIdx, setHoverSeqIdx] = useState(-1);
+  const [refuseBubble, setRefuseBubble] = useState(false);
 
   // ── pixel animation state ──────────────────────────────────────────────────
-  const [animFrame,   setAnimFrame]   = useState(0);
-  const [isBlinking,  setIsBlinking]  = useState(0);    // 0=open, 1=half, 2=closed
-  const [earTwitch,   setEarTwitch]   = useState(null); // null | 'left' | 'right'
-  const [landSquash,  setLandSquash]  = useState(false);
-  const [angryPhase,  setAngryPhase]  = useState(null); // null | 'intro' | 'loop'
+  const [animFrame, setAnimFrame] = useState(0);
+  const [isBlinking, setIsBlinking] = useState(0);    // 0=open, 1=half, 2=closed
+  const [earTwitch, setEarTwitch] = useState(null); // null | 'left' | 'right'
+  const [landSquash, setLandSquash] = useState(false);
+  const [angryPhase, setAngryPhase] = useState(null); // null | 'intro' | 'loop'
 
   // ── refs ───────────────────────────────────────────────────────────────────
-  const petRef         = useRef(null);
-  const posRef         = useRef({ x: posX, y: posY });
-  const isDraggingRef  = useRef(false);
-  const dragStartRef   = useRef({ x: 0, y: 0 });
-  const dragOffsetRef  = useRef({ x: 0, y: 0 });
-  const velocityRef    = useRef({ x: 0, y: 0 });
-  const lastPosRef     = useRef({ x: 0, y: 0 });
-  const lastTimeRef    = useRef(0);
-  const blinkTimerRef  = useRef(null);
-  const earTimerRef    = useRef(null);
+  const petRef = useRef(null);
+  const posRef = useRef({ x: posX, y: posY });
+  const isDraggingRef = useRef(false);
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const lastPosRef = useRef({ x: 0, y: 0 });
+  const lastTimeRef = useRef(0);
+  const blinkTimerRef = useRef(null);
+  const earTimerRef = useRef(null);
 
   useEffect(() => { posRef.current = { x: posX, y: posY }; }, [posX, posY]);
 
   const hoverMessages = [
     "Hello human!",
-    "I am Tinker",
-    "Nice to meet you!!",
+    "I am Tinker!",
+    "Nice to meet you!",
     "Click me — I might backflip!",
   ];
 
@@ -273,9 +273,9 @@ export default function PixelPet() {
   // ── ANIMATION FRAME TICKER ─────────────────────────────────────────────────
   useEffect(() => {
     const fps =
-      state === "walking"  ? 8  :
-      state === "chasing"  ? 14 :
-      state === "sleeping" ? 2  : 4;
+      state === "walking" ? 8 :
+        state === "chasing" ? 14 :
+          state === "sleeping" ? 2 : 4;
     const ticker = setInterval(() => setAnimFrame(f => f + 1), 1000 / fps);
     return () => clearInterval(ticker);
   }, [state]);
@@ -325,14 +325,14 @@ export default function PixelPet() {
     if (!hasAwoken) return;
 
     const interval = setInterval(() => {
-      if (["playing","pouncing","chasing","held","angry"].includes(state)
-          || isDropping || isThrown || hoverSeqIdx !== -1) return;
+      if (["playing", "pouncing", "chasing", "held", "angry"].includes(state)
+        || isDropping || isThrown || hoverSeqIdx !== -1) return;
 
       const r = Math.random();
-      if      (r < 0.25) setState("idle");
-      else if (r < 0.5)  { setState("walking"); setIsMovingLeft(Math.random() > 0.5); }
+      if (r < 0.25) setState("idle");
+      else if (r < 0.5) { setState("walking"); setIsMovingLeft(Math.random() > 0.5); }
       else if (r < 0.75) {
-        const plays = ["pouncing","chasing"];
+        const plays = ["pouncing", "chasing"];
         const p = plays[Math.floor(Math.random() * plays.length)];
         setState(p);
         setTimeout(() => setState("idle"),
@@ -347,8 +347,8 @@ export default function PixelPet() {
     if (state !== "walking" && state !== "chasing") return;
     if (hoverSeqIdx !== -1) return;
 
-    const ms   = state === "chasing" ? 30 : 40;
-    const step = state === "chasing" ? 3  : 2.2;
+    const ms = state === "chasing" ? 30 : 40;
+    const step = state === "chasing" ? 3 : 2.2;
     const walk = setInterval(() => {
       setPosX(prev => {
         const max = window.innerWidth - 100, min = 20;
@@ -360,7 +360,7 @@ export default function PixelPet() {
           if (prev >= max) { setIsMovingLeft(false); return prev - step; }
           return prev + step;
         } else {
-          if (prev <= min) { setIsMovingLeft(true);  return prev + step; }
+          if (prev <= min) { setIsMovingLeft(true); return prev + step; }
           return prev - step;
         }
       });
@@ -386,15 +386,15 @@ export default function PixelPet() {
 
     const timer = setInterval(() => {
       vY -= g;
-      h  += vY;
-      x  += vX;
+      h += vY;
+      x += vX;
 
       const maxX = window.innerWidth - 70, minX = 20;
       if (x > maxX) { x = maxX; vX *= -0.5; }
       if (x < minX) { x = minX; vX *= -0.5; }
 
       if (h <= 0) {
-        h  = 0;
+        h = 0;
         vX *= friction;
         if (Math.abs(vY) < 2.5) {
           clearInterval(timer);
@@ -426,17 +426,17 @@ export default function PixelPet() {
     setIsDragging(true);
     setState("held");
     setHoverSeqIdx(-1);
-    dragStartRef.current  = { x: cx, y: cy };
+    dragStartRef.current = { x: cx, y: cy };
     dragOffsetRef.current = { x: posRef.current.x, y: posRef.current.y };
-    lastPosRef.current    = { x: cx, y: cy };
-    lastTimeRef.current   = performance.now();
-    velocityRef.current   = { x: 0, y: 0 };
+    lastPosRef.current = { x: cx, y: cy };
+    lastTimeRef.current = performance.now();
+    velocityRef.current = { x: 0, y: 0 };
   }, [isDropping, isThrown, hasAwoken]);
 
   const moveDrag = useCallback((cx, cy) => {
     if (!isDraggingRef.current) return;
     const now = performance.now();
-    const dt  = Math.max(1, now - lastTimeRef.current);
+    const dt = Math.max(1, now - lastTimeRef.current);
     const rvX = (cx - lastPosRef.current.x) / dt * 16;
     const rvY = (cy - lastPosRef.current.y) / dt * 16;
     velocityRef.current = {
@@ -457,7 +457,7 @@ export default function PixelPet() {
     isDraggingRef.current = false;
     setIsDragging(false);
 
-    const h   = posRef.current.y;
+    const h = posRef.current.y;
     const vel = velocityRef.current;
     const speed = Math.sqrt(vel.x * vel.x + vel.y * vel.y);
 
@@ -478,12 +478,12 @@ export default function PixelPet() {
   useEffect(() => {
     if (!isDragging) return;
     const onMove = (e) => moveDrag(e.clientX, e.clientY);
-    const onUp   = ()  => endDrag();
+    const onUp = () => endDrag();
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup",   onUp);
+    window.addEventListener("mouseup", onUp);
     return () => {
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup",   onUp);
+      window.removeEventListener("mouseup", onUp);
     };
   }, [isDragging, moveDrag, endDrag]);
 
@@ -498,15 +498,15 @@ export default function PixelPet() {
     const el = petRef.current;
     if (!el) return;
     const onMove = (e) => { e.preventDefault(); moveDrag(e.touches[0].clientX, e.touches[0].clientY); };
-    const onEnd  = (e) => { e.preventDefault(); endDrag(); };
-    el.addEventListener("touchstart",  handleTouchStart, { passive: false });
-    el.addEventListener("touchmove",   onMove,           { passive: false });
-    el.addEventListener("touchend",    onEnd,            { passive: false });
-    el.addEventListener("touchcancel", onEnd,            { passive: false });
+    const onEnd = (e) => { e.preventDefault(); endDrag(); };
+    el.addEventListener("touchstart", handleTouchStart, { passive: false });
+    el.addEventListener("touchmove", onMove, { passive: false });
+    el.addEventListener("touchend", onEnd, { passive: false });
+    el.addEventListener("touchcancel", onEnd, { passive: false });
     return () => {
-      el.removeEventListener("touchstart",  handleTouchStart);
-      el.removeEventListener("touchmove",   onMove);
-      el.removeEventListener("touchend",    onEnd);
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
       el.removeEventListener("touchcancel", onEnd);
     };
   }, [moveDrag, endDrag]);
@@ -521,7 +521,7 @@ export default function PixelPet() {
       setHoverSeqIdx(0); // Trigger hello human sequence
       return;
     }
-    if (["held","angry","ball","playing"].includes(state) || refuseBubble) return;
+    if (["held", "angry", "ball", "playing"].includes(state) || refuseBubble) return;
     setHoverSeqIdx(-1);
     if (Math.random() < 0.6) {
       setState("playing");
@@ -533,7 +533,7 @@ export default function PixelPet() {
   };
 
   const handleMouseEnter = () => {
-    if (["held","angry"].includes(state) || isDropping || isThrown) return;
+    if (["held", "angry"].includes(state) || isDropping || isThrown) return;
     if (!hasAwoken) {
       setIsHovered(true);
       return;
@@ -548,34 +548,34 @@ export default function PixelPet() {
 
   // ── FRAMER MOTION ANIMATION PROPS ─────────────────────────────────────────
   const getAnimProps = () => {
-    if (refuseBubble) return { x:[0,-4,4,-4,4,0], y: 0, rotate: 0, scaleY:0.95, scaleX:1.05 };
+    if (refuseBubble) return { x: [0, -4, 4, -4, 4, 0], y: 0, rotate: 0, scaleY: 0.95, scaleX: 1.05 };
     switch (state) {
-      case "held":      return { x: 0, y:0, rotate: 0, scaleY:1.25, scaleX:0.85 };
+      case "held": return { x: 0, y: 0, rotate: 0, scaleY: 1.25, scaleX: 0.85 };
       case "angry":
         if (angryPhase === "intro") return {
           x: 0,
-          y:      [0, -28, -10, 6, 0],
+          y: [0, -28, -10, 6, 0],
           scaleX: [1.3, 0.75, 1.1, 0.85, 1.25],
           scaleY: [0.6, 1.45, 0.85, 1.15, 0.82],
           rotate: [0, -8, 6, -4, 0],
         };
         // looping rage vibration
         return {
-          x:      [0, -5, 5, -4, 4, -3, 3, 0],
-          y:      0,
+          x: [0, -5, 5, -4, 4, -3, 3, 0],
+          y: 0,
           scaleX: [1.25, 1.28, 1.22, 1.28, 1.22, 1.26, 1.23, 1.25],
           scaleY: [0.80, 0.77, 0.83, 0.77, 0.83, 0.79, 0.81, 0.80],
           rotate: 0,
         };
-      case "playing":   return { x: 0, y:[0,-35,-45,-35,0], rotate:[0,180,360,360,360], scaleY:[1,.7,1.2,1.2,.8,1], scaleX:[1,1.3,.8,.8,1.2,1] };
-      case "pouncing":  return { y:[0,2,0,-25,-28,0,3,0], x:isMovingLeft?[0,-2,-5,-20,-35,-45,-46,-45]:[0,2,5,20,35,45,46,45], rotate: 0, scaleY:[1,.6,.7,1.4,1.3,.7,.9,1], scaleX:[1,1.4,1.3,.7,.8,1.4,1.1,1] };
-      case "chasing":   return { x: 0, y:[0,-3,0,-3,0], rotate: 0, scaleY:[1,.9,1.05,.9,1], scaleX:[1,1.08,.95,1.08,1] };
-      case "walking":   return { x: 0, y:[0,-1,0,-1,0], rotate: 0, scaleY:[1,1.01,1,1.01,1] };
-      case "sleeping":  return { x: 0, y: 0, rotate: 0, scaleY:[1,.94,1], scaleX:[1,1.03,1] };
+      case "playing": return { x: 0, y: [0, -35, -45, -35, 0], rotate: [0, 180, 360, 360, 360], scaleY: [1, .7, 1.2, 1.2, .8, 1], scaleX: [1, 1.3, .8, .8, 1.2, 1] };
+      case "pouncing": return { y: [0, 2, 0, -25, -28, 0, 3, 0], x: isMovingLeft ? [0, -2, -5, -20, -35, -45, -46, -45] : [0, 2, 5, 20, 35, 45, 46, 45], rotate: 0, scaleY: [1, .6, .7, 1.4, 1.3, .7, .9, 1], scaleX: [1, 1.4, 1.3, .7, .8, 1.4, 1.1, 1] };
+      case "chasing": return { x: 0, y: [0, -3, 0, -3, 0], rotate: 0, scaleY: [1, .9, 1.05, .9, 1], scaleX: [1, 1.08, .95, 1.08, 1] };
+      case "walking": return { x: 0, y: [0, -1, 0, -1, 0], rotate: 0, scaleY: [1, 1.01, 1, 1.01, 1] };
+      case "sleeping": return { x: 0, y: 0, rotate: 0, scaleY: [1, .94, 1], scaleX: [1, 1.03, 1] };
       default:
         return hoverSeqIdx !== -1
-          ? { x: 0, y: 0, rotate: 0, scaleY:[1,.97,1], scaleX:[1,1.03,1] }
-          : { x: 0, y: 0, rotate: 0, scaleY:[1,.96,1], scaleX:[1,1.02,1] };
+          ? { x: 0, y: 0, rotate: 0, scaleY: [1, .97, 1], scaleX: [1, 1.03, 1] }
+          : { x: 0, y: 0, rotate: 0, scaleY: [1, .96, 1], scaleX: [1, 1.02, 1] };
     }
   };
 
@@ -595,7 +595,7 @@ export default function PixelPet() {
     };
 
     switch (state) {
-      case "held":      return { duration: 0.2 };
+      case "held": return { duration: 0.2 };
       case "angry":
         if (angryPhase === "intro") return {
           y: { duration: 0.65, ease: [0.2, 1.4, 0.4, 1] },
@@ -611,35 +611,35 @@ export default function PixelPet() {
           y: { duration: 0.2 },
           rotate: { duration: 0.2 }
         };
-      case "playing":   return {
+      case "playing": return {
         y: { duration: 1.2, ease: "easeInOut" },
         rotate: { duration: 1.2, ease: "easeInOut" },
         scaleY: { duration: 1.2, ease: "easeInOut" },
         scaleX: { duration: 1.2, ease: "easeInOut" },
         x: { duration: 0.2 }
       };
-      case "pouncing":  return {
+      case "pouncing": return {
         y: { duration: 1.8, ease: [.25, 1, .5, 1] },
         x: { duration: 1.8, ease: [.25, 1, .5, 1] },
         scaleY: { duration: 1.8, ease: [.25, 1, .5, 1] },
         scaleX: { duration: 1.8, ease: [.25, 1, .5, 1] },
         rotate: { duration: 0.2 }
       };
-      case "chasing":   return {
+      case "chasing": return {
         y: { repeat: Infinity, duration: 0.5, ease: "linear" },
         scaleY: { repeat: Infinity, duration: 0.5, ease: "linear" },
         scaleX: { repeat: Infinity, duration: 0.5, ease: "linear" },
         x: { duration: 0.2 },
         rotate: { duration: 0.2 }
       };
-      case "walking":   return {
+      case "walking": return {
         y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
         scaleY: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
         scaleX: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
         x: { duration: 0.2 },
         rotate: { duration: 0.2 }
       };
-      case "sleeping":  return {
+      case "sleeping": return {
         scaleY: { repeat: Infinity, duration: 2.4, ease: "easeInOut" },
         scaleX: { repeat: Infinity, duration: 2.4, ease: "easeInOut" },
         x: { duration: 0.2 },
@@ -663,7 +663,7 @@ export default function PixelPet() {
       ref={petRef}
       className={`pixel-pet-container ${isDragging ? "dragging" : ""} ${isDropping || isThrown ? "dropping" : ""} ${state === "angry" ? "pet-angry" : ""}`}
       style={{
-        right:  `${posX}px`,
+        right: `${posX}px`,
         bottom: `calc(0.5rem + ${posY}px)`,
         cursor: isDragging ? "grabbing" : "grab",
         touchAction: "none",
@@ -678,10 +678,10 @@ export default function PixelPet() {
         {state === "sleeping" && hoverSeqIdx === -1 &&
           zs.map((z, i) => (
             <motion.span key={z.id} className="pet-z" style={{ left: `${z.x}px` }}
-              initial={{ opacity:0, y:0, scale:0.5 }}
-              animate={{ opacity:0.8, y:-40, scale:1 + i * 0.15 }}
-              exit={{ opacity:0 }}
-              transition={{ duration:2, ease:"easeOut" }}
+              initial={{ opacity: 0, y: 0, scale: 0.5 }}
+              animate={{ opacity: 0.8, y: -40, scale: 1 + i * 0.15 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2, ease: "easeOut" }}
             >z</motion.span>
           ))}
       </AnimatePresence>
@@ -707,28 +707,28 @@ export default function PixelPet() {
 
       {/* Refusal bubble */}
       {refuseBubble && (
-        <div className="pet-speech" style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
+        <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
           <TypewriterText text="Nah not in the mood." speed={50} />
         </div>
       )}
 
       {/* Angry speech */}
       {state === "angry" && (
-        <div className="pet-speech" style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
+        <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
           <TypewriterText text="How dare you!!" speed={50} />
         </div>
       )}
 
       {/* Sleep hover bubble */}
       {!hasAwoken && isHovered && (
-        <div className="pet-speech" style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
+        <div className="pet-speech" style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
           <TypewriterText text="Zzz... (Click to wake me)" speed={50} />
         </div>
       )}
 
       {/* Hover chat */}
       {hoverSeqIdx >= 0 && hoverSeqIdx < hoverMessages.length && !refuseBubble && state !== "playing" && state !== "angry" && (
-        <div className="pet-speech" key={hoverSeqIdx} style={{ width:"max-content", maxWidth:"200px", textAlign:"center" }}>
+        <div className="pet-speech" key={hoverSeqIdx} style={{ width: "max-content", maxWidth: "200px", textAlign: "center" }}>
           <TypewriterText text={hoverMessages[hoverSeqIdx]} speed={50} />
         </div>
       )}

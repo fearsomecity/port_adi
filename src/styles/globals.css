@@ -31,9 +31,9 @@
   --gradient-dark: linear-gradient(135deg, #222222 0%, #333333 100%);
   --gradient-light: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
   
-  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-lg: 0 16px 56px rgba(0, 0, 0, 0.22);
   
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --radius: 12px;
