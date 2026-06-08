@@ -248,11 +248,13 @@
 }
 
 .project-link-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--project-color);
+  border-color: var(--project-color);
   transform: scale(1.02);
   box-shadow: 
-    0 6px 16px rgba(0, 0, 0, 0.06),
+    0 6px 16px rgba(0, 0, 0, 0.04),
+    0 0 15px var(--project-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
@@ -284,11 +286,13 @@
 }
 
 [data-theme="dark"] .project-link-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--project-color);
+  border-color: var(--project-color);
   transform: scale(1.02);
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 0 20px var(--project-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
