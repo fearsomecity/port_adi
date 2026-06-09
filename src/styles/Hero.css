@@ -201,6 +201,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 1.4em;
   min-width: 24ch;
 }
