@@ -337,7 +337,7 @@
   border: 1px solid color-mix(in srgb, var(--clr-blue) 20%, transparent);
 }
 
-.edu-info {}
+
 
 .edu-degree {
   font-family: var(--font-heading);
@@ -530,9 +530,6 @@
 
   .cert-card {
     flex: 1 1 calc(50% - 0.5rem);
-  }
-
-  .cert-card {
     padding: 1.25rem 1.5rem;
     gap: 1rem;
     min-height: 5rem;
@@ -615,9 +612,6 @@
 
   .cert-card {
     flex: 1 1 100%;
-  }
-
-  .cert-card {
     padding: 1rem;
     min-height: auto;
   }
