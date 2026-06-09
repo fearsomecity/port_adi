@@ -235,6 +235,46 @@ function SnakeGame({ onClose }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [steer]);
 
+  // Touch Swipe controls for Mobile
+  const touchStartRef = useRef({ x: 0, y: 0 });
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const handleTouchStart = (e) => {
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.cancelable) e.preventDefault();
+      
+      const touch = e.touches[0];
+      const dx = touch.clientX - touchStartRef.current.x;
+      const dy = touch.clientY - touchStartRef.current.y;
+      const threshold = 30; // Swipe threshold in pixels
+
+      if (Math.abs(dx) > threshold || Math.abs(dy) > threshold) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0) steer(1, 0); // Right
+          else steer(-1, 0);       // Left
+        } else {
+          if (dy > 0) steer(0, 1); // Down
+          else steer(0, -1);       // Up
+        }
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      }
+    };
+
+    wrap.addEventListener("touchstart", handleTouchStart, { passive: true });
+    wrap.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      wrap.removeEventListener("touchstart", handleTouchStart);
+      wrap.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [steer]);
+
   // Canvas size
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -297,7 +337,7 @@ function SnakeGame({ onClose }) {
           <button className="sg-dpad-btn" onClick={() => steer(0, 1)}>▼</button>
         </div>
 
-        <p className="sg-hint">Arrow keys · WASD · Esc to close</p>
+        <p className="sg-hint">Arrow keys · Swipe canvas · Esc to close</p>
       </div>
     </div>
   );
