@@ -156,16 +156,17 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text)', textDecoration: 'none' }}>
-            <FaGithub size={18} />
+          <a href="https://github.com/fearsomecity" target="_blank" rel="noreferrer" className="navbar-mobile-social" title="GitHub">
+            <FaGithub size={18} /> GitHub
           </a>
-          <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 500, color: 'var(--text)', textDecoration: 'none' }}>
-            <SiLeetcode size={18} />
+          <a href={leetcodeStats.profileUrl} target="_blank" rel="noreferrer" className="navbar-mobile-social" title="LeetCode">
+            <SiLeetcode size={18} /> LeetCode
           </a>
           <a
             href="/Aditya_Resume.pdf"
             download="Aditya_Resume.pdf"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0.75rem 1rem', fontSize: '1rem', fontWeight: 600, color: 'var(--text-h)', textDecoration: 'none', borderTop: '1px solid var(--border)' }}
+            className="navbar-mobile-cv"
+            title="Download CV"
           >
             ↓ Download CV
           </a>

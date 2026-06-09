@@ -473,5 +473,40 @@
   background: var(--border);
 }
 
+/* Mobile dropdown social and CV links styling */
+.navbar-mobile .navbar-mobile-social {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
 
+.navbar-mobile .navbar-mobile-social:hover {
+  color: var(--text-h);
+  background: var(--bg-secondary);
+}
 
+.navbar-mobile .navbar-mobile-cv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-h);
+  text-decoration: none;
+  border-top: 1px solid var(--border-light);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.navbar-mobile .navbar-mobile-cv:hover {
+  background: var(--bg-secondary);
+}

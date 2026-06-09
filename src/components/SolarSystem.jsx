@@ -198,12 +198,16 @@ export default function SolarSystem({ size = 340 }) {
     };
   }, [size]);
 
-  // Track relative mouse position inside the canvas
+  // Track relative mouse position inside the canvas, scaling for visual resize
   const handleMouseMove = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = rect.width > 0 ? canvas.width / rect.width : 1;
+    const scaleY = rect.height > 0 ? canvas.height / rect.height : 1;
     mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
     };
   };
 
@@ -213,7 +217,7 @@ export default function SolarSystem({ size = 340 }) {
   };
 
   return (
-    <div style={{ position: "relative", width: size, height: size, margin: "0 auto" }}>
+    <div style={{ position: "relative", maxWidth: `${size}px`, width: "100%", aspectRatio: "1 / 1", margin: "0 auto" }}>
       <canvas
         ref={canvasRef}
         onMouseMove={handleMouseMove}
@@ -221,6 +225,8 @@ export default function SolarSystem({ size = 340 }) {
         style={{
           borderRadius: "50%",
           display: "block",
+          width: "100%",
+          height: "100%",
           cursor: hoveredPlanet ? "pointer" : "default",
           boxShadow: "0 0 40px rgba(8, 7, 17, 0.6)",
         }}

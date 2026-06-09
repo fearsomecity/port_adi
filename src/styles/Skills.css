@@ -28,17 +28,39 @@
   border: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   min-height: 200px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
 /* Bento Card Sizes */
-.card-languages { grid-column: span 3; }
-.card-frontend { grid-column: span 3; }
-.card-backend { grid-column: span 3; grid-row: span 1; }
-.card-database { grid-column: span 3; }
-.card-toolsplatforms { grid-column: span 2; }
-.card-corecs { grid-column: span 4; }
-.card-leetcode { grid-column: span 6; min-height: auto; }
+.card-languages {
+  grid-column: span 3;
+}
+
+.card-frontend {
+  grid-column: span 3;
+}
+
+.card-backend {
+  grid-column: span 3;
+  grid-row: span 1;
+}
+
+.card-database {
+  grid-column: span 3;
+}
+
+.card-toolsplatforms {
+  grid-column: span 2;
+}
+
+.card-corecs {
+  grid-column: span 4;
+}
+
+.card-leetcode {
+  grid-column: span 6;
+  min-height: auto;
+}
 
 /* Mobile Responsiveness */
 @media (max-width: 1024px) {
@@ -51,13 +73,33 @@
     gap: 1.25rem;
   }
 
-  .card-languages { grid-column: span 2; }
-  .card-frontend { grid-column: span 2; }
-  .card-backend { grid-column: span 2; }
-  .card-database { grid-column: span 2; }
-  .card-toolsplatforms { grid-column: span 1; }
-  .card-corecs { grid-column: span 2; }
-  .card-leetcode { grid-column: span 2; }
+  .card-languages {
+    grid-column: span 2;
+  }
+
+  .card-frontend {
+    grid-column: span 2;
+  }
+
+  .card-backend {
+    grid-column: span 2;
+  }
+
+  .card-database {
+    grid-column: span 2;
+  }
+
+  .card-toolsplatforms {
+    grid-column: span 1;
+  }
+
+  .card-corecs {
+    grid-column: span 2;
+  }
+
+  .card-leetcode {
+    grid-column: span 2;
+  }
 
   .skill-bento-card {
     min-height: 150px;
@@ -78,13 +120,33 @@
     gap: 1rem;
   }
 
-  .card-languages { grid-column: span 1; }
-  .card-frontend { grid-column: span 1; }
-  .card-backend { grid-column: span 1; }
-  .card-database { grid-column: span 1; }
-  .card-toolsplatforms { grid-column: span 1; }
-  .card-corecs { grid-column: span 1; }
-  .card-leetcode { grid-column: span 1; }
+  .card-languages {
+    grid-column: span 1;
+  }
+
+  .card-frontend {
+    grid-column: span 1;
+  }
+
+  .card-backend {
+    grid-column: span 1;
+  }
+
+  .card-database {
+    grid-column: span 1;
+  }
+
+  .card-toolsplatforms {
+    grid-column: span 1;
+  }
+
+  .card-corecs {
+    grid-column: span 1;
+  }
+
+  .card-leetcode {
+    grid-column: span 1;
+  }
 
   .skill-card-content {
     padding: 1.75rem;
@@ -227,7 +289,13 @@
   .skills-bento {
     grid-template-columns: repeat(2, 1fr);
   }
-  .card-languages, .card-frontend, .card-backend, .card-database, .card-toolsplatforms, .card-corecs {
+
+  .card-languages,
+  .card-frontend,
+  .card-backend,
+  .card-database,
+  .card-toolsplatforms,
+  .card-corecs {
     grid-column: span 1;
   }
 }
@@ -236,23 +304,34 @@
   .skills-section {
     padding: 4rem 1.5rem;
   }
+
   .skills-header {
     margin-bottom: 3rem;
   }
+
   .skills-bento {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
-  .card-languages, .card-frontend, .card-backend, .card-database, .card-toolsplatforms, .card-corecs {
+
+  .card-languages,
+  .card-frontend,
+  .card-backend,
+  .card-database,
+  .card-toolsplatforms,
+  .card-corecs {
     grid-column: span 1;
     min-height: 160px;
   }
+
   .skill-card-content {
     padding: 1.5rem;
   }
+
   .skill-cat-header {
     margin-bottom: 1rem;
   }
+
   .skill-cat-icon {
     width: 40px;
     height: 40px;
@@ -263,25 +342,32 @@
   .skills-section {
     padding: 3rem 1rem;
   }
+
   .skills-header {
     margin-bottom: 2rem;
   }
+
   .skills-bento {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
   .skill-bento-card {
     min-height: 150px;
   }
+
   .skill-card-content {
     padding: 1.25rem;
   }
+
   .skill-cat-name {
     font-size: 1.1rem;
   }
+
   .skill-pills {
     gap: 0.5rem;
   }
+
   .skill-pill {
     font-size: 0.75rem;
     padding: 0.4rem 0.8rem;
@@ -292,11 +378,13 @@
   .skill-card-content {
     padding: 1rem;
   }
+
   .skill-cat-icon {
     width: 36px;
     height: 36px;
     font-size: 1rem;
   }
+
   .skill-cat-name {
     font-size: 1rem;
   }
@@ -380,6 +468,7 @@
     grid-template-columns: 100px 1fr;
     gap: 1.5rem;
   }
+
   .leetcode-mini-meta {
     grid-column: span 2;
     flex-direction: row !important;
@@ -397,6 +486,7 @@
     justify-items: center;
     text-align: center;
   }
+
   .leetcode-mini-meta {
     grid-column: span 1;
   }
@@ -534,4 +624,3 @@
   color: var(--text-secondary);
   margin-top: 0.1rem;
 }
-

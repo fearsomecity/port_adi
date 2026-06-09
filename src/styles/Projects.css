@@ -36,10 +36,12 @@
 
   .project-title {
     font-size: 1rem;
+    min-height: auto;
   }
 
   .project-description {
     font-size: 0.85rem;
+    min-height: auto;
   }
 
   .project-bullets {
@@ -48,6 +50,10 @@
 
   .project-bullets li {
     font-size: 0.78rem;
+  }
+
+  .project-tech-pills {
+    min-height: auto;
   }
 }
 

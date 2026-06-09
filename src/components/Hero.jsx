@@ -5,8 +5,7 @@ import { Globe as GithubIcon, Link as LinkedinIcon, Mail } from "lucide-react";
 import Magnetic from "./Magnetic";
 import "../styles/Hero.css";
 
-const CANVAS_PARTICLE_COUNT = 80;
-
+// Dynamically set particle count per viewport size
 function ParticleCanvas() {
   const canvasRef = useRef(null);
 
@@ -14,7 +13,11 @@ function ParticleCanvas() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     let animId;
-    let mouse = { x: null, y: null };
+    const mouse = { x: null, y: null };
+
+    // Fewer particles on mobile — big win on low-end devices
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 35 : 75;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -23,25 +26,31 @@ function ParticleCanvas() {
     resize();
     window.addEventListener("resize", resize);
 
-    window.addEventListener("mousemove", (e) => {
+    const onMouseMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
-    });
+    };
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
-    const particles = Array.from({ length: CANVAS_PARTICLE_COUNT }, () => ({
+    const particles = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 2.5 + 0.5,
-      alpha: Math.random() * 0.6 + 0.2,
+      r: Math.random() * 2 + 0.5,
+      alpha: Math.random() * 0.5 + 0.15,
     }));
+
+    // Squared thresholds — avoids Math.sqrt until we know we need opacity
+    const LINK_DIST_SQ  = 120 * 120;   // particle–particle
+    const MOUSE_DIST_SQ = 180 * 180;   // particle–mouse
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p) => {
-        // Move
+      // ── Move + draw dots ──────────────────────────────────
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0) p.x = canvas.width;
@@ -49,38 +58,48 @@ function ParticleCanvas() {
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34, 34, 34, ${p.alpha * 0.3})`;
+        ctx.fillStyle = `rgba(34,34,34,${p.alpha * 0.3})`;
         ctx.fill();
+      }
 
-        // Connect to nearby particles
-        particles.forEach((q) => {
-          const dist = Math.hypot(p.x - q.x, p.y - q.y);
-          if (dist < 120) {
+      // ── Particle–particle connections (forward-only → N*(N-1)/2 checks) ──
+      ctx.lineWidth = 0.6;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        for (let j = i + 1; j < particles.length; j++) {
+          const q   = particles[j];
+          const dx  = p.x - q.x;
+          const dy  = p.y - q.y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < LINK_DIST_SQ) {
+            const dist = Math.sqrt(dSq);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = `rgba(34, 34, 34, ${0.06 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-          }
-        });
-
-        // Connect to mouse
-        if (mouse.x !== null) {
-          const mdist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-          if (mdist < 180) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(34, 34, 34, ${0.12 * (1 - mdist / 180)})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(34,34,34,${0.06 * (1 - dist / 120)})`;
             ctx.stroke();
           }
         }
-      });
+
+        // ── Particle–mouse connection ─────────────────────
+        if (mouse.x !== null) {
+          const dx  = p.x - mouse.x;
+          const dy  = p.y - mouse.y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < MOUSE_DIST_SQ) {
+            const mdist = Math.sqrt(dSq);
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(34,34,34,${0.12 * (1 - mdist / 180)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+            ctx.lineWidth = 0.6; // restore
+          }
+        }
+      }
 
       animId = requestAnimationFrame(draw);
     };
@@ -89,6 +108,7 @@ function ParticleCanvas() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 

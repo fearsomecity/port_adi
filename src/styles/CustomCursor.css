@@ -3,6 +3,13 @@
   * { cursor: none !important; }
 }
 
+/* ── Hide custom cursor on touchscreens ── */
+@media (hover: none) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
 /* ── Blob cursor ── */
 .custom-cursor {
   position: fixed;

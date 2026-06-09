@@ -139,3 +139,9 @@
   0%   { opacity: 0.6; transform: scaleX(1.4) scaleY(0.7); }
   100% { opacity: 0.2; transform: scaleX(0.8) scaleY(1.1); }
 }
+
+@media (max-width: 768px) {
+  .pixel-pet-container {
+    display: none !important;
+  }
+}
