@@ -384,8 +384,5 @@
   }
 }
 
-@media (max-width: 768px) {
-  .snake-hanger {
-    display: none !important;
-  }
-}
+
+

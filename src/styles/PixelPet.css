@@ -140,8 +140,5 @@
   100% { opacity: 0.2; transform: scaleX(0.8) scaleY(1.1); }
 }
 
-@media (max-width: 768px) {
-  .pixel-pet-container {
-    display: none !important;
-  }
-}
+
+
