@@ -1,15 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+﻿import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/PteranodonPet.css";
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PIXEL ART BUDGIE / PARAKEET SPRITE (Red & Ruby Palette)
-   Matching exact pixel proportions: curved head, cheek mark, scalloped wing,
-   long stepped tail, golden beak, and peach legs.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
 function PixelRedBirdSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
-  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide/rest
   const wingState = state === "soaring" ? 3 : (flapFrame % 4);
 
   return (
@@ -24,107 +17,98 @@ function PixelRedBirdSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
         filter: "drop-shadow(0px 3px 6px rgba(0,0,0,0.25))",
       }}
     >
-      {/* ── LONG STEPPED TAIL ── */}
-      <rect x="10" y="18" width="4" height="2" fill="#EF4444" />
-      <rect x="8" y="19" width="4" height="2" fill="#DC2626" />
-      <rect x="6" y="20" width="4" height="2" fill="#B91C1C" />
-      <rect x="4" y="21" width="4" height="2" fill="#991B1B" />
-      <rect x="2" y="22" width="4" height="2" fill="#7F1D1D" />
-      <rect x="0" y="23" width="3" height="2" fill="#374151" />
+      {/* -- LONG STEPPED TAIL -- */}
+      <rect x="10" y="18" width="4" height="2" fill="#38BDF8" />
+      <rect x="8" y="19" width="4" height="2" fill="#0EA5E9" />
+      <rect x="6" y="20" width="4" height="2" fill="#0284C7" />
+      <rect x="4" y="21" width="4" height="2" fill="#0369A1" />
+      <rect x="2" y="22" width="4" height="2" fill="#1E3A8A" />
+      <rect x="0" y="23" width="3" height="2" fill="#1E293B" />
       {/* Tail underside accent */}
-      <rect x="7" y="21" width="3" height="1" fill="#7F1D1D" />
-      <rect x="3" y="23" width="2" height="1" fill="#1F2937" />
+      <rect x="7" y="21" width="3" height="1" fill="#0369A1" />
+      <rect x="3" y="23" width="2" height="1" fill="#0F172A" />
 
-      {/* ── PEACH LEGS & FEET ── */}
+      {/* -- PEACH LEGS & FEET -- */}
       <rect x="18" y="19" width="1" height="3" fill="#FDBA74" />
       <rect x="20" y="19" width="1" height="3" fill="#FDBA74" />
-      <rect x="16" y="22" width="6" height="1" fill="#F97316" />
+      <rect x="16" y="22" width="6" height="1" fill="#FFEDD5" />
 
-      {/* ── MAIN BODY & BREAST (Curved shape) ── */}
-      <rect x="16" y="12" width="8" height="7" fill="#EF4444" />
-      <rect x="17" y="11" width="7" height="8" fill="#EF4444" />
-      <rect x="18" y="10" width="6" height="9" fill="#EF4444" />
-      <rect x="19" y="13" width="5" height="5" fill="#F87171" />
+      {/* -- MAIN BODY & BREAST (Sky Blue) -- */}
+      <rect x="16" y="12" width="8" height="7" fill="#38BDF8" />
+      <rect x="17" y="11" width="7" height="8" fill="#38BDF8" />
+      <rect x="18" y="10" width="6" height="9" fill="#38BDF8" />
+      <rect x="19" y="13" width="5" height="5" fill="#7DD3FC" />
 
-      {/* ── HEAD DOME & NECK ── */}
-      <rect x="18" y="4" width="5" height="2" fill="#FECDD3" />
-      <rect x="17" y="5" width="7" height="2" fill="#FECDD3" />
-      <rect x="16" y="6" width="8" height="5" fill="#FCA5A5" />
-      <rect x="16" y="8" width="9" height="4" fill="#EF4444" />
+      {/* -- HEAD DOME & NECK (Light Pastel Blue) -- */}
+      <rect x="18" y="4" width="5" height="2" fill="#E0F2FE" />
+      <rect x="17" y="5" width="7" height="2" fill="#E0F2FE" />
+      <rect x="16" y="6" width="8" height="5" fill="#BAE6FD" />
+      <rect x="16" y="8" width="9" height="4" fill="#38BDF8" />
 
-      {/* ── BEAK (On right side of head) ── */}
+      {/* -- BEAK (Golden yellow on right edge) -- */}
       <rect x="24" y="7" width="2" height="3" fill="#F59E0B" />
       <rect x="25" y="8" width="1" height="2" fill="#D97706" />
 
-      {/* ── CHEEK MARK ── */}
-      <rect x="21" y="10" width="2" height="1" fill="#881337" />
+      {/* -- CHEEK MARK (Dark Blue Bar) -- */}
+      <rect x="21" y="10" width="2" height="1" fill="#1E3A8A" />
 
-      {/* ── EYE & BLINK ── */}
+      {/* -- EYE & BLINK -- */}
       {isBlinking ? (
-        <rect x="21" y="7" width="2" height="1" fill="#4C0519" />
+        <rect x="21" y="7" width="2" height="1" fill="#0F172A" />
       ) : (
         <g>
-          <rect x="21" y="6" width="2" height="2" fill="#1F2937" />
+          <rect x="21" y="6" width="2" height="2" fill="#1E293B" />
           <rect x="22" y="6" width="1" height="1" fill="#FFFFFF" />
         </g>
       )}
 
-      {/* ── FOLDED / FLUTTERING WINGS ── */}
+      {/* -- FOLDED / FLUTTERING WINGS (Navy & Dark Scallops) -- */}
       {wingState === 3 && (
-        /* Folded Wing (Resting / Soaring) - Matching image pattern! */
         <g>
-          {/* Main wing body */}
-          <rect x="12" y="11" width="7" height="7" fill="#991B1B" />
-          <rect x="10" y="13" width="7" height="6" fill="#991B1B" />
-          <rect x="8" y="15" width="6" height="4" fill="#7F1D1D" />
+          <rect x="12" y="11" width="7" height="7" fill="#0284C7" />
+          <rect x="10" y="13" width="7" height="6" fill="#0369A1" />
+          <rect x="8" y="15" width="6" height="4" fill="#1E3A8A" />
           
-          {/* Wing stripe / scallop pattern from screenshot */}
-          <rect x="14" y="11" width="2" height="2" fill="#1F2937" />
-          <rect x="17" y="12" width="2" height="2" fill="#1F2937" />
-          <rect x="12" y="13" width="2" height="2" fill="#1F2937" />
-          <rect x="15" y="14" width="2" height="2" fill="#1F2937" />
-          <rect x="10" y="15" width="2" height="2" fill="#1F2937" />
-          <rect x="13" y="16" width="2" height="2" fill="#1F2937" />
-          <rect x="8" y="17" width="2" height="2" fill="#111827" />
+          <rect x="14" y="11" width="2" height="2" fill="#1E293B" />
+          <rect x="17" y="12" width="2" height="2" fill="#1E293B" />
+          <rect x="12" y="13" width="2" height="2" fill="#1E293B" />
+          <rect x="15" y="14" width="2" height="2" fill="#1E293B" />
+          <rect x="10" y="15" width="2" height="2" fill="#1E293B" />
+          <rect x="13" y="16" width="2" height="2" fill="#1E293B" />
+          <rect x="8" y="17" width="2" height="2" fill="#0F172A" />
         </g>
       )}
 
       {wingState === 0 && (
-        /* Wing Flap High Up */
         <g>
-          <rect x="11" y="2" width="6" height="9" fill="#991B1B" />
-          <rect x="9" y="4" width="5" height="7" fill="#B91C1C" />
-          <rect x="13" y="3" width="2" height="4" fill="#1F2937" />
-          <rect x="11" y="6" width="2" height="3" fill="#1F2937" />
+          <rect x="11" y="2" width="6" height="9" fill="#0284C7" />
+          <rect x="9" y="4" width="5" height="7" fill="#0369A1" />
+          <rect x="13" y="3" width="2" height="4" fill="#1E293B" />
+          <rect x="11" y="6" width="2" height="3" fill="#1E293B" />
         </g>
       )}
 
       {wingState === 1 && (
-        /* Wing Flap Mid Level */
         <g>
-          <rect x="8" y="9" width="9" height="5" fill="#991B1B" />
-          <rect x="6" y="10" width="8" height="4" fill="#B91C1C" />
-          <rect x="10" y="10" width="3" height="2" fill="#1F2937" />
-          <rect x="8" y="12" width="3" height="2" fill="#1F2937" />
+          <rect x="8" y="9" width="9" height="5" fill="#0284C7" />
+          <rect x="6" y="10" width="8" height="4" fill="#0369A1" />
+          <rect x="10" y="10" width="3" height="2" fill="#1E293B" />
+          <rect x="8" y="12" width="3" height="2" fill="#1E293B" />
         </g>
       )}
 
       {wingState === 2 && (
-        /* Wing Flap Down */
         <g>
-          <rect x="11" y="14" width="6" height="8" fill="#991B1B" />
-          <rect x="9" y="15" width="5" height="6" fill="#7F1D1D" />
-          <rect x="13" y="15" width="2" height="4" fill="#1F2937" />
-          <rect x="11" y="17" width="2" height="3" fill="#1F2937" />
+          <rect x="11" y="14" width="6" height="8" fill="#0284C7" />
+          <rect x="9" y="15" width="5" height="6" fill="#1E3A8A" />
+          <rect x="13" y="15" width="2" height="4" fill="#1E293B" />
+          <rect x="11" y="17" width="2" height="3" fill="#1E293B" />
         </g>
       )}
     </svg>
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TYPEWRITER SPEECH
-   ═══════════════════════════════════════════════════════════════════════════ */
 function TypewriterText({ text, speed = 45 }) {
   const [index, setIndex] = useState(0);
   useEffect(() => { setIndex(0); }, [text]);
@@ -137,11 +121,6 @@ function TypewriterText({ text, speed = 45 }) {
   return <span>{text.slice(0, index)}</span>;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   MAIN RED BIRD PET COMPONENT
-   Hides behind Navbar, emerges when summoned via Navbar button,
-   and flutters smoothly across the upper/middle viewport.
-   ═══════════════════════════════════════════════════════════════════════════ */
 export default function PteranodonPet() {
   const [isSummoned, setIsSummoned] = useState(false);
   const [pos, setPos] = useState({ x: 200, y: 15 });
@@ -160,13 +139,12 @@ export default function PteranodonPet() {
   const offsetStartRef = useRef({ x: 200, y: 110 });
 
   const messages = [
-    "Chirp chirp! Redbird emerged from the Navbar!",
-    "I'm Redbird, your sky buddy!",
-    "Click me to watch me do a somersault!",
+    "Chirp chirp! Pixel Budgie emerged from the Navbar!",
+    "I'm your sky buddy!",
+    "Click me to watch me do a flip!",
     "Fluttering high over Aditya's portfolio!",
   ];
 
-  // ── WING FLAP TICKER ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!isSummoned || state === "hidden") return;
     const fps = state === "soaring" ? 4 : 10;
@@ -174,7 +152,6 @@ export default function PteranodonPet() {
     return () => clearInterval(timer);
   }, [isSummoned, state]);
 
-  // ── RANDOM BLINK ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (!isSummoned || state === "hidden") return;
     const scheduleBlink = () => {
@@ -191,7 +168,6 @@ export default function PteranodonPet() {
     return () => clearTimeout(t);
   }, [isSummoned, state]);
 
-  // ── AUTONOMOUS SMOOTH FLIGHT ENGINE ──────────────────────────────────────
   useEffect(() => {
     if (!isSummoned || isDragging || state === "trick" || state === "retreating" || state === "emerging") return;
 
@@ -238,14 +214,12 @@ export default function PteranodonPet() {
     };
   }, [isSummoned, isDragging, state, targetPos]);
 
-  // ── SPEECH ROTATION ───────────────────────────────────────────────────────
   useEffect(() => {
     if (speechIdx < 0 || speechIdx >= messages.length) return;
     const t = setTimeout(() => setSpeechIdx(i => i + 1), 3500);
     return () => clearTimeout(t);
   }, [speechIdx, messages.length]);
 
-  // ── LISTEN FOR NAVBAR TOGGLE ──────────────────────────────────────────────
   useEffect(() => {
     const handleToggle = (e) => {
       const active = e.detail ? e.detail.active : !isSummoned;
@@ -416,4 +390,3 @@ export default function PteranodonPet() {
     </div>
   );
 }
-
