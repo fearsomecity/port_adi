@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Code2, Palette, Cog, Database, Wrench, Brain } from "lucide-react";
-import { skills } from "../data/portfolioData";
+import { Code2, Palette, Cog, Database, Wrench, Brain, Flame, Trophy } from "lucide-react";
+import { SiLeetcode } from "react-icons/si";
+import { skills, leetcodeStats } from "../data/portfolioData";
 import "../styles/Skills.css";
 
 const categoryIcons = {
@@ -93,6 +94,132 @@ function BentoCard({ category, items, i }) {
   );
 }
 
+/* ── LeetCode Mini Bento Card ──────────────────────────────────────────── */
+function LeetCodeMiniCard({ i }) {
+  const lc = leetcodeStats;
+  const [animated, setAnimated] = useState(false);
+  const ref = useRef(null);
+
+  // Trigger animation once card enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setAnimated(true); },
+      { threshold: 0.2 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const R = 42;
+  const CIRC = 2 * Math.PI * R;
+  const pct = lc.solved / lc.totalQuestions;
+  const offset = CIRC * (1 - (animated ? pct : 0));
+
+  const bars = [
+    { label: "Easy",   solved: lc.easySolved,   total: lc.easyTotal,   color: "#28c840" },
+    { label: "Medium", solved: lc.mediumSolved, total: lc.mediumTotal, color: "#febc2e" },
+    { label: "Hard",   solved: lc.hardSolved,   total: lc.hardTotal,   color: "#ff5f57" },
+  ];
+
+  return (
+    <motion.div
+      ref={ref}
+      className="skill-bento-card card-leetcode"
+      style={{ "--bento-color": "#ffa116" }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.7, delay: i * 0.08 }}
+    >
+      <div className="skill-card-glass" />
+      <div className="skill-card-content leetcode-mini-content">
+
+        {/* Header */}
+        <div className="leetcode-mini-header">
+          <div className="leetcode-mini-title-wrap">
+            <div className="skill-cat-icon leetcode-icon-bg">
+              <SiLeetcode size={22} />
+            </div>
+            <div>
+              <h3 className="skill-cat-name">LeetCode</h3>
+              <span className="leetcode-mini-username">
+                <a href={lc.profileUrl} target="_blank" rel="noreferrer">@{lc.username}</a>
+              </span>
+            </div>
+          </div>
+          <div className="leetcode-mini-stats-top">
+            <span className="leetcode-mini-stat-badge streak">
+              <Flame size={13} /> {lc.streak}-day streak
+            </span>
+            <span className="leetcode-mini-stat-badge">
+              <Trophy size={13} /> #{lc.ranking}
+            </span>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="leetcode-mini-body">
+          {/* Circle progress */}
+          <div className="leetcode-mini-circle-wrap">
+            <svg className="leetcode-mini-circle-svg" viewBox="0 0 100 100">
+              <circle className="leetcode-circle-bg" cx="50" cy="50" r={R} strokeWidth="8" />
+              <circle
+                className="leetcode-circle-progress"
+                cx="50" cy="50" r={R}
+                strokeWidth="8"
+                strokeDasharray={CIRC}
+                strokeDashoffset={offset}
+                style={{ transition: "stroke-dashoffset 1.2s ease-out" }}
+              />
+            </svg>
+            <div className="leetcode-mini-circle-text">
+              <span className="leetcode-mini-solved-num">{lc.solved}</span>
+              <span className="leetcode-mini-solved-label">Solved</span>
+            </div>
+          </div>
+
+          {/* Difficulty bars */}
+          <div className="leetcode-mini-bars">
+            {bars.map((b) => (
+              <div key={b.label} className="leetcode-mini-bar-item">
+                <div className="leetcode-mini-bar-info">
+                  <span className="leetcode-mini-bar-label" style={{ color: b.color }}>{b.label}</span>
+                  <span className="leetcode-mini-bar-nums">
+                    {b.solved}<span className="leetcode-mini-bar-total">/{b.total}</span>
+                  </span>
+                </div>
+                <div className="leetcode-mini-bar-track">
+                  <div
+                    className="leetcode-mini-bar-fill"
+                    style={{
+                      background: b.color,
+                      width: animated ? `${(b.solved / b.total) * 100}%` : "0%",
+                      transition: "width 1.1s ease-out"
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Meta stats */}
+          <div className="leetcode-mini-meta">
+            <div className="leetcode-mini-meta-item">
+              <span className="leetcode-mini-meta-val">{lc.acceptanceRate}</span>
+              <span className="leetcode-mini-meta-lbl">Acceptance</span>
+            </div>
+            <div className="leetcode-mini-meta-item">
+              <span className="leetcode-mini-meta-val">{lc.activeDays}</span>
+              <span className="leetcode-mini-meta-lbl">Active Days</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Skills() {
   return (
     <section className="skills-section" id="skills">
@@ -122,6 +249,7 @@ export default function Skills() {
               i={i}
             />
           ))}
+          <LeetCodeMiniCard i={Object.keys(skills).length} />
         </div>
       </div>
     </section>

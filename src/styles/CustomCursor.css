@@ -3,65 +3,122 @@
   * { cursor: none !important; }
 }
 
-/* ── Hide custom cursor on touchscreens ── */
+/* ── Hide custom cursor on touchscreens / coarse pointers ── */
 @media (hover: none) {
-  .custom-cursor {
+  .custom-cursor-dot,
+  .custom-cursor-aura,
+  .custom-cursor-ripple {
     display: none !important;
   }
 }
 
-/* ── Blob cursor ── */
-.custom-cursor {
+/* ── Inner Precision Hotspot Dot ── */
+.custom-cursor-dot {
   position: fixed;
   top: 0;
   left: 0;
-  width: 20px;
-  height: 20px;
-
-  /* Sharp top-left corner = pointing tip, rest is blob */
-  border-radius: 0 50% 50% 50%;
-
-  background: #ffffff;
-  mix-blend-mode: difference;
-  backdrop-filter: grayscale(1);
-  -webkit-backdrop-filter: grayscale(1);
-
-  pointer-events: none;
-  z-index: 999999;
-  will-change: transform;
-
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-primary, #ffffff);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  pointer-events: none !important;
+  z-index: 1000000;
+  will-change: transform, opacity;
   opacity: 0;
-
-  /*
-    Default: tip (top-left corner, 0,0) sits exactly at mouse.
-    No centering offset needed — the sharp corner IS the hotspot.
-  */
-  transform: translate(var(--cx, -100px), var(--cy, -100px));
-
-  transition:
-    opacity 0.2s ease,
-    width  0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-radius 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0s; /* transform must NOT transition — instant follow */
+  transition: opacity 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Visible when mouse is on page */
-.custom-cursor.cursor--visible {
+[data-theme="dark"] .custom-cursor-dot {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
+
+.custom-cursor-dot.cursor--visible {
   opacity: 1;
 }
 
-/*
-  Hover state — full circle, CENTERED at mouse.
-  Width/height grows to 32px, so we offset by -16px (half)
-  on both axes using calc() so the circle center hits the mouse.
-*/
-.custom-cursor.cursor--hover {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  transform: translate(
-    calc(var(--cx, -100px) - 16px),
-    calc(var(--cy, -100px) - 16px)
-  );
+.custom-cursor-dot.cursor--hover {
+  background: var(--clr-purple, #c084fc);
+  box-shadow: 0 0 12px var(--clr-purple, #c084fc);
 }
+
+.custom-cursor-dot.cursor--active {
+  background: var(--clr-blue, #60a5fa);
+}
+
+/* ── Smooth Fluid Outer Aura Halo ── */
+.custom-cursor-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(120, 120, 120, 0.4);
+  background: rgba(120, 120, 120, 0.05);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none !important;
+  z-index: 999999;
+  will-change: transform, opacity, border-color, background-color, box-shadow;
+  opacity: 0;
+  transition: 
+    opacity 0.25s ease, 
+    border-color 0.25s ease, 
+    background-color 0.25s ease, 
+    box-shadow 0.25s ease;
+}
+
+[data-theme="dark"] .custom-cursor-aura {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.custom-cursor-aura.cursor--visible {
+  opacity: 1;
+}
+
+/* Hover state — subtle highlight halo */
+.custom-cursor-aura.cursor--hover {
+  border-color: var(--clr-purple, #c084fc);
+  background: rgba(192, 132, 252, 0.12);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.25);
+}
+
+/* Click Active State */
+.custom-cursor-aura.cursor--active {
+  border-color: var(--clr-blue, #60a5fa);
+  background: rgba(96, 165, 250, 0.2);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+/* ── Click Ripple Ring ── */
+.custom-cursor-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--clr-purple, #c084fc);
+  pointer-events: none !important;
+  z-index: 999998;
+  opacity: 0;
+}
+
+.custom-cursor-ripple.ripple--animating {
+  animation: cursor-ripple-expand 0.45s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes cursor-ripple-expand {
+  0% {
+    opacity: 0.8;
+    transform: translate3d(0, 0, 0) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1.9);
+  }
+}
+
