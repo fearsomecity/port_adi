@@ -130,53 +130,72 @@ function TypewriterText({ text, speed = 45 }) {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MAIN PTERANODON PET COMPONENT
-   Hides & roosts in top-left sky, wakes up on user interaction
+   Hides behind Navbar, emerges when summoned via Navbar button,
+   and soars smoothly across the upper/middle viewport.
    ═══════════════════════════════════════════════════════════════════════════ */
 export default function PteranodonPet() {
-  const [posX, setPosX] = useState(70);      // Left offset
-  const [posY, setPosY] = useState(75);      // Top offset (hiding/perched near top edge)
-  const [hasAwoken, setHasAwoken] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isSummoned, setIsSummoned] = useState(false);
+  const [pos, setPos] = useState({ x: 200, y: 15 }); // Start hidden near navbar
+  const [targetPos, setTargetPos] = useState({ x: 200, y: 110 });
   const [isFacingLeft, setIsFacingLeft] = useState(false);
-  const [state, setState] = useState("sleeping"); // sleeping | waking | soaring | flapping | trick | held
+  const [state, setState] = useState("hidden"); // hidden | emerging | soaring | flapping | trick | held | retreating
   const [flapFrame, setFlapFrame] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [speechIdx, setSpeechIdx] = useState(-1);
-  const [zs, setZs] = useState([]);
+  const [rotation, setRotation] = useState(0);
 
   const petRef = useRef(null);
   const isDraggingRef = useRef(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
-  const offsetStartRef = useRef({ x: 70, y: 75 });
+  const offsetStartRef = useRef({ x: 200, y: 110 });
 
   const messages = [
-    "SKREEE! Red Ptero is awake!",
+    "SKREEE! Emerged from the Navbar!",
     "I am Ptero, sky guardian of the header!",
-    "Click me to watch me do an air flip!",
-    "Patrolling high over Aditya's portfolio!",
+    "Click me in mid-air to watch a loop-de-loop!",
+    "Soaring high over Aditya's portfolio!",
   ];
+
+  // ── LISTEN FOR NAVBAR TOGGLE EVENT ───────────────────────────────────────
+  useEffect(() => {
+    const handleToggle = (e) => {
+      const active = e.detail ? e.detail.active : !isSummoned;
+      if (active) {
+        // Emerge from navbar
+        setIsSummoned(true);
+        setState("emerging");
+        setPos({ x: Math.min(window.innerWidth - 160, Math.max(80, window.innerWidth - 220)), y: 15 });
+        setTargetPos({ x: Math.min(window.innerWidth - 200, Math.max(100, window.innerWidth - 300)), y: 110 });
+        setSpeechIdx(0);
+        setTimeout(() => setState("soaring"), 800);
+      } else {
+        // Retreat behind navbar
+        setState("retreating");
+        setTargetPos({ x: pos.x, y: 15 });
+        setSpeechIdx(-1);
+        setTimeout(() => {
+          setIsSummoned(false);
+          setState("hidden");
+        }, 900);
+      }
+    };
+
+    window.addEventListener("toggle-ptero", handleToggle);
+    return () => window.removeEventListener("toggle-ptero", handleToggle);
+  }, [isSummoned, pos.x]);
 
   // ── WING FLAP TICKER ──────────────────────────────────────────────────────
   useEffect(() => {
-    if (state === "sleeping") return;
+    if (!isSummoned || state === "hidden") return;
     const fps = state === "soaring" ? 3 : 8;
     const timer = setInterval(() => setFlapFrame(f => f + 1), 1000 / fps);
     return () => clearInterval(timer);
-  }, [state]);
-
-  // ── ZZZ FLOATING PARTICLES (WHEN SLEEPING) ────────────────────────────────
-  useEffect(() => {
-    if (state !== "sleeping") { setZs([]); return; }
-    const t = setInterval(() => {
-      setZs(p => [...p, { id: Math.random(), x: Math.random() * 15 + 15 }].slice(-3));
-    }, 1600);
-    return () => clearInterval(t);
-  }, [state]);
+  }, [isSummoned, state]);
 
   // ── RANDOM BLINK ──────────────────────────────────────────────────────────
   useEffect(() => {
-    if (state === "sleeping") return;
+    if (!isSummoned || state === "hidden") return;
     const scheduleBlink = () => {
       const delay = 3500 + Math.random() * 4500;
       return setTimeout(() => {
@@ -189,65 +208,69 @@ export default function PteranodonPet() {
     };
     const t = scheduleBlink();
     return () => clearTimeout(t);
-  }, [state]);
+  }, [isSummoned, state]);
 
-  // ── PATROL FLIGHT (ONLY WHEN AWOKEN) ──────────────────────────────────────
+  // ── AUTONOMOUS SMOOTH FLIGHT ENGINE (WAYPOINT LERP LOOP) ──────────────────
   useEffect(() => {
-    if (!hasAwoken || isDragging || state === "trick" || speechIdx !== -1) return;
+    if (!isSummoned || isDragging || state === "trick" || state === "retreating" || state === "emerging") return;
 
-    const interval = setInterval(() => {
-      if (Math.random() < 0.5) {
-        setState("flapping");
-        const dir = Math.random() > 0.5;
-        setIsFacingLeft(dir);
-        
-        setPosX(prev => {
-          const max = Math.min(window.innerWidth - 120, 520);
-          const min = 30;
-          const delta = (Math.random() * 90 + 45) * (dir ? -1 : 1);
-          return Math.max(min, Math.min(max, prev + delta));
-        });
+    let animId = null;
 
-        setPosY(prev => {
-          const min = 80;
-          const max = 220;
-          const delta = (Math.random() * 40 - 20);
-          return Math.max(min, Math.min(max, prev + delta));
-        });
+    // Pick random target waypoint every 3-5 seconds
+    const waypointInterval = setInterval(() => {
+      const newTargetX = Math.random() * (window.innerWidth - 200) + 80;
+      const newTargetY = Math.random() * 180 + 80; // Fly in upper/middle sky area
+      setTargetPos({ x: newTargetX, y: newTargetY });
+      setState("flapping");
+    }, 3800);
 
-        setTimeout(() => setState("soaring"), 2400);
-      }
-    }, 4500);
+    // Continuous smooth RAF interpolation loop
+    const flyLoop = () => {
+      setPos((prev) => {
+        const dx = targetPos.x - prev.x;
+        const dy = targetPos.y - prev.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-    return () => clearInterval(interval);
-  }, [hasAwoken, isDragging, state, speechIdx]);
+        if (dist < 5) {
+          setState("soaring");
+          return prev;
+        }
+
+        // Smooth flight velocity lerp
+        const nextX = prev.x + dx * 0.035;
+        const nextY = prev.y + dy * 0.035;
+
+        // Facing direction & bank tilt angle
+        if (Math.abs(dx) > 1) {
+          setIsFacingLeft(dx < 0);
+        }
+        const bankAngle = Math.max(-12, Math.min(12, dx * 0.05));
+        setRotation(bankAngle);
+
+        return { x: nextX, y: nextY };
+      });
+
+      animId = requestAnimationFrame(flyLoop);
+    };
+
+    animId = requestAnimationFrame(flyLoop);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      clearInterval(waypointInterval);
+    };
+  }, [isSummoned, isDragging, state, targetPos]);
 
   // ── SPEECH ROTATION ───────────────────────────────────────────────────────
   useEffect(() => {
     if (speechIdx < 0 || speechIdx >= messages.length) return;
-    const t = setTimeout(() => setSpeechIdx(i => i + 1), 3200);
+    const t = setTimeout(() => setSpeechIdx(i => i + 1), 3500);
     return () => clearTimeout(t);
   }, [speechIdx, messages.length]);
 
-  // ── WAKE UP / CLICK INTERACTION ──────────────────────────────────────────
+  // ── AIR TRICK ON CLICK ────────────────────────────────────────────────────
   const handleClick = () => {
-    if (isDragging) return;
-
-    // Wake up trigger if currently sleeping/roosting
-    if (!hasAwoken) {
-      setHasAwoken(true);
-      setIsHovered(false);
-      setState("waking");
-      setPosY(110); // Fly down from perch
-      setTimeout(() => {
-        setState("soaring");
-        setSpeechIdx(0); // Trigger "Red Ptero is awake!" message
-      }, 600);
-      return;
-    }
-
-    // Air trick if already awake
-    if (state === "trick") return;
+    if (!isSummoned || isDragging || state === "trick" || state === "retreating") return;
     setSpeechIdx(-1);
     setState("trick");
     setTimeout(() => {
@@ -256,30 +279,24 @@ export default function PteranodonPet() {
   };
 
   const handleMouseEnter = () => {
-    if (isDragging || state === "trick") return;
-    setIsHovered(true);
-    if (hasAwoken) {
+    if (isSummoned && !isDragging && state !== "trick" && state !== "retreating") {
       setSpeechIdx(0);
     }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     setSpeechIdx(-1);
   };
 
   // ── DRAG ENGINE ───────────────────────────────────────────────────────────
   const startDrag = (cx, cy) => {
-    if (!hasAwoken) {
-      setHasAwoken(true);
-      setIsHovered(false);
-    }
+    if (!isSummoned) return;
     isDraggingRef.current = true;
     setIsDragging(true);
     setState("held");
     setSpeechIdx(-1);
     dragStartRef.current = { x: cx, y: cy };
-    offsetStartRef.current = { x: posX, y: posY };
+    offsetStartRef.current = { x: pos.x, y: pos.y };
   };
 
   const moveDrag = useCallback((cx, cy) => {
@@ -288,9 +305,9 @@ export default function PteranodonPet() {
     const dy = cy - dragStartRef.current.y;
     const newX = Math.max(20, Math.min(window.innerWidth - 100, offsetStartRef.current.x + dx));
     const newY = Math.max(60, Math.min(window.innerHeight - 100, offsetStartRef.current.y + dy));
-    setPosX(newX);
-    setPosY(newY);
-  }, [posX, posY]);
+    setPos({ x: newX, y: newY });
+    setTargetPos({ x: newX, y: newY });
+  }, []);
 
   const endDrag = useCallback(() => {
     if (!isDraggingRef.current) return;
@@ -338,13 +355,16 @@ export default function PteranodonPet() {
     };
   }, [moveDrag, endDrag]);
 
+  // If not summoned and hidden, do not render
+  if (!isSummoned && state === "hidden") return null;
+
   // Motion props
   const getMotionProps = () => {
-    if (state === "sleeping") {
-      return { y: [0, -3, 0], scaleY: [1, 0.96, 1], rotate: 0 };
+    if (state === "emerging") {
+      return { y: [-30, 0], scale: [0.2, 1], opacity: [0, 1] };
     }
-    if (state === "waking") {
-      return { y: [0, -20, 0], scale: [1, 1.2, 1], rotate: [0, -10, 0] };
+    if (state === "retreating") {
+      return { y: [0, -40], scale: [1, 0.1], opacity: [1, 0] };
     }
     if (state === "trick") {
       return {
@@ -360,14 +380,14 @@ export default function PteranodonPet() {
       };
     }
     return {
-      y: [0, -8, 0],
-      rotate: isFacingLeft ? [0, -3, 0] : [0, 3, 0],
+      y: [0, -6, 0],
+      rotate: rotation,
     };
   };
 
   const getTransitionProps = () => {
-    if (state === "sleeping") {
-      return { duration: 2.5, repeat: Infinity, ease: "easeInOut" };
+    if (state === "emerging" || state === "retreating") {
+      return { duration: 0.75, ease: [0.16, 1, 0.3, 1] };
     }
     if (state === "trick") {
       return { duration: 1.1, ease: "easeInOut" };
@@ -383,8 +403,8 @@ export default function PteranodonPet() {
       ref={petRef}
       className={`pteranodon-container ${isDragging ? "dragging" : ""}`}
       style={{
-        left: `${posX}px`,
-        top: `${posY}px`,
+        left: `${pos.x}px`,
+        top: `${pos.y}px`,
         cursor: isDragging ? "grabbing" : "grab",
       }}
       onMouseDown={handleMouseDown}
@@ -392,24 +412,6 @@ export default function PteranodonPet() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Floating Zzz (when roosting/sleeping) */}
-      <AnimatePresence>
-        {!hasAwoken && state === "sleeping" &&
-          zs.map((z, i) => (
-            <motion.span
-              key={z.id}
-              className="ptero-z"
-              style={{ left: `${z.x}px` }}
-              initial={{ opacity: 0, y: 0, scale: 0.5 }}
-              animate={{ opacity: 0.85, y: -35, scale: 1 + i * 0.15 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.8, ease: "easeOut" }}
-            >
-              z
-            </motion.span>
-          ))}
-      </AnimatePresence>
-
       {/* Pteranodon Motion Sprite */}
       <motion.div animate={getMotionProps()} transition={getTransitionProps()}>
         <PixelPteranodonSprite
@@ -420,16 +422,9 @@ export default function PteranodonPet() {
         />
       </motion.div>
 
-      {/* Sleep hover prompt */}
-      {!hasAwoken && isHovered && (
-        <div className="ptero-speech" style={{ width: "max-content", textAlign: "center" }}>
-          <TypewriterText text="Zzz... (Click to wake Red Ptero!)" speed={45} />
-        </div>
-      )}
-
       {/* Awoken Speech Bubble */}
       <AnimatePresence>
-        {hasAwoken && speechIdx >= 0 && speechIdx < messages.length && (
+        {isSummoned && speechIdx >= 0 && speechIdx < messages.length && (
           <motion.div
             key={speechIdx}
             className="ptero-speech"

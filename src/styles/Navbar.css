@@ -276,6 +276,34 @@
   transform: scale(1.15) rotate(8deg);
 }
 
+.ptero-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+}
+
+.ptero-nav-btn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  transform: scale(1.15) rotate(-6deg);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.ptero-nav-btn.active {
+  background: #ef4444;
+  border-color: #dc2626;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+}
+
 /* Hamburger */
 .navbar-hamburger {
   display: none;
