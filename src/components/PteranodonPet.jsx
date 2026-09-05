@@ -3,89 +3,119 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../styles/PteranodonPet.css";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CUTE RED BIRD PIXEL ART SPRITE
-   Chubby round body, rosy belly, golden beak, fluttering wings
+   PIXEL ART BUDGIE / PARAKEET SPRITE (Red & Ruby Palette)
+   Matching exact pixel proportions: curved head, cheek mark, scalloped wing,
+   long stepped tail, golden beak, and peach legs.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function PixelRedBirdSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
-  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide
+  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide/rest
   const wingState = state === "soaring" ? 3 : (flapFrame % 4);
 
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 16 16"
+      width="56"
+      height="56"
+      viewBox="0 0 28 28"
       style={{
         shapeRendering: "crispEdges",
         transform: isFacingLeft ? "scaleX(-1)" : "scaleX(1)",
-        transition: "transform 0.25s ease",
+        transition: "transform 0.2s ease",
+        filter: "drop-shadow(0px 3px 6px rgba(0,0,0,0.25))",
       }}
     >
-      {/* ── TAIL FEATHERS ── */}
-      <rect x="2" y="8" width="3" height="2" fill="#B91C1C" />
-      <rect x="1" y="9" width="2" height="1" fill="#EF4444" />
+      {/* ── LONG STEPPED TAIL ── */}
+      <rect x="10" y="18" width="4" height="2" fill="#EF4444" />
+      <rect x="8" y="19" width="4" height="2" fill="#DC2626" />
+      <rect x="6" y="20" width="4" height="2" fill="#B91C1C" />
+      <rect x="4" y="21" width="4" height="2" fill="#991B1B" />
+      <rect x="2" y="22" width="4" height="2" fill="#7F1D1D" />
+      <rect x="0" y="23" width="3" height="2" fill="#374151" />
+      {/* Tail underside accent */}
+      <rect x="7" y="21" width="3" height="1" fill="#7F1D1D" />
+      <rect x="3" y="23" width="2" height="1" fill="#1F2937" />
 
-      {/* ── TINY FEET ── */}
-      <rect x="7" y="12" width="1" height="2" fill="#F59E0B" />
-      <rect x="9" y="12" width="1" height="2" fill="#F59E0B" />
+      {/* ── PEACH LEGS & FEET ── */}
+      <rect x="18" y="19" width="1" height="3" fill="#FDBA74" />
+      <rect x="20" y="19" width="1" height="3" fill="#FDBA74" />
+      <rect x="16" y="22" width="6" height="1" fill="#F97316" />
 
-      {/* ── CHUBBY ROUND BODY ── */}
-      <rect x="4" y="5" width="8" height="7" fill="#EF4444" />
-      <rect x="5" y="4" width="6" height="8" fill="#EF4444" />
+      {/* ── MAIN BODY & BREAST (Curved shape) ── */}
+      <rect x="16" y="12" width="8" height="7" fill="#EF4444" />
+      <rect x="17" y="11" width="7" height="8" fill="#EF4444" />
+      <rect x="18" y="10" width="6" height="9" fill="#EF4444" />
+      <rect x="19" y="13" width="5" height="5" fill="#F87171" />
 
-      {/* ── ROSY CHEST / UNDERBELLY ── */}
-      <rect x="7" y="7" width="4" height="4" fill="#FECACA" />
-      <rect x="8" y="6" width="3" height="5" fill="#F87171" />
+      {/* ── HEAD DOME & NECK ── */}
+      <rect x="18" y="4" width="5" height="2" fill="#FECDD3" />
+      <rect x="17" y="5" width="7" height="2" fill="#FECDD3" />
+      <rect x="16" y="6" width="8" height="5" fill="#FCA5A5" />
+      <rect x="16" y="8" width="9" height="4" fill="#EF4444" />
 
-      {/* ── CUTE HEAD CREST FEATHER ── */}
-      <rect x="6" y="2" width="2" height="2" fill="#DC2626" />
-      <rect x="7" y="1" width="1" height="2" fill="#EF4444" />
+      {/* ── BEAK (On right side of head) ── */}
+      <rect x="24" y="7" width="2" height="3" fill="#F59E0B" />
+      <rect x="25" y="8" width="1" height="2" fill="#D97706" />
 
-      {/* ── CUTE TINY BEAK ── */}
-      <rect x="11" y="6" width="3" height="2" fill="#FBBF24" />
-      <rect x="12" y="7" width="1" height="1" fill="#D97706" />
+      {/* ── CHEEK MARK ── */}
+      <rect x="21" y="10" width="2" height="1" fill="#881337" />
 
-      {/* ── CUTE BIG EYE ── */}
+      {/* ── EYE & BLINK ── */}
       {isBlinking ? (
-        <rect x="9" y="5" width="2" height="1" fill="#7F1D1D" />
+        <rect x="21" y="7" width="2" height="1" fill="#4C0519" />
       ) : (
         <g>
-          <rect x="9" y="4" width="2" height="3" fill="#000000" />
-          <rect x="9" y="4" width="1" height="1" fill="#FFFFFF" />
+          <rect x="21" y="6" width="2" height="2" fill="#1F2937" />
+          <rect x="22" y="6" width="1" height="1" fill="#FFFFFF" />
         </g>
       )}
 
-      {/* ── FLUTTERING WINGS ── */}
+      {/* ── FOLDED / FLUTTERING WINGS ── */}
+      {wingState === 3 && (
+        /* Folded Wing (Resting / Soaring) - Matching image pattern! */
+        <g>
+          {/* Main wing body */}
+          <rect x="12" y="11" width="7" height="7" fill="#991B1B" />
+          <rect x="10" y="13" width="7" height="6" fill="#991B1B" />
+          <rect x="8" y="15" width="6" height="4" fill="#7F1D1D" />
+          
+          {/* Wing stripe / scallop pattern from screenshot */}
+          <rect x="14" y="11" width="2" height="2" fill="#1F2937" />
+          <rect x="17" y="12" width="2" height="2" fill="#1F2937" />
+          <rect x="12" y="13" width="2" height="2" fill="#1F2937" />
+          <rect x="15" y="14" width="2" height="2" fill="#1F2937" />
+          <rect x="10" y="15" width="2" height="2" fill="#1F2937" />
+          <rect x="13" y="16" width="2" height="2" fill="#1F2937" />
+          <rect x="8" y="17" width="2" height="2" fill="#111827" />
+        </g>
+      )}
+
       {wingState === 0 && (
-        /* Wing High Up */
-        <g fill="#DC2626">
-          <rect x="5" y="1" width="3" height="4" />
-          <rect x="4" y="2" width="2" height="3" fill="#B91C1C" />
+        /* Wing Flap High Up */
+        <g>
+          <rect x="11" y="2" width="6" height="9" fill="#991B1B" />
+          <rect x="9" y="4" width="5" height="7" fill="#B91C1C" />
+          <rect x="13" y="3" width="2" height="4" fill="#1F2937" />
+          <rect x="11" y="6" width="2" height="3" fill="#1F2937" />
         </g>
       )}
 
       {wingState === 1 && (
-        /* Wing Mid Level */
-        <g fill="#DC2626">
-          <rect x="3" y="5" width="4" height="3" />
-          <rect x="2" y="6" width="3" height="2" fill="#B91C1C" />
+        /* Wing Flap Mid Level */
+        <g>
+          <rect x="8" y="9" width="9" height="5" fill="#991B1B" />
+          <rect x="6" y="10" width="8" height="4" fill="#B91C1C" />
+          <rect x="10" y="10" width="3" height="2" fill="#1F2937" />
+          <rect x="8" y="12" width="3" height="2" fill="#1F2937" />
         </g>
       )}
 
       {wingState === 2 && (
-        /* Wing Down */
-        <g fill="#DC2626">
-          <rect x="5" y="8" width="3" height="4" />
-          <rect x="4" y="9" width="2" height="3" fill="#B91C1C" />
-        </g>
-      )}
-
-      {wingState === 3 && (
-        /* Soaring / Glide Wing */
-        <g fill="#DC2626">
-          <rect x="3" y="4" width="5" height="2" />
-          <rect x="2" y="5" width="3" height="2" fill="#B91C1C" />
+        /* Wing Flap Down */
+        <g>
+          <rect x="11" y="14" width="6" height="8" fill="#991B1B" />
+          <rect x="9" y="15" width="5" height="6" fill="#7F1D1D" />
+          <rect x="13" y="15" width="2" height="4" fill="#1F2937" />
+          <rect x="11" y="17" width="2" height="3" fill="#1F2937" />
         </g>
       )}
     </svg>
