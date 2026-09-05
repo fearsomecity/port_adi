@@ -15,7 +15,7 @@ export const education = {
   university: "Chitkara University",
   location: "Rajpura, Punjab",
   duration: "07/2023 – 07/2027",
-  gpa: "8.37",
+  gpa: "8.43",
 };
 
 export const skills = {

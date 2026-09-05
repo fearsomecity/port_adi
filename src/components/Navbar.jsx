@@ -20,7 +20,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("");
-  const [pteroActive, setPteroActive] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   const { scrollYProgress } = useScroll();
@@ -61,24 +60,6 @@ export default function Navbar() {
               <div className="logo-icon"></div>
               AS.
             </Link>
-            <button
-              className={`ptero-nav-btn ${pteroActive ? "active" : ""}`}
-              onClick={() => {
-                const next = !pteroActive;
-                setPteroActive(next);
-                window.dispatchEvent(new CustomEvent("toggle-ptero", { detail: { active: next } }));
-              }}
-              title={pteroActive ? "Recall Redbird to Navbar" : "Summon Flying Redbird from Navbar"}
-              aria-label="Toggle Flying Redbird"
-            >
-              <svg width="18" height="18" viewBox="0 0 16 16" style={{ shapeRendering: "crispEdges" }}>
-                <rect x="2" y="8" width="3" height="2" fill="currentColor" opacity="0.6" />
-                <rect x="4" y="5" width="8" height="7" fill="currentColor" />
-                <rect x="6" y="2" width="2" height="2" fill="currentColor" />
-                <rect x="11" y="6" width="3" height="2" fill="currentColor" opacity="0.85" />
-                <rect x="9" y="4" width="2" height="3" fill="currentColor" opacity="0.4" />
-              </svg>
-            </button>
           </div>
 
           <div className="navbar-center">

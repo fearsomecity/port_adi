@@ -24,7 +24,7 @@ const highlights = [
   },
   {
     icon: <Trophy size={24} strokeWidth={1.5} />,
-    title: "8.37 CGPA",
+    title: "8.43 CGPA",
     desc: "Maintaining a strong academic record at Chitkara University, Rajpura.",
     color: "var(--clr-green)",
   },
@@ -86,7 +86,7 @@ export default function About() {
                 <span className="code-line">
                   {"  "}<span className="code-property">gpa</span>
                   <span className="code-punctuation">: </span>
-                  <span className="code-string">8.37</span>
+                  <span className="code-string">8.43</span>
                   <span className="code-punctuation">,</span>
                 </span>
                 <span className="code-line">
@@ -107,7 +107,7 @@ export default function About() {
             {/* Stats */}
             <div className="about-stats">
               {[
-                { num: "8.37", label: "CGPA" },
+                { num: "8.43", label: "CGPA" },
                 { num: "3+", label: "Projects" },
               ].map((stat, i) => (
                 <motion.div

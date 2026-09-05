@@ -110,8 +110,8 @@ function LeetCodeMiniCard({ i }) {
         const data = await res.json();
         if (!data || !data.totalSolved || !isMounted) return;
 
-        const totalAc = data.totalSubmissions?.[0]?.count || 386;
-        const totalSub = data.totalSubmissions?.[0]?.submissions || 465;
+        const totalAc = data.matchedUserStats?.acSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.count || 387;
+        const totalSub = data.matchedUserStats?.totalSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.submissions || 466;
         const rate = totalSub > 0 ? ((totalAc / totalSub) * 100).toFixed(1) + "%" : "83.0%";
         const activeDays = data.submissionCalendar ? Object.keys(data.submissionCalendar).length : 118;
 
