@@ -14,93 +14,110 @@ function PteranodonSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
 
   return (
     <svg
-      width="56"
-      height="56"
-      viewBox="0 0 16 16"
+      width="72"
+      height="72"
+      viewBox="0 0 100 100"
       style={{
-        shapeRendering: "crispEdges",
         transform: isFacingLeft ? "scaleX(-1)" : "scaleX(1)",
         transition: "transform 0.3s ease",
       }}
     >
-      {/* ── TAIL ── */}
-      <rect x="2" y="9" width="3" height="1" fill="#7C3AED" />
-      <rect x="1" y="9" width="1" height="1" fill="#C084FC" />
+      <defs>
+        {/* Realistic Red Body Gradient */}
+        <linearGradient id="pteroRedBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#EF4444" />
+          <stop offset="50%" stopColor="#DC2626" />
+          <stop offset="100%" stopColor="#991B1B" />
+        </linearGradient>
 
-      {/* ── BACK FEET ── */}
-      <rect x="4" y="11" width="1" height="2" fill="#5B21B6" />
-      <rect x="3" y="13" width="2" height="1" fill="#A78BFA" />
+        {/* Fiery Crest Gradient */}
+        <linearGradient id="pteroCrest" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#7F1D1D" />
+          <stop offset="60%" stopColor="#DC2626" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </linearGradient>
 
-      {/* ── MAIN BODY ── */}
-      <rect x="5" y="7" width="5" height="4" fill="#7C3AED" />
-      <rect x="6" y="8" width="3" height="2" fill="#9333EA" />
+        {/* Realistic Leather Wing Membrane Gradient */}
+        <linearGradient id="pteroWingMembrane" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="rgba(239, 68, 68, 0.9)" />
+          <stop offset="60%" stopColor="rgba(220, 38, 38, 0.75)" />
+          <stop offset="100%" stopColor="rgba(245, 158, 11, 0.65)" />
+        </linearGradient>
 
-      {/* ── CHEST HIGHLIGHT ── */}
-      <rect x="8" y="8" width="2" height="2" fill="#DDD6FE" />
+        {/* Beak Gradient */}
+        <linearGradient id="pteroBeak" x1="0%" y1="0%" x2="100%" y2="50%">
+          <stop offset="0%" stopColor="#F59E0B" />
+          <stop offset="100%" stopColor="#B45309" />
+        </linearGradient>
+      </defs>
 
-      {/* ── HEAD & CREST ── */}
-      {/* Long backward crest */}
-      <rect x="4" y="4" width="4" height="2" fill="#6D28D9" />
-      <rect x="2" y="3" width="3" height="2" fill="#A78BFA" />
-      <rect x="1" y="2" width="2" height="1" fill="#C084FC" />
+      {/* ── TAIL & FEET ── */}
+      <path d="M35 58 L20 62 L28 55 Z" fill="#991B1B" />
+      {/* Legs & Talons */}
+      <path d="M42 60 L38 72 L32 74 M38 72 L40 76 M38 72 L35 76" stroke="#7F1D1D" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M48 59 L46 70 L42 72" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" fill="none" />
 
-      {/* Main head */}
-      <rect x="7" y="5" width="4" height="4" fill="#7C3AED" />
+      {/* ── TORSO & NECK ── */}
+      <path d="M40 45 C42 35 48 30 54 28 C58 35 56 48 50 56 C44 60 38 56 40 45 Z" fill="url(#pteroRedBody)" />
+      {/* Chest Muscles / Scale Highlights */}
+      <path d="M46 34 C49 38 48 46 44 52" stroke="#F87171" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6" />
 
-      {/* Sharp Beak */}
-      <rect x="11" y="7" width="4" height="2" fill="#F59E0B" />
-      <rect x="12" y="8" width="4" height="1" fill="#FBBF24" />
-      <rect x="15" y="8" width="1" height="1" fill="#D97706" />
+      {/* ── HEAD & REALISTIC CREST ── */}
+      {/* Backward Crest */}
+      <path d="M54 26 C44 20 28 14 18 16 C30 22 42 25 50 28 Z" fill="url(#pteroCrest)" />
+      {/* Head Base */}
+      <path d="M52 24 C55 20 62 20 66 23 C68 26 66 30 60 32 Z" fill="#DC2626" />
+      {/* Sharp Curved Beak */}
+      <path d="M64 24 L86 28 C88 29 88 30 84 31 L60 32 Z" fill="url(#pteroBeak)" />
+      <path d="M64 28 L84 31" stroke="#78350F" strokeWidth="1" opacity="0.5" />
 
-      {/* EYE */}
+      {/* REALISTIC EYE */}
       {isBlinking ? (
-        <rect x="9" y="6" width="2" height="1" fill="#371B58" />
+        <line x1="58" y1="24" x2="62" y2="24" stroke="#450A0A" strokeWidth="2" strokeLinecap="round" />
       ) : (
         <g>
-          <rect x="9" y="5" width="2" height="2" fill="#FFFFFF" />
-          <rect x="10" y="5" width="1" height="2" fill="#1E1B4B" />
+          <circle cx="60" cy="24" r="3" fill="#FBBF24" />
+          <circle cx="60" cy="24" r="1.5" fill="#000000" />
+          <circle cx="59.2" cy="23.2" r="0.6" fill="#FFFFFF" />
         </g>
       )}
 
-      {/* ── WINGS (Dynamic 4-frame flap) ── */}
+      {/* ── DYNAMIC WINGS (4-Frame Flap Animation) ── */}
       {wingState === 0 && (
-        /* Wing Up */
-        <g fill="#A78BFA">
-          <rect x="6" y="2" width="2" height="5" fill="#7C3AED" />
-          <rect x="5" y="1" width="3" height="2" fill="#8B5CF6" />
-          <rect x="3" y="0" width="3" height="2" fill="#C084FC" />
-          {/* Wing membrane inner */}
-          <rect x="5" y="3" width="2" height="3" fill="rgba(192, 132, 252, 0.4)" />
+        /* Wing Up (Arched Upward) */
+        <g>
+          {/* Main Wing Arm & Finger Bones */}
+          <path d="M48 40 C42 22 36 8 26 2 C34 16 38 28 42 38 Z" fill="#B91C1C" />
+          <path d="M26 2 C18 12 12 24 8 36 C22 28 34 32 44 42 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
+          {/* Wing Finger Structure Lines */}
+          <path d="M26 2 L12 28 M26 2 L22 34" stroke="#F87171" strokeWidth="1" opacity="0.6" fill="none" />
         </g>
       )}
 
       {wingState === 1 && (
         /* Wing Mid-Horizontal */
-        <g fill="#A78BFA">
-          <rect x="3" y="6" width="4" height="2" fill="#7C3AED" />
-          <rect x="1" y="5" width="3" height="2" fill="#8B5CF6" />
-          <rect x="0" y="4" width="2" height="2" fill="#C084FC" />
-          <rect x="2" y="7" width="3" height="1" fill="rgba(192, 132, 252, 0.4)" />
+        <g>
+          <path d="M46 42 C32 36 18 32 4 28 C14 42 26 48 38 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
+          <path d="M48 40 C34 35 20 30 4 28" stroke="#B91C1C" strokeWidth="3" strokeLinecap="round" fill="none" />
+          <path d="M24 31 L18 44 M34 33 L30 46" stroke="#F87171" strokeWidth="1" opacity="0.5" fill="none" />
         </g>
       )}
 
       {wingState === 2 && (
-        /* Wing Down */
-        <g fill="#A78BFA">
-          <rect x="6" y="11" width="2" height="4" fill="#7C3AED" />
-          <rect x="5" y="13" width="2" height="3" fill="#8B5CF6" />
-          <rect x="3" y="14" width="3" height="2" fill="#C084FC" />
-          <rect x="5" y="10" width="2" height="2" fill="rgba(192, 132, 252, 0.4)" />
+        /* Wing Down (Swept Downward) */
+        <g>
+          <path d="M48 42 C38 56 26 70 12 84 C22 72 32 60 42 50 Z" fill="#B91C1C" />
+          <path d="M12 84 C24 76 34 62 40 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
+          <path d="M12 84 L30 62 M12 84 L36 56" stroke="#F87171" strokeWidth="1" opacity="0.5" fill="none" />
         </g>
       )}
 
       {wingState === 3 && (
-        /* Soaring / Glide Spread */
-        <g fill="#A78BFA">
-          <rect x="4" y="5" width="4" height="2" fill="#7C3AED" />
-          <rect x="2" y="4" width="3" height="2" fill="#8B5CF6" />
-          <rect x="0" y="3" width="3" height="2" fill="#C084FC" />
-          <rect x="2" y="6" width="4" height="2" fill="rgba(192, 132, 252, 0.45)" />
+        /* Soaring / Aerodynamic Delta Glide */
+        <g>
+          <path d="M48 40 C34 28 18 20 2 16 C12 34 26 46 42 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1.2" />
+          <path d="M48 40 C34 27 18 19 2 16" stroke="#B91C1C" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+          <path d="M24 22 L18 36 M36 26 L30 42 M14 20 L8 30" stroke="#F87171" strokeWidth="1" opacity="0.6" fill="none" />
         </g>
       )}
     </svg>
