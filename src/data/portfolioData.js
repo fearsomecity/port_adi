@@ -104,5 +104,4 @@ export const leetcodeStats = {
   ranking: "1,315,880",
   streak: 15,
   activeDays: 118,
-  acceptanceRate: "83.0%",
 };

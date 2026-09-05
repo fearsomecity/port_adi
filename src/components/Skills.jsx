@@ -247,10 +247,6 @@ function LeetCodeMiniCard({ i }) {
           {/* Meta stats */}
           <div className="leetcode-mini-meta">
             <div className="leetcode-mini-meta-item">
-              <span className="leetcode-mini-meta-val">{lc.acceptanceRate}</span>
-              <span className="leetcode-mini-meta-lbl">Acceptance</span>
-            </div>
-            <div className="leetcode-mini-meta-item">
               <span className="leetcode-mini-meta-val">{lc.activeDays}</span>
               <span className="leetcode-mini-meta-lbl">Active Days</span>
             </div>
