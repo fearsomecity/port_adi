@@ -61,6 +61,27 @@ export default function Navbar() {
               <div className="logo-icon"></div>
               AS.
             </Link>
+            <button
+              className={`ptero-nav-btn ${pteroActive ? "active" : ""}`}
+              onClick={() => {
+                const next = !pteroActive;
+                setPteroActive(next);
+                window.dispatchEvent(new CustomEvent("toggle-ptero", { detail: { active: next } }));
+              }}
+              title={pteroActive ? "Recall Pteranodon to Navbar" : "Summon Flying Pteranodon from Navbar"}
+              aria-label="Toggle Flying Pteranodon"
+            >
+              <svg width="18" height="18" viewBox="0 0 16 16" style={{ shapeRendering: "crispEdges" }}>
+                <rect x="2" y="9" width="3" height="1" fill="currentColor" opacity="0.6" />
+                <rect x="5" y="7" width="5" height="4" fill="currentColor" />
+                <rect x="4" y="4" width="4" height="2" fill="currentColor" opacity="0.8" />
+                <rect x="2" y="3" width="3" height="2" fill="currentColor" />
+                <rect x="7" y="5" width="4" height="4" fill="currentColor" />
+                <rect x="11" y="7" width="4" height="2" fill="currentColor" opacity="0.9" />
+                <rect x="3" y="6" width="4" height="2" fill="currentColor" opacity="0.75" />
+                <rect x="0" y="4" width="3" height="2" fill="currentColor" opacity="0.85" />
+              </svg>
+            </button>
           </div>
 
           <div className="navbar-center">
@@ -114,30 +135,6 @@ export default function Navbar() {
               ) : (
                 <Moon size={18} style={{ strokeWidth: 2 }} />
               )}
-            </button>
-
-            <button
-              className={`ptero-nav-btn ${pteroActive ? "active" : ""}`}
-              onClick={() => {
-                const next = !pteroActive;
-                setPteroActive(next);
-                window.dispatchEvent(new CustomEvent("toggle-ptero", { detail: { active: next } }));
-              }}
-              title={pteroActive ? "Recall Red Pteranodon to Navbar" : "Summon Flying Red Pteranodon from Navbar"}
-              aria-label="Toggle Flying Pteranodon"
-            >
-              <svg width="18" height="18" viewBox="0 0 16 16" style={{ shapeRendering: "crispEdges" }}>
-                <rect x="2" y="9" width="3" height="1" fill="#991B1B" />
-                <rect x="5" y="7" width="5" height="4" fill="#EF4444" />
-                <rect x="4" y="4" width="4" height="2" fill="#DC2626" />
-                <rect x="2" y="3" width="3" height="2" fill="#EF4444" />
-                <rect x="7" y="5" width="4" height="4" fill="#EF4444" />
-                <rect x="11" y="7" width="4" height="2" fill="#FBBF24" />
-                <rect x="9" y="5" width="2" height="2" fill="#FFFFFF" />
-                <rect x="10" y="5" width="1" height="2" fill="#000000" />
-                <rect x="3" y="6" width="4" height="2" fill="#EF4444" />
-                <rect x="0" y="4" width="3" height="2" fill="#DC2626" />
-              </svg>
             </button>
 
             <div className="navbar-cta-wrapper" style={{ position: "relative" }}>
