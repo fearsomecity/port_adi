@@ -10,11 +10,13 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import CustomCursor from "./components/CustomCursor";
 import PixelPet from "./components/PixelPet";
+import PteranodonPet from "./components/PteranodonPet";
 
 export default function App() {
   return (
     <ThemeProvider>
       <CustomCursor />
+      <PteranodonPet />
       <Navbar />
       <main>
         <Hero />

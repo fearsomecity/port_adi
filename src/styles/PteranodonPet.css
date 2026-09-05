@@ -1,0 +1,66 @@
+/* ── Pteranodon Flying Companion Container ── */
+.pteranodon-container {
+  position: fixed;
+  z-index: 999900;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  filter: drop-shadow(0 8px 16px rgba(124, 58, 237, 0.25));
+  transition: filter 0.3s ease;
+}
+
+.pteranodon-container:hover {
+  filter: drop-shadow(0 12px 24px rgba(167, 139, 250, 0.45));
+}
+
+.pteranodon-container.dragging {
+  filter: drop-shadow(0 16px 32px rgba(192, 132, 252, 0.6));
+}
+
+/* Speech Bubble */
+.ptero-speech {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-surface, #1e1b4b);
+  color: var(--text-primary, #ffffff);
+  border: 1px solid var(--clr-purple, #c084fc);
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.ptero-speech::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+  border-color: var(--clr-purple, #c084fc) transparent transparent transparent;
+}
+
+[data-theme="light"] .ptero-speech {
+  background: #ffffff;
+  color: #1e1b4b;
+  border-color: #7c3aed;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.2);
+}
+
+[data-theme="light"] .ptero-speech::after {
+  border-color: #7c3aed transparent transparent transparent;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .pteranodon-container {
+    transform: scale(0.85);
+  }
+}
