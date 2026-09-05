@@ -3,121 +3,110 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../styles/PteranodonPet.css";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PTERANODON PIXEL ART SPRITE
-   16×16 SVG unit grid, rendered 56×56
-   Features: Backward head crest, sharp beak, flapping wings, tail & feet
+   RED PIXEL ART PTERANODON SPRITE
+   16×16 Pixel Grid (rendered crispEdges at 56×56)
+   Colors: Fiery Red (#EF4444), Deep Crimson (#991B1B), Gold Beak (#FBBF24)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-function PteranodonSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
-  // Wing positions: 0 = up, 1 = mid, 2 = down, 3 = glide
-  const wingState = state === "soaring" ? 3 : (flapFrame % 4);
+function PixelPteranodonSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
+  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide / folded sleep
+  const wingState = state === "sleeping" ? 4 : (state === "soaring" ? 3 : (flapFrame % 4));
 
   return (
     <svg
-      width="72"
-      height="72"
-      viewBox="0 0 100 100"
+      width="56"
+      height="56"
+      viewBox="0 0 16 16"
       style={{
+        shapeRendering: "crispEdges",
         transform: isFacingLeft ? "scaleX(-1)" : "scaleX(1)",
         transition: "transform 0.3s ease",
       }}
     >
-      <defs>
-        {/* Realistic Red Body Gradient */}
-        <linearGradient id="pteroRedBody" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#EF4444" />
-          <stop offset="50%" stopColor="#DC2626" />
-          <stop offset="100%" stopColor="#991B1B" />
-        </linearGradient>
+      {/* ── TAIL ── */}
+      <rect x="2" y="9" width="3" height="1" fill="#991B1B" />
+      <rect x="1" y="9" width="1" height="1" fill="#EF4444" />
 
-        {/* Fiery Crest Gradient */}
-        <linearGradient id="pteroCrest" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#7F1D1D" />
-          <stop offset="60%" stopColor="#DC2626" />
-          <stop offset="100%" stopColor="#F59E0B" />
-        </linearGradient>
+      {/* ── FEET / TALONS ── */}
+      <rect x="4" y="11" width="1" height="2" fill="#7F1D1D" />
+      <rect x="3" y="13" width="2" height="1" fill="#FBBF24" />
 
-        {/* Realistic Leather Wing Membrane Gradient */}
-        <linearGradient id="pteroWingMembrane" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="rgba(239, 68, 68, 0.9)" />
-          <stop offset="60%" stopColor="rgba(220, 38, 38, 0.75)" />
-          <stop offset="100%" stopColor="rgba(245, 158, 11, 0.65)" />
-        </linearGradient>
+      {/* ── MAIN BODY ── */}
+      <rect x="5" y="7" width="5" height="4" fill="#EF4444" />
+      <rect x="6" y="8" width="3" height="2" fill="#DC2626" />
+      <rect x="7" y="9" width="2" height="1" fill="#991B1B" />
 
-        {/* Beak Gradient */}
-        <linearGradient id="pteroBeak" x1="0%" y1="0%" x2="100%" y2="50%">
-          <stop offset="0%" stopColor="#F59E0B" />
-          <stop offset="100%" stopColor="#B45309" />
-        </linearGradient>
-      </defs>
+      {/* ── HEAD & CREST ── */}
+      {/* Head Crest */}
+      <rect x="4" y="4" width="4" height="2" fill="#DC2626" />
+      <rect x="2" y="3" width="3" height="2" fill="#EF4444" />
+      <rect x="1" y="2" width="2" height="1" fill="#F59E0B" /> {/* Flame Crest Tip */}
 
-      {/* ── TAIL & FEET ── */}
-      <path d="M35 58 L20 62 L28 55 Z" fill="#991B1B" />
-      {/* Legs & Talons */}
-      <path d="M42 60 L38 72 L32 74 M38 72 L40 76 M38 72 L35 76" stroke="#7F1D1D" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      <path d="M48 59 L46 70 L42 72" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Main Head */}
+      <rect x="7" y="5" width="4" height="4" fill="#EF4444" />
 
-      {/* ── TORSO & NECK ── */}
-      <path d="M40 45 C42 35 48 30 54 28 C58 35 56 48 50 56 C44 60 38 56 40 45 Z" fill="url(#pteroRedBody)" />
-      {/* Chest Muscles / Scale Highlights */}
-      <path d="M46 34 C49 38 48 46 44 52" stroke="#F87171" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6" />
+      {/* Golden Beak */}
+      <rect x="11" y="7" width="4" height="2" fill="#FBBF24" />
+      <rect x="12" y="8" width="3" height="1" fill="#F59E0B" />
 
-      {/* ── HEAD & REALISTIC CREST ── */}
-      {/* Backward Crest */}
-      <path d="M54 26 C44 20 28 14 18 16 C30 22 42 25 50 28 Z" fill="url(#pteroCrest)" />
-      {/* Head Base */}
-      <path d="M52 24 C55 20 62 20 66 23 C68 26 66 30 60 32 Z" fill="#DC2626" />
-      {/* Sharp Curved Beak */}
-      <path d="M64 24 L86 28 C88 29 88 30 84 31 L60 32 Z" fill="url(#pteroBeak)" />
-      <path d="M64 28 L84 31" stroke="#78350F" strokeWidth="1" opacity="0.5" />
-
-      {/* REALISTIC EYE */}
-      {isBlinking ? (
-        <line x1="58" y1="24" x2="62" y2="24" stroke="#450A0A" strokeWidth="2" strokeLinecap="round" />
+      {/* EYE */}
+      {state === "sleeping" ? (
+        <rect x="9" y="6" width="2" height="1" fill="#450A0A" />
+      ) : isBlinking ? (
+        <rect x="9" y="6" width="2" height="1" fill="#7F1D1D" />
       ) : (
         <g>
-          <circle cx="60" cy="24" r="3" fill="#FBBF24" />
-          <circle cx="60" cy="24" r="1.5" fill="#000000" />
-          <circle cx="59.2" cy="23.2" r="0.6" fill="#FFFFFF" />
+          <rect x="9" y="5" width="2" height="2" fill="#FFFFFF" />
+          <rect x="10" y="5" width="1" height="2" fill="#000000" />
         </g>
       )}
 
-      {/* ── DYNAMIC WINGS (4-Frame Flap Animation) ── */}
+      {/* ── PIXEL WINGS (4-Frame Flap + Sleeping Fold) ── */}
+      {wingState === 4 && (
+        /* Sleeping Folded Wings (Roosting) */
+        <g fill="#DC2626">
+          <rect x="4" y="6" width="3" height="4" fill="#991B1B" />
+          <rect x="3" y="7" width="2" height="3" fill="#EF4444" />
+        </g>
+      )}
+
       {wingState === 0 && (
-        /* Wing Up (Arched Upward) */
+        /* Wing Up */
         <g>
-          {/* Main Wing Arm & Finger Bones */}
-          <path d="M48 40 C42 22 36 8 26 2 C34 16 38 28 42 38 Z" fill="#B91C1C" />
-          <path d="M26 2 C18 12 12 24 8 36 C22 28 34 32 44 42 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
-          {/* Wing Finger Structure Lines */}
-          <path d="M26 2 L12 28 M26 2 L22 34" stroke="#F87171" strokeWidth="1" opacity="0.6" fill="none" />
+          <rect x="6" y="2" width="2" height="5" fill="#EF4444" />
+          <rect x="5" y="1" width="3" height="2" fill="#DC2626" />
+          <rect x="3" y="0" width="3" height="2" fill="#F87171" />
+          <rect x="5" y="3" width="2" height="3" fill="#991B1B" />
         </g>
       )}
 
       {wingState === 1 && (
-        /* Wing Mid-Horizontal */
+        /* Wing Mid */
         <g>
-          <path d="M46 42 C32 36 18 32 4 28 C14 42 26 48 38 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
-          <path d="M48 40 C34 35 20 30 4 28" stroke="#B91C1C" strokeWidth="3" strokeLinecap="round" fill="none" />
-          <path d="M24 31 L18 44 M34 33 L30 46" stroke="#F87171" strokeWidth="1" opacity="0.5" fill="none" />
+          <rect x="3" y="6" width="4" height="2" fill="#EF4444" />
+          <rect x="1" y="5" width="3" height="2" fill="#DC2626" />
+          <rect x="0" y="4" width="2" height="2" fill="#F87171" />
+          <rect x="2" y="7" width="3" height="1" fill="#991B1B" />
         </g>
       )}
 
       {wingState === 2 && (
-        /* Wing Down (Swept Downward) */
+        /* Wing Down */
         <g>
-          <path d="M48 42 C38 56 26 70 12 84 C22 72 32 60 42 50 Z" fill="#B91C1C" />
-          <path d="M12 84 C24 76 34 62 40 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1" />
-          <path d="M12 84 L30 62 M12 84 L36 56" stroke="#F87171" strokeWidth="1" opacity="0.5" fill="none" />
+          <rect x="6" y="11" width="2" height="4" fill="#EF4444" />
+          <rect x="5" y="13" width="2" height="3" fill="#DC2626" />
+          <rect x="3" y="14" width="3" height="2" fill="#F87171" />
+          <rect x="5" y="10" width="2" height="2" fill="#991B1B" />
         </g>
       )}
 
       {wingState === 3 && (
-        /* Soaring / Aerodynamic Delta Glide */
+        /* Soaring / Glide */
         <g>
-          <path d="M48 40 C34 28 18 20 2 16 C12 34 26 46 42 48 Z" fill="url(#pteroWingMembrane)" stroke="#DC2626" strokeWidth="1.2" />
-          <path d="M48 40 C34 27 18 19 2 16" stroke="#B91C1C" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-          <path d="M24 22 L18 36 M36 26 L30 42 M14 20 L8 30" stroke="#F87171" strokeWidth="1" opacity="0.6" fill="none" />
+          <rect x="4" y="5" width="4" height="2" fill="#EF4444" />
+          <rect x="2" y="4" width="3" height="2" fill="#DC2626" />
+          <rect x="0" y="3" width="3" height="2" fill="#F87171" />
+          <rect x="2" y="6" width="4" height="2" fill="#991B1B" />
         </g>
       )}
     </svg>
@@ -141,39 +130,53 @@ function TypewriterText({ text, speed = 45 }) {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MAIN PTERANODON PET COMPONENT
-   Lives in top-left region of the portfolio
+   Hides & roosts in top-left sky, wakes up on user interaction
    ═══════════════════════════════════════════════════════════════════════════ */
 export default function PteranodonPet() {
-  const [posX, setPosX] = useState(60);     // Left offset
-  const [posY, setPosY] = useState(110);    // Top offset
+  const [posX, setPosX] = useState(70);      // Left offset
+  const [posY, setPosY] = useState(75);      // Top offset (hiding/perched near top edge)
+  const [hasAwoken, setHasAwoken] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [isFacingLeft, setIsFacingLeft] = useState(false);
-  const [state, setState] = useState("soaring"); // soaring | flapping | trick | held
+  const [state, setState] = useState("sleeping"); // sleeping | waking | soaring | flapping | trick | held
   const [flapFrame, setFlapFrame] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [speechIdx, setSpeechIdx] = useState(-1);
+  const [zs, setZs] = useState([]);
 
   const petRef = useRef(null);
   const isDraggingRef = useRef(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
-  const offsetStartRef = useRef({ x: 60, y: 110 });
+  const offsetStartRef = useRef({ x: 70, y: 75 });
 
   const messages = [
-    "SKREEE! Sky Patrol reporting!",
-    "I am Ptero, guardian of the header!",
+    "SKREEE! Red Ptero is awake!",
+    "I am Ptero, sky guardian of the header!",
     "Click me to watch me do an air flip!",
-    "Flying high over Aditya's portfolio!",
+    "Patrolling high over Aditya's portfolio!",
   ];
 
   // ── WING FLAP TICKER ──────────────────────────────────────────────────────
   useEffect(() => {
+    if (state === "sleeping") return;
     const fps = state === "soaring" ? 3 : 8;
     const timer = setInterval(() => setFlapFrame(f => f + 1), 1000 / fps);
     return () => clearInterval(timer);
   }, [state]);
 
+  // ── ZZZ FLOATING PARTICLES (WHEN SLEEPING) ────────────────────────────────
+  useEffect(() => {
+    if (state !== "sleeping") { setZs([]); return; }
+    const t = setInterval(() => {
+      setZs(p => [...p, { id: Math.random(), x: Math.random() * 15 + 15 }].slice(-3));
+    }, 1600);
+    return () => clearInterval(t);
+  }, [state]);
+
   // ── RANDOM BLINK ──────────────────────────────────────────────────────────
   useEffect(() => {
+    if (state === "sleeping") return;
     const scheduleBlink = () => {
       const delay = 3500 + Math.random() * 4500;
       return setTimeout(() => {
@@ -186,23 +189,22 @@ export default function PteranodonPet() {
     };
     const t = scheduleBlink();
     return () => clearTimeout(t);
-  }, []);
+  }, [state]);
 
-  // ── AUTONOMOUS GLIDE & PATROL MOVEMENT ───────────────────────────────────
+  // ── PATROL FLIGHT (ONLY WHEN AWOKEN) ──────────────────────────────────────
   useEffect(() => {
-    if (isDragging || state === "trick" || speechIdx !== -1) return;
+    if (!hasAwoken || isDragging || state === "trick" || speechIdx !== -1) return;
 
     const interval = setInterval(() => {
-      // 45% chance to glide left/right across top section
-      if (Math.random() < 0.45) {
+      if (Math.random() < 0.5) {
         setState("flapping");
         const dir = Math.random() > 0.5;
         setIsFacingLeft(dir);
         
         setPosX(prev => {
-          const max = Math.min(window.innerWidth - 120, 500);
+          const max = Math.min(window.innerWidth - 120, 520);
           const min = 30;
-          const delta = (Math.random() * 80 + 40) * (dir ? -1 : 1);
+          const delta = (Math.random() * 90 + 45) * (dir ? -1 : 1);
           return Math.max(min, Math.min(max, prev + delta));
         });
 
@@ -213,12 +215,12 @@ export default function PteranodonPet() {
           return Math.max(min, Math.min(max, prev + delta));
         });
 
-        setTimeout(() => setState("soaring"), 2500);
+        setTimeout(() => setState("soaring"), 2400);
       }
     }, 4500);
 
     return () => clearInterval(interval);
-  }, [isDragging, state, speechIdx]);
+  }, [hasAwoken, isDragging, state, speechIdx]);
 
   // ── SPEECH ROTATION ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -227,9 +229,25 @@ export default function PteranodonPet() {
     return () => clearTimeout(t);
   }, [speechIdx, messages.length]);
 
-  // ── CLICK TRICK ───────────────────────────────────────────────────────────
+  // ── WAKE UP / CLICK INTERACTION ──────────────────────────────────────────
   const handleClick = () => {
-    if (isDragging || state === "trick") return;
+    if (isDragging) return;
+
+    // Wake up trigger if currently sleeping/roosting
+    if (!hasAwoken) {
+      setHasAwoken(true);
+      setIsHovered(false);
+      setState("waking");
+      setPosY(110); // Fly down from perch
+      setTimeout(() => {
+        setState("soaring");
+        setSpeechIdx(0); // Trigger "Red Ptero is awake!" message
+      }, 600);
+      return;
+    }
+
+    // Air trick if already awake
+    if (state === "trick") return;
     setSpeechIdx(-1);
     setState("trick");
     setTimeout(() => {
@@ -238,17 +256,24 @@ export default function PteranodonPet() {
   };
 
   const handleMouseEnter = () => {
-    if (!isDragging && state !== "trick") {
+    if (isDragging || state === "trick") return;
+    setIsHovered(true);
+    if (hasAwoken) {
       setSpeechIdx(0);
     }
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     setSpeechIdx(-1);
   };
 
   // ── DRAG ENGINE ───────────────────────────────────────────────────────────
   const startDrag = (cx, cy) => {
+    if (!hasAwoken) {
+      setHasAwoken(true);
+      setIsHovered(false);
+    }
     isDraggingRef.current = true;
     setIsDragging(true);
     setState("held");
@@ -313,8 +338,14 @@ export default function PteranodonPet() {
     };
   }, [moveDrag, endDrag]);
 
-  // Motion trick props
+  // Motion props
   const getMotionProps = () => {
+    if (state === "sleeping") {
+      return { y: [0, -3, 0], scaleY: [1, 0.96, 1], rotate: 0 };
+    }
+    if (state === "waking") {
+      return { y: [0, -20, 0], scale: [1, 1.2, 1], rotate: [0, -10, 0] };
+    }
     if (state === "trick") {
       return {
         rotate: [0, -20, 360, 340, 0],
@@ -335,6 +366,9 @@ export default function PteranodonPet() {
   };
 
   const getTransitionProps = () => {
+    if (state === "sleeping") {
+      return { duration: 2.5, repeat: Infinity, ease: "easeInOut" };
+    }
     if (state === "trick") {
       return { duration: 1.1, ease: "easeInOut" };
     }
@@ -358,9 +392,27 @@ export default function PteranodonPet() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Floating Zzz (when roosting/sleeping) */}
+      <AnimatePresence>
+        {!hasAwoken && state === "sleeping" &&
+          zs.map((z, i) => (
+            <motion.span
+              key={z.id}
+              className="ptero-z"
+              style={{ left: `${z.x}px` }}
+              initial={{ opacity: 0, y: 0, scale: 0.5 }}
+              animate={{ opacity: 0.85, y: -35, scale: 1 + i * 0.15 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.8, ease: "easeOut" }}
+            >
+              z
+            </motion.span>
+          ))}
+      </AnimatePresence>
+
       {/* Pteranodon Motion Sprite */}
       <motion.div animate={getMotionProps()} transition={getTransitionProps()}>
-        <PteranodonSprite
+        <PixelPteranodonSprite
           flapFrame={flapFrame}
           isFacingLeft={isFacingLeft}
           state={state}
@@ -368,9 +420,16 @@ export default function PteranodonPet() {
         />
       </motion.div>
 
-      {/* Speech Bubble */}
+      {/* Sleep hover prompt */}
+      {!hasAwoken && isHovered && (
+        <div className="ptero-speech" style={{ width: "max-content", textAlign: "center" }}>
+          <TypewriterText text="Zzz... (Click to wake Red Ptero!)" speed={45} />
+        </div>
+      )}
+
+      {/* Awoken Speech Bubble */}
       <AnimatePresence>
-        {speechIdx >= 0 && speechIdx < messages.length && (
+        {hasAwoken && speechIdx >= 0 && speechIdx < messages.length && (
           <motion.div
             key={speechIdx}
             className="ptero-speech"
@@ -386,3 +445,4 @@ export default function PteranodonPet() {
     </div>
   );
 }
+

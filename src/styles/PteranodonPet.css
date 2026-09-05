@@ -58,6 +58,19 @@
   border-color: #ef4444 transparent transparent transparent;
 }
 
+/* Floating Zzz particles */
+.ptero-z {
+  position: absolute;
+  top: -15px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ef4444;
+  pointer-events: none;
+  user-select: none;
+  z-index: 12;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 640px) {
   .pteranodon-container {
