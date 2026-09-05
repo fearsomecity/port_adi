@@ -96,9 +96,51 @@ function BentoCard({ category, items, i }) {
 
 /* ── LeetCode Mini Bento Card ──────────────────────────────────────────── */
 function LeetCodeMiniCard({ i }) {
-  const lc = leetcodeStats;
+  const [lc, setLc] = useState(leetcodeStats);
   const [animated, setAnimated] = useState(false);
   const ref = useRef(null);
+
+  // Live fetch real stats from LeetCode API
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveStats() {
+      try {
+        const res = await fetch("https://alfa-leetcode-api.onrender.com/userProfile/Stoic_97");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data || !data.totalSolved || !isMounted) return;
+
+        const totalAc = data.totalSubmissions?.[0]?.count || 386;
+        const totalSub = data.totalSubmissions?.[0]?.submissions || 465;
+        const rate = totalSub > 0 ? ((totalAc / totalSub) * 100).toFixed(1) + "%" : "83.0%";
+        const activeDays = data.submissionCalendar ? Object.keys(data.submissionCalendar).length : 118;
+
+        setLc({
+          username: "Stoic_97",
+          profileUrl: "https://leetcode.com/u/Stoic_97/",
+          solved: data.totalSolved,
+          totalQuestions: data.totalQuestions || 4042,
+          easySolved: data.easySolved || 68,
+          easyTotal: data.totalEasy || 962,
+          mediumSolved: data.mediumSolved || 57,
+          mediumTotal: data.totalMedium || 2109,
+          hardSolved: data.hardSolved || 5,
+          hardTotal: data.totalHard || 971,
+          ranking: data.ranking ? Number(data.ranking).toLocaleString() : "1,315,880",
+          streak: 15,
+          activeDays,
+          acceptanceRate: rate,
+        });
+      } catch (e) {
+        // Quiet fallback to accurate default state
+      }
+    }
+
+    fetchLiveStats();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Trigger animation once card enters viewport
   useEffect(() => {
