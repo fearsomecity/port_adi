@@ -3,110 +3,89 @@ import { motion, AnimatePresence } from "framer-motion";
 import "../styles/PteranodonPet.css";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   RED PIXEL ART PTERANODON SPRITE
-   16×16 Pixel Grid (rendered crispEdges at 56×56)
-   Colors: Fiery Red (#EF4444), Deep Crimson (#991B1B), Gold Beak (#FBBF24)
+   CUTE RED BIRD PIXEL ART SPRITE
+   Chubby round body, rosy belly, golden beak, fluttering wings
    ═══════════════════════════════════════════════════════════════════════════ */
 
-function PixelPteranodonSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
-  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide / folded sleep
-  const wingState = state === "sleeping" ? 4 : (state === "soaring" ? 3 : (flapFrame % 4));
+function PixelRedBirdSprite({ flapFrame, isFacingLeft, state, isBlinking }) {
+  // Wing state: 0 = up, 1 = mid, 2 = down, 3 = glide
+  const wingState = state === "soaring" ? 3 : (flapFrame % 4);
 
   return (
     <svg
-      width="56"
-      height="56"
+      width="48"
+      height="48"
       viewBox="0 0 16 16"
       style={{
         shapeRendering: "crispEdges",
         transform: isFacingLeft ? "scaleX(-1)" : "scaleX(1)",
-        transition: "transform 0.3s ease",
+        transition: "transform 0.25s ease",
       }}
     >
-      {/* ── TAIL ── */}
-      <rect x="2" y="9" width="3" height="1" fill="#991B1B" />
-      <rect x="1" y="9" width="1" height="1" fill="#EF4444" />
+      {/* ── TAIL FEATHERS ── */}
+      <rect x="2" y="8" width="3" height="2" fill="#B91C1C" />
+      <rect x="1" y="9" width="2" height="1" fill="#EF4444" />
 
-      {/* ── FEET / TALONS ── */}
-      <rect x="4" y="11" width="1" height="2" fill="#7F1D1D" />
-      <rect x="3" y="13" width="2" height="1" fill="#FBBF24" />
+      {/* ── TINY FEET ── */}
+      <rect x="7" y="12" width="1" height="2" fill="#F59E0B" />
+      <rect x="9" y="12" width="1" height="2" fill="#F59E0B" />
 
-      {/* ── MAIN BODY ── */}
-      <rect x="5" y="7" width="5" height="4" fill="#EF4444" />
-      <rect x="6" y="8" width="3" height="2" fill="#DC2626" />
-      <rect x="7" y="9" width="2" height="1" fill="#991B1B" />
+      {/* ── CHUBBY ROUND BODY ── */}
+      <rect x="4" y="5" width="8" height="7" fill="#EF4444" />
+      <rect x="5" y="4" width="6" height="8" fill="#EF4444" />
 
-      {/* ── HEAD & CREST ── */}
-      {/* Head Crest */}
-      <rect x="4" y="4" width="4" height="2" fill="#DC2626" />
-      <rect x="2" y="3" width="3" height="2" fill="#EF4444" />
-      <rect x="1" y="2" width="2" height="1" fill="#F59E0B" /> {/* Flame Crest Tip */}
+      {/* ── ROSY CHEST / UNDERBELLY ── */}
+      <rect x="7" y="7" width="4" height="4" fill="#FECACA" />
+      <rect x="8" y="6" width="3" height="5" fill="#F87171" />
 
-      {/* Main Head */}
-      <rect x="7" y="5" width="4" height="4" fill="#EF4444" />
+      {/* ── CUTE HEAD CREST FEATHER ── */}
+      <rect x="6" y="2" width="2" height="2" fill="#DC2626" />
+      <rect x="7" y="1" width="1" height="2" fill="#EF4444" />
 
-      {/* Golden Beak */}
-      <rect x="11" y="7" width="4" height="2" fill="#FBBF24" />
-      <rect x="12" y="8" width="3" height="1" fill="#F59E0B" />
+      {/* ── CUTE TINY BEAK ── */}
+      <rect x="11" y="6" width="3" height="2" fill="#FBBF24" />
+      <rect x="12" y="7" width="1" height="1" fill="#D97706" />
 
-      {/* EYE */}
-      {state === "sleeping" ? (
-        <rect x="9" y="6" width="2" height="1" fill="#450A0A" />
-      ) : isBlinking ? (
-        <rect x="9" y="6" width="2" height="1" fill="#7F1D1D" />
+      {/* ── CUTE BIG EYE ── */}
+      {isBlinking ? (
+        <rect x="9" y="5" width="2" height="1" fill="#7F1D1D" />
       ) : (
         <g>
-          <rect x="9" y="5" width="2" height="2" fill="#FFFFFF" />
-          <rect x="10" y="5" width="1" height="2" fill="#000000" />
+          <rect x="9" y="4" width="2" height="3" fill="#000000" />
+          <rect x="9" y="4" width="1" height="1" fill="#FFFFFF" />
         </g>
       )}
 
-      {/* ── PIXEL WINGS (4-Frame Flap + Sleeping Fold) ── */}
-      {wingState === 4 && (
-        /* Sleeping Folded Wings (Roosting) */
-        <g fill="#DC2626">
-          <rect x="4" y="6" width="3" height="4" fill="#991B1B" />
-          <rect x="3" y="7" width="2" height="3" fill="#EF4444" />
-        </g>
-      )}
-
+      {/* ── FLUTTERING WINGS ── */}
       {wingState === 0 && (
-        /* Wing Up */
-        <g>
-          <rect x="6" y="2" width="2" height="5" fill="#EF4444" />
-          <rect x="5" y="1" width="3" height="2" fill="#DC2626" />
-          <rect x="3" y="0" width="3" height="2" fill="#F87171" />
-          <rect x="5" y="3" width="2" height="3" fill="#991B1B" />
+        /* Wing High Up */
+        <g fill="#DC2626">
+          <rect x="5" y="1" width="3" height="4" />
+          <rect x="4" y="2" width="2" height="3" fill="#B91C1C" />
         </g>
       )}
 
       {wingState === 1 && (
-        /* Wing Mid */
-        <g>
-          <rect x="3" y="6" width="4" height="2" fill="#EF4444" />
-          <rect x="1" y="5" width="3" height="2" fill="#DC2626" />
-          <rect x="0" y="4" width="2" height="2" fill="#F87171" />
-          <rect x="2" y="7" width="3" height="1" fill="#991B1B" />
+        /* Wing Mid Level */
+        <g fill="#DC2626">
+          <rect x="3" y="5" width="4" height="3" />
+          <rect x="2" y="6" width="3" height="2" fill="#B91C1C" />
         </g>
       )}
 
       {wingState === 2 && (
         /* Wing Down */
-        <g>
-          <rect x="6" y="11" width="2" height="4" fill="#EF4444" />
-          <rect x="5" y="13" width="2" height="3" fill="#DC2626" />
-          <rect x="3" y="14" width="3" height="2" fill="#F87171" />
-          <rect x="5" y="10" width="2" height="2" fill="#991B1B" />
+        <g fill="#DC2626">
+          <rect x="5" y="8" width="3" height="4" />
+          <rect x="4" y="9" width="2" height="3" fill="#B91C1C" />
         </g>
       )}
 
       {wingState === 3 && (
-        /* Soaring / Glide */
-        <g>
-          <rect x="4" y="5" width="4" height="2" fill="#EF4444" />
-          <rect x="2" y="4" width="3" height="2" fill="#DC2626" />
-          <rect x="0" y="3" width="3" height="2" fill="#F87171" />
-          <rect x="2" y="6" width="4" height="2" fill="#991B1B" />
+        /* Soaring / Glide Wing */
+        <g fill="#DC2626">
+          <rect x="3" y="4" width="5" height="2" />
+          <rect x="2" y="5" width="3" height="2" fill="#B91C1C" />
         </g>
       )}
     </svg>
@@ -129,16 +108,16 @@ function TypewriterText({ text, speed = 45 }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   MAIN PTERANODON PET COMPONENT
+   MAIN RED BIRD PET COMPONENT
    Hides behind Navbar, emerges when summoned via Navbar button,
-   and soars smoothly across the upper/middle viewport.
+   and flutters smoothly across the upper/middle viewport.
    ═══════════════════════════════════════════════════════════════════════════ */
 export default function PteranodonPet() {
   const [isSummoned, setIsSummoned] = useState(false);
-  const [pos, setPos] = useState({ x: 200, y: 15 }); // Start hidden near navbar
+  const [pos, setPos] = useState({ x: 200, y: 15 });
   const [targetPos, setTargetPos] = useState({ x: 200, y: 110 });
   const [isFacingLeft, setIsFacingLeft] = useState(false);
-  const [state, setState] = useState("hidden"); // hidden | emerging | soaring | flapping | trick | held | retreating
+  const [state, setState] = useState("hidden");
   const [flapFrame, setFlapFrame] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -151,44 +130,16 @@ export default function PteranodonPet() {
   const offsetStartRef = useRef({ x: 200, y: 110 });
 
   const messages = [
-    "SKREEE! Emerged from the Navbar!",
-    "I am Ptero, sky guardian of the header!",
-    "Click me in mid-air to watch a loop-de-loop!",
-    "Soaring high over Aditya's portfolio!",
+    "Chirp chirp! Redbird emerged from the Navbar!",
+    "I'm Redbird, your sky buddy!",
+    "Click me to watch me do a somersault!",
+    "Fluttering high over Aditya's portfolio!",
   ];
-
-  // ── LISTEN FOR NAVBAR TOGGLE EVENT ───────────────────────────────────────
-  useEffect(() => {
-    const handleToggle = (e) => {
-      const active = e.detail ? e.detail.active : !isSummoned;
-      if (active) {
-        // Emerge from navbar
-        setIsSummoned(true);
-        setState("emerging");
-        setPos({ x: Math.min(window.innerWidth - 160, Math.max(80, window.innerWidth - 220)), y: 15 });
-        setTargetPos({ x: Math.min(window.innerWidth - 200, Math.max(100, window.innerWidth - 300)), y: 110 });
-        setSpeechIdx(0);
-        setTimeout(() => setState("soaring"), 800);
-      } else {
-        // Retreat behind navbar
-        setState("retreating");
-        setTargetPos({ x: pos.x, y: 15 });
-        setSpeechIdx(-1);
-        setTimeout(() => {
-          setIsSummoned(false);
-          setState("hidden");
-        }, 900);
-      }
-    };
-
-    window.addEventListener("toggle-ptero", handleToggle);
-    return () => window.removeEventListener("toggle-ptero", handleToggle);
-  }, [isSummoned, pos.x]);
 
   // ── WING FLAP TICKER ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!isSummoned || state === "hidden") return;
-    const fps = state === "soaring" ? 3 : 8;
+    const fps = state === "soaring" ? 4 : 10;
     const timer = setInterval(() => setFlapFrame(f => f + 1), 1000 / fps);
     return () => clearInterval(timer);
   }, [isSummoned, state]);
@@ -197,34 +148,32 @@ export default function PteranodonPet() {
   useEffect(() => {
     if (!isSummoned || state === "hidden") return;
     const scheduleBlink = () => {
-      const delay = 3500 + Math.random() * 4500;
+      const delay = 3200 + Math.random() * 4000;
       return setTimeout(() => {
         setIsBlinking(true);
         setTimeout(() => {
           setIsBlinking(false);
           scheduleBlink();
-        }, 180);
+        }, 160);
       }, delay);
     };
     const t = scheduleBlink();
     return () => clearTimeout(t);
   }, [isSummoned, state]);
 
-  // ── AUTONOMOUS SMOOTH FLIGHT ENGINE (WAYPOINT LERP LOOP) ──────────────────
+  // ── AUTONOMOUS SMOOTH FLIGHT ENGINE ──────────────────────────────────────
   useEffect(() => {
     if (!isSummoned || isDragging || state === "trick" || state === "retreating" || state === "emerging") return;
 
     let animId = null;
 
-    // Pick random target waypoint every 3-5 seconds
     const waypointInterval = setInterval(() => {
       const newTargetX = Math.random() * (window.innerWidth - 200) + 80;
-      const newTargetY = Math.random() * 180 + 80; // Fly in upper/middle sky area
+      const newTargetY = Math.random() * 180 + 80;
       setTargetPos({ x: newTargetX, y: newTargetY });
       setState("flapping");
-    }, 3800);
+    }, 3600);
 
-    // Continuous smooth RAF interpolation loop
     const flyLoop = () => {
       setPos((prev) => {
         const dx = targetPos.x - prev.x;
@@ -236,15 +185,13 @@ export default function PteranodonPet() {
           return prev;
         }
 
-        // Smooth flight velocity lerp
-        const nextX = prev.x + dx * 0.035;
-        const nextY = prev.y + dy * 0.035;
+        const nextX = prev.x + dx * 0.04;
+        const nextY = prev.y + dy * 0.04;
 
-        // Facing direction & bank tilt angle
         if (Math.abs(dx) > 1) {
           setIsFacingLeft(dx < 0);
         }
-        const bankAngle = Math.max(-12, Math.min(12, dx * 0.05));
+        const bankAngle = Math.max(-10, Math.min(10, dx * 0.04));
         setRotation(bankAngle);
 
         return { x: nextX, y: nextY };
@@ -268,14 +215,39 @@ export default function PteranodonPet() {
     return () => clearTimeout(t);
   }, [speechIdx, messages.length]);
 
-  // ── AIR TRICK ON CLICK ────────────────────────────────────────────────────
+  // ── LISTEN FOR NAVBAR TOGGLE ──────────────────────────────────────────────
+  useEffect(() => {
+    const handleToggle = (e) => {
+      const active = e.detail ? e.detail.active : !isSummoned;
+      if (active) {
+        setIsSummoned(true);
+        setState("emerging");
+        setPos({ x: Math.min(window.innerWidth - 160, Math.max(80, window.innerWidth - 220)), y: 15 });
+        setTargetPos({ x: Math.min(window.innerWidth - 200, Math.max(100, window.innerWidth - 300)), y: 110 });
+        setSpeechIdx(0);
+        setTimeout(() => setState("soaring"), 750);
+      } else {
+        setState("retreating");
+        setTargetPos({ x: pos.x, y: 15 });
+        setSpeechIdx(-1);
+        setTimeout(() => {
+          setIsSummoned(false);
+          setState("hidden");
+        }, 850);
+      }
+    };
+
+    window.addEventListener("toggle-ptero", handleToggle);
+    return () => window.removeEventListener("toggle-ptero", handleToggle);
+  }, [isSummoned, pos.x]);
+
   const handleClick = () => {
     if (!isSummoned || isDragging || state === "trick" || state === "retreating") return;
     setSpeechIdx(-1);
     setState("trick");
     setTimeout(() => {
       setState("soaring");
-    }, 1200);
+    }, 1100);
   };
 
   const handleMouseEnter = () => {
@@ -288,7 +260,6 @@ export default function PteranodonPet() {
     setSpeechIdx(-1);
   };
 
-  // ── DRAG ENGINE ───────────────────────────────────────────────────────────
   const startDrag = (cx, cy) => {
     if (!isSummoned) return;
     isDraggingRef.current = true;
@@ -334,31 +305,8 @@ export default function PteranodonPet() {
     };
   }, [isDragging, moveDrag, endDrag]);
 
-  // Touch handlers
-  const handleTouchStart = (e) => {
-    const t = e.touches[0];
-    startDrag(t.clientX, t.clientY);
-  };
-
-  useEffect(() => {
-    const el = petRef.current;
-    if (!el) return;
-    const onMove = (e) => moveDrag(e.touches[0].clientX, e.touches[0].clientY);
-    const onEnd = () => endDrag();
-    el.addEventListener("touchstart", handleTouchStart, { passive: true });
-    el.addEventListener("touchmove", onMove, { passive: true });
-    el.addEventListener("touchend", onEnd, { passive: true });
-    return () => {
-      el.removeEventListener("touchstart", handleTouchStart);
-      el.removeEventListener("touchmove", onMove);
-      el.removeEventListener("touchend", onEnd);
-    };
-  }, [moveDrag, endDrag]);
-
-  // If not summoned and hidden, do not render
   if (!isSummoned && state === "hidden") return null;
 
-  // Motion props
   const getMotionProps = () => {
     if (state === "emerging") {
       return { y: [-30, 0], scale: [0.2, 1], opacity: [0, 1] };
@@ -369,13 +317,13 @@ export default function PteranodonPet() {
     if (state === "trick") {
       return {
         rotate: [0, -20, 360, 340, 0],
-        y: [0, -35, -45, -15, 0],
-        scale: [1, 1.25, 1.3, 1.1, 1],
+        y: [0, -30, -40, -10, 0],
+        scale: [1, 1.2, 1.25, 1.1, 1],
       };
     }
     if (state === "held") {
       return {
-        rotate: [0, 8, -8, 0],
+        rotate: [0, 6, -6, 0],
         scale: 0.9,
       };
     }
@@ -412,9 +360,8 @@ export default function PteranodonPet() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Pteranodon Motion Sprite */}
       <motion.div animate={getMotionProps()} transition={getTransitionProps()}>
-        <PixelPteranodonSprite
+        <PixelRedBirdSprite
           flapFrame={flapFrame}
           isFacingLeft={isFacingLeft}
           state={state}
@@ -422,7 +369,6 @@ export default function PteranodonPet() {
         />
       </motion.div>
 
-      {/* Awoken Speech Bubble */}
       <AnimatePresence>
         {isSummoned && speechIdx >= 0 && speechIdx < messages.length && (
           <motion.div
