@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Code2, Palette, Cog, Database, Wrench, Brain, Flame, Trophy } from "lucide-react";
+import { Code2, Palette, Cog, Database, Wrench, Brain, Flame, Trophy, ArrowUpRight, CheckCircle2, Calendar, TrendingUp } from "lucide-react";
 import { SiLeetcode } from "react-icons/si";
 import { skills, leetcodeStats } from "../data/portfolioData";
 import "../styles/Skills.css";
@@ -94,11 +94,32 @@ function BentoCard({ category, items, i }) {
   );
 }
 
-/* ── LeetCode Mini Bento Card ──────────────────────────────────────────── */
+/* ── LeetCode Mini Bento Card (Compact & Streamlined) ───────────── */
 function LeetCodeMiniCard({ i }) {
   const [lc, setLc] = useState(leetcodeStats);
   const [animated, setAnimated] = useState(false);
   const ref = useRef(null);
+
+  // Motion values for tilt tracking
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [-0.5, 0.5], [4, -4]);
+  const rotateY = useTransform(x, [-0.5, 0.5], [-4, 4]);
+
+  const handleMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   // Live fetch real stats from LeetCode API
   useEffect(() => {
@@ -110,29 +131,19 @@ function LeetCodeMiniCard({ i }) {
         const data = await res.json();
         if (!data || !data.totalSolved || !isMounted) return;
 
-        const totalAc = data.matchedUserStats?.acSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.count || 387;
-        const totalSub = data.matchedUserStats?.totalSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.submissions || 466;
-        const rate = totalSub > 0 ? ((totalAc / totalSub) * 100).toFixed(1) + "%" : "83.0%";
         const activeDays = data.submissionCalendar ? Object.keys(data.submissionCalendar).length : 118;
 
-        setLc({
-          username: "Stoic_97",
-          profileUrl: "https://leetcode.com/u/Stoic_97/",
-          solved: data.totalSolved,
-          totalQuestions: data.totalQuestions || 4042,
-          easySolved: data.easySolved || 68,
-          easyTotal: data.totalEasy || 962,
-          mediumSolved: data.mediumSolved || 57,
-          mediumTotal: data.totalMedium || 2109,
-          hardSolved: data.hardSolved || 5,
-          hardTotal: data.totalHard || 971,
-          ranking: data.ranking ? Number(data.ranking).toLocaleString() : "1,315,880",
-          streak: 15,
-          activeDays,
-          acceptanceRate: rate,
-        });
+        setLc((prev) => ({
+          ...prev,
+          solved: data.totalSolved || prev.solved,
+          easySolved: data.easySolved || prev.easySolved,
+          mediumSolved: data.mediumSolved || prev.mediumSolved,
+          hardSolved: data.hardSolved || prev.hardSolved,
+          ranking: data.ranking ? Number(data.ranking).toLocaleString() : prev.ranking,
+          activeDays: activeDays || prev.activeDays,
+        }));
       } catch (e) {
-        // Quiet fallback to accurate default state
+        // Quiet fallback
       }
     }
 
@@ -142,7 +153,6 @@ function LeetCodeMiniCard({ i }) {
     };
   }, []);
 
-  // Trigger animation once card enters viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setAnimated(true); },
@@ -152,104 +162,82 @@ function LeetCodeMiniCard({ i }) {
     return () => observer.disconnect();
   }, []);
 
-  const R = 42;
-  const CIRC = 2 * Math.PI * R;
-  const pct = lc.solved / lc.totalQuestions;
-  const offset = CIRC * (1 - (animated ? pct : 0));
-
-  const bars = [
-    { label: "Easy",   solved: lc.easySolved,   total: lc.easyTotal,   color: "#28c840" },
-    { label: "Medium", solved: lc.mediumSolved, total: lc.mediumTotal, color: "#febc2e" },
-    { label: "Hard",   solved: lc.hardSolved,   total: lc.hardTotal,   color: "#ff5f57" },
-  ];
+  const totalSolved = Math.max(lc.solved, 1);
+  const easyPct = ((lc.easySolved / totalSolved) * 100).toFixed(1);
+  const medPct = ((lc.mediumSolved / totalSolved) * 100).toFixed(1);
+  const hardPct = ((lc.hardSolved / totalSolved) * 100).toFixed(1);
 
   return (
     <motion.div
       ref={ref}
       className="skill-bento-card card-leetcode"
-      style={{ "--bento-color": "#ffa116" }}
+      style={{
+        "--bento-color": "rgba(245, 158, 11, 0.4)",
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1000
+      }}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.7, delay: i * 0.08 }}
+      transition={{ duration: 0.6, delay: i * 0.08 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      <div className="skill-card-glass" />
-      <div className="skill-card-content leetcode-mini-content">
-
-        {/* Header */}
-        <div className="leetcode-mini-header">
-          <div className="leetcode-mini-title-wrap">
-            <div className="skill-cat-icon leetcode-icon-bg">
-              <SiLeetcode size={22} />
+      <div className="skill-card-glass" style={{ transform: "translateZ(0px)" }} />
+      <div className="leetcode-compact-content" style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" }}>
+        
+        {/* Compact Header */}
+        <div className="leetcode-compact-header">
+          <div className="leetcode-compact-identity">
+            <div className="leetcode-brand-icon">
+              <SiLeetcode size={18} />
             </div>
-            <div>
-              <h3 className="skill-cat-name">LeetCode</h3>
-              <span className="leetcode-mini-username">
-                <a href={lc.profileUrl} target="_blank" rel="noreferrer">@{lc.username}</a>
-              </span>
+            <div className="leetcode-title-row">
+              <h3 className="leetcode-compact-title">LeetCode</h3>
+              <a
+                href={lc.profileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="leetcode-profile-link"
+              >
+                <span>@{lc.username}</span>
+                <ArrowUpRight size={12} />
+              </a>
             </div>
           </div>
-          <div className="leetcode-mini-stats-top">
-            <span className="leetcode-mini-stat-badge streak">
-              <Flame size={13} /> {lc.streak}-day streak
-            </span>
-            <span className="leetcode-mini-stat-badge">
-              <Trophy size={13} /> #{lc.ranking}
-            </span>
+
+          <div className="leetcode-compact-badges">
+            <div className="leetcode-badge streak-badge">
+              <Flame size={12} className="badge-icon-streak" />
+              <span>{lc.streak}-Day Streak</span>
+            </div>
+            <div className="leetcode-badge active-badge">
+              <Calendar size={12} />
+              <span>{lc.activeDays} Active Days</span>
+            </div>
           </div>
         </div>
 
-        {/* Body */}
-        <div className="leetcode-mini-body">
-          {/* Circle progress */}
-          <div className="leetcode-mini-circle-wrap">
-            <svg className="leetcode-mini-circle-svg" viewBox="0 0 100 100">
-              <circle className="leetcode-circle-bg" cx="50" cy="50" r={R} strokeWidth="8" />
-              <circle
-                className="leetcode-circle-progress"
-                cx="50" cy="50" r={R}
-                strokeWidth="8"
-                strokeDasharray={CIRC}
-                strokeDashoffset={offset}
-                style={{ transition: "stroke-dashoffset 1.2s ease-out" }}
-              />
-            </svg>
-            <div className="leetcode-mini-circle-text">
-              <span className="leetcode-mini-solved-num">{lc.solved}</span>
-              <span className="leetcode-mini-solved-label">Solved</span>
-            </div>
+        {/* Clean Developer Metrics Grid */}
+        <div className="leetcode-metrics-grid">
+          <div className="leetcode-metric-col">
+            <span className="leetcode-metric-val val-total">{lc.solved}+</span>
+            <span className="leetcode-metric-lbl">Total Solved</span>
           </div>
-
-          {/* Difficulty bars */}
-          <div className="leetcode-mini-bars">
-            {bars.map((b) => (
-              <div key={b.label} className="leetcode-mini-bar-item">
-                <div className="leetcode-mini-bar-info">
-                  <span className="leetcode-mini-bar-label" style={{ color: b.color }}>{b.label}</span>
-                  <span className="leetcode-mini-bar-nums">
-                    {b.solved}<span className="leetcode-mini-bar-total">/{b.total}</span>
-                  </span>
-                </div>
-                <div className="leetcode-mini-bar-track">
-                  <div
-                    className="leetcode-mini-bar-fill"
-                    style={{
-                      background: b.color,
-                      width: animated ? `${(b.solved / b.total) * 100}%` : "0%",
-                      transition: "width 1.1s ease-out"
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
+          <div className="leetcode-metric-divider" />
+          <div className="leetcode-metric-col">
+            <span className="leetcode-metric-val val-easy">{lc.easySolved}</span>
+            <span className="leetcode-metric-lbl">Easy</span>
           </div>
-
-          {/* Meta stats */}
-          <div className="leetcode-mini-meta">
-            <div className="leetcode-mini-meta-item">
-              <span className="leetcode-mini-meta-val">{lc.activeDays}</span>
-              <span className="leetcode-mini-meta-lbl">Active Days</span>
-            </div>
+          <div className="leetcode-metric-col">
+            <span className="leetcode-metric-val val-med">{lc.mediumSolved}</span>
+            <span className="leetcode-metric-lbl">Medium</span>
+          </div>
+          <div className="leetcode-metric-col">
+            <span className="leetcode-metric-val val-hard">{lc.hardSolved}</span>
+            <span className="leetcode-metric-lbl">Hard</span>
           </div>
         </div>
 
