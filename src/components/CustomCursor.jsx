@@ -294,11 +294,11 @@ export default function CustomCursor() {
       if (currentMode === "text") {
         reticleTransform += ` rotate(0deg) scale(1)`;
       } else if (currentMode === "card") {
-        reticleTransform += ` rotate(0deg) scale(1.25)`;
+        reticleTransform += ` rotate(0deg) scale(1.05)`;
       } else if (currentMode === "hover") {
-        reticleTransform += ` rotate(45deg) scale(1.15)`;
+        reticleTransform += ` rotate(45deg) scale(1.05)`;
       } else if (isDown) {
-        reticleTransform += ` rotate(${reticleAngle}deg) scale(0.8)`;
+        reticleTransform += ` rotate(${reticleAngle}deg) scale(0.85)`;
       } else {
         reticleTransform += ` rotate(${reticleAngle}deg) scale(1)`;
       }
