@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Code2, Palette, Cog, Database, Wrench, Brain, Flame, Trophy, ArrowUpRight, CheckCircle2, Calendar, TrendingUp } from "lucide-react";
 import { SiLeetcode } from "react-icons/si";
-import { skills, leetcodeStats } from "../data/portfolioData";
+import { skills, leetcodeStats, initialHeatmapMonths } from "../data/portfolioData";
 import "../styles/Skills.css";
 
 const categoryIcons = {
@@ -94,10 +94,10 @@ function BentoCard({ category, items, i }) {
   );
 }
 
-/* ── LeetCode Mini Bento Card (Compact & Streamlined) ───────────── */
+/* ── LeetCode Mini Bento Card (With Authentic Yearly Activity Heatmap) ── */
 function LeetCodeMiniCard({ i }) {
   const [lc, setLc] = useState(leetcodeStats);
-  const [animated, setAnimated] = useState(false);
+  const [heatmapMonths, setHeatmapMonths] = useState(initialHeatmapMonths);
   const ref = useRef(null);
 
   // Motion values for tilt tracking
@@ -131,7 +131,7 @@ function LeetCodeMiniCard({ i }) {
         const data = await res.json();
         if (!data || !data.totalSolved || !isMounted) return;
 
-        const activeDays = data.submissionCalendar ? Object.keys(data.submissionCalendar).length : 118;
+        const activeDays = data.submissionCalendar ? Object.keys(data.submissionCalendar).length : 120;
 
         setLc((prev) => ({
           ...prev,
@@ -142,6 +142,62 @@ function LeetCodeMiniCard({ i }) {
           ranking: data.ranking ? Number(data.ranking).toLocaleString() : prev.ranking,
           activeDays: activeDays || prev.activeDays,
         }));
+
+        if (data.submissionCalendar) {
+          try {
+            const cal = typeof data.submissionCalendar === "string" 
+              ? JSON.parse(data.submissionCalendar) 
+              : data.submissionCalendar;
+
+            const totalSubs = cal ? Object.values(cal).reduce((sum, v) => sum + Number(v || 0), 0) : 0;
+            if (totalSubs > 0) {
+              setLc((prev) => ({
+                ...prev,
+                totalSubmissions: totalSubs,
+                activeDays: Object.keys(cal).length || prev.activeDays
+              }));
+            }
+            
+            const allMonthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+
+            const monthsData = [];
+            // Dynamically generate rolling 12 months ending at the current month
+            for (let offset = 11; offset >= 0; offset--) {
+              const targetDate = new Date(currentYear, currentMonth - offset, 1);
+              const year = targetDate.getFullYear();
+              const month = targetDate.getMonth();
+              const daysInMonth = new Date(year, month + 1, 0).getDate();
+              const firstDayOfWeek = new Date(Date.UTC(year, month, 1)).getUTCDay();
+              
+              const cells = [];
+              for (let pad = 0; pad < firstDayOfWeek; pad++) cells.push(-1);
+              for (let day = 1; day <= daysInMonth; day++) {
+                const ts = Date.UTC(year, month, day) / 1000;
+                let count = 0;
+                for (const [calTs, cnt] of Object.entries(cal)) {
+                  if (Math.abs(Number(calTs) - ts) < 43200) {
+                    count = cnt;
+                    break;
+                  }
+                }
+                cells.push(count);
+              }
+              while (cells.length % 7 !== 0) cells.push(-1);
+              
+              const cols = [];
+              for (let c = 0; c < cells.length; c += 7) {
+                cols.push(cells.slice(c, c + 7));
+              }
+              monthsData.push({ name: allMonthNames[month], cols });
+            }
+            if (monthsData.length === 12) setHeatmapMonths(monthsData);
+          } catch (err) {
+            // fallback quietly
+          }
+        }
       } catch (e) {
         // Quiet fallback
       }
@@ -152,20 +208,6 @@ function LeetCodeMiniCard({ i }) {
       isMounted = false;
     };
   }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setAnimated(true); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const totalSolved = Math.max(lc.solved, 1);
-  const easyPct = ((lc.easySolved / totalSolved) * 100).toFixed(1);
-  const medPct = ((lc.mediumSolved / totalSolved) * 100).toFixed(1);
-  const hardPct = ((lc.hardSolved / totalSolved) * 100).toFixed(1);
 
   return (
     <motion.div
@@ -207,38 +249,81 @@ function LeetCodeMiniCard({ i }) {
               </a>
             </div>
           </div>
-
-          <div className="leetcode-compact-badges">
-            <div className="leetcode-badge streak-badge">
-              <Flame size={12} className="badge-icon-streak" />
-              <span>{lc.streak}-Day Streak</span>
-            </div>
-            <div className="leetcode-badge active-badge">
-              <Calendar size={12} />
-              <span>{lc.activeDays} Active Days</span>
-            </div>
-          </div>
         </div>
 
-        {/* Clean Developer Metrics Grid */}
-        <div className="leetcode-metrics-grid">
-          <div className="leetcode-metric-col">
-            <span className="leetcode-metric-val val-total">{lc.solved}+</span>
-            <span className="leetcode-metric-lbl">Total Solved</span>
+        {/* Main Content: Left stats + Right authentic LeetCode yearly heatmap */}
+        <div className="leetcode-main-row">
+          
+          {/* Left Stats Grid */}
+          <div className="leetcode-metrics-col">
+            <div className="leetcode-metric-item">
+              <span className="leetcode-metric-val val-total">{lc.solved}+</span>
+              <span className="leetcode-metric-lbl">Total Solved</span>
+            </div>
+            <div className="leetcode-metrics-subrow">
+              <div className="leetcode-metric-item">
+                <span className="leetcode-metric-val val-easy">{lc.easySolved}</span>
+                <span className="leetcode-metric-lbl">Easy</span>
+              </div>
+              <div className="leetcode-metric-item">
+                <span className="leetcode-metric-val val-med">{lc.mediumSolved}</span>
+                <span className="leetcode-metric-lbl">Medium</span>
+              </div>
+              <div className="leetcode-metric-item">
+                <span className="leetcode-metric-val val-hard">{lc.hardSolved}</span>
+                <span className="leetcode-metric-lbl">Hard</span>
+              </div>
+            </div>
           </div>
-          <div className="leetcode-metric-divider" />
-          <div className="leetcode-metric-col">
-            <span className="leetcode-metric-val val-easy">{lc.easySolved}</span>
-            <span className="leetcode-metric-lbl">Easy</span>
+
+          <div className="leetcode-vertical-divider" />
+
+          {/* Right: Authentic LeetCode Yearly Heatmap */}
+          <div className="leetcode-heatmap-panel">
+            <div className="leetcode-heatmap-meta">
+              <span className="heatmap-subs-count">
+                <strong>{lc.totalSubmissions || 430}</strong> submissions in the past one year
+              </span>
+              <div className="heatmap-meta-right">
+                <span>Total active days: <strong>{lc.activeDays || 120}</strong></span>
+                <span>Max streak: <strong>{lc.streak || 15}</strong></span>
+              </div>
+            </div>
+
+            <div className="leetcode-heatmap-scroll">
+              <div className="leetcode-heatmap-months">
+                {heatmapMonths.map((m, mi) => (
+                  <div key={mi} className="heatmap-month-group">
+                    <div className="heatmap-month-cols">
+                      {m.cols.map((col, ci) => (
+                        <div key={ci} className="heatmap-col">
+                          {col.map((val, ri) => (
+                            <div
+                              key={ri}
+                              className={`heatmap-sq ${
+                                val === -1
+                                  ? "sq-hidden"
+                                  : val >= 7
+                                  ? "sq-high"
+                                  : val >= 3
+                                  ? "sq-med"
+                                  : val >= 1
+                                  ? "sq-low"
+                                  : "sq-empty"
+                              }`}
+                              title={val > 0 ? `${val} submissions` : ""}
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="heatmap-month-title">{m.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="leetcode-metric-col">
-            <span className="leetcode-metric-val val-med">{lc.mediumSolved}</span>
-            <span className="leetcode-metric-lbl">Medium</span>
-          </div>
-          <div className="leetcode-metric-col">
-            <span className="leetcode-metric-val val-hard">{lc.hardSolved}</span>
-            <span className="leetcode-metric-lbl">Hard</span>
-          </div>
+
         </div>
 
       </div>

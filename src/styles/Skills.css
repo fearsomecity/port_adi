@@ -506,55 +506,211 @@
   color: var(--text-secondary);
 }
 
-/* ── Metrics Grid (Authentic, Clean Developer Stats) ── */
-.leetcode-metrics-grid {
+/* ── Main Row: Left Stats + Right Heatmap ── */
+.leetcode-main-row {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 1.5rem;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.leetcode-metric-col {
+/* ── Metrics Column (Total + Breakdown) ── */
+.leetcode-metrics-col {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.85rem;
+  min-width: 150px;
+  flex-shrink: 0;
 }
 
-.leetcode-metric-divider {
-  width: 1px;
-  height: 32px;
-  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+.leetcode-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.leetcode-metrics-subrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
 }
 
 .leetcode-metric-val {
   font-family: var(--font-heading);
-  font-size: 1.6rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
 .val-total {
+  font-size: 1.7rem;
   color: var(--text-primary);
 }
 
 .val-easy {
+  font-size: 1.15rem;
   color: #10b981;
 }
 
 .val-med {
+  font-size: 1.15rem;
   color: #f59e0b;
 }
 
 .val-hard {
+  font-size: 1.15rem;
   color: #f43f5e;
 }
 
 .leetcode-metric-lbl {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-secondary);
+}
+
+.leetcode-vertical-divider {
+  width: 1px;
+  height: 85px;
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  flex-shrink: 0;
+}
+
+/* ── Authentic LeetCode Yearly Heatmap Panel ── */
+.leetcode-heatmap-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: color-mix(in srgb, var(--bg-primary) 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 8%, transparent);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem 0.65rem;
+}
+
+.leetcode-heatmap-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 6%, transparent);
+  padding-bottom: 0.45rem;
+}
+
+.heatmap-subs-count strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.heatmap-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.72rem;
+}
+
+.heatmap-meta-right strong {
+  color: var(--text-primary);
+}
+
+.leetcode-heatmap-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+
+.leetcode-heatmap-months {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 520px;
+}
+
+.heatmap-month-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.heatmap-month-cols {
+  display: flex;
+  gap: 2.5px;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+}
+
+.heatmap-sq {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.heatmap-sq:hover:not(.sq-hidden) {
+  transform: scale(1.35);
+  z-index: 2;
+}
+
+.sq-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sq-empty {
+  background: color-mix(in srgb, var(--text-primary) 9%, transparent);
+}
+
+.sq-low {
+  background: #15803d;
+}
+
+.sq-med {
+  background: #22c55e;
+}
+
+.sq-high {
+  background: #4ade80;
+  box-shadow: 0 0 5px rgba(74, 222, 128, 0.4);
+}
+
+.heatmap-month-title {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 960px) {
+  .leetcode-main-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .leetcode-vertical-divider {
+    display: none;
+  }
+
+  .leetcode-metrics-col {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: auto;
+  }
 }
 
 @media (max-width: 640px) {
@@ -562,13 +718,9 @@
     padding: 1.15rem 1.25rem;
   }
 
-  .leetcode-metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-
-  .leetcode-metric-divider {
-    display: none;
+  .leetcode-metrics-col {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
