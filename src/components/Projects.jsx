@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Droplets, Brain, Lightbulb } from "lucide-react";
+import { Droplets, Brain, Lightbulb, Link2 } from "lucide-react";
 import { projects } from "../data/portfolioData";
 import "../styles/Projects.css";
 
@@ -16,6 +16,7 @@ const iconMap = {
   "🩸": <Droplets size={28} strokeWidth={1.5} />,
   "🧠": <Brain size={28} strokeWidth={1.5} />,
   "💡": <Lightbulb size={28} strokeWidth={1.5} />,
+  "🔗": <Link2 size={28} strokeWidth={1.5} />,
 };
 
 export default function Projects() {
