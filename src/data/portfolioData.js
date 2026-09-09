@@ -63,17 +63,18 @@ export const projects = [
     link: "https://delightful-bay-07530dc00.4.azurestaticapps.net/",
   },
   {
-    title: "Smart Street Light Environment",
-    tech: ["IoT", "Arduino Uno", "ThingSpeak"],
-    year: "2024",
+    title: "Threadline – System Architecture Visualizer",
+    tech: ["React.js", "Node.js", "Express.js", "MongoDB"],
+    year: "2026",
     description:
-      "Developed a smart, energy-efficient IoT street-light system utilizing an Arduino Uno microcontroller.",
+      "Built an interactive drag-and-drop platform to design, validate, and simulate distributed system architectures in real time.",
     bullets: [
-      "Programmed the device to automatically adjust light intensity based on environmental conditions and motion to reduce power wastage.",
-      "Integrated the ThingSpeak IoT platform to transmit, store, and visualize real-time sensor data for performance monitoring and analysis.",
+      "Implemented deterministic validation to audit designs for single points of failure, unshielded edges, and unbuffered queues.",
+      "Developed a packet simulation engine with latency tracing that visualizes request traversal across directed graph edges.",
     ],
-    color: "#34D399",
-    icon: "💡",
+    color: "#38bdf8",
+    icon: "🔗",
+    link: "https://thread-line-frontend.vercel.app/",
   },
 ];
 
