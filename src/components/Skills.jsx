@@ -36,6 +36,7 @@ function BentoCard({ category, items, i }) {
   const rotateY = useTransform(x, [-0.5, 0.5], [-10, 10]);
 
   const handleMouseMove = (event) => {
+    if (typeof window !== "undefined" && window.innerWidth <= 768) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -107,6 +108,7 @@ function LeetCodeMiniCard({ i }) {
   const rotateY = useTransform(x, [-0.5, 0.5], [-4, 4]);
 
   const handleMouseMove = (event) => {
+    if (typeof window !== "undefined" && window.innerWidth <= 768) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -256,9 +258,11 @@ function LeetCodeMiniCard({ i }) {
           
           {/* Left Stats Grid */}
           <div className="leetcode-metrics-col">
-            <div className="leetcode-metric-item">
-              <span className="leetcode-metric-val val-total">{lc.solved}+</span>
-              <span className="leetcode-metric-lbl">Total Solved</span>
+            <div className="val-total-wrapper">
+              <div className="leetcode-metric-item">
+                <span className="leetcode-metric-val val-total">{lc.solved}+</span>
+                <span className="leetcode-metric-lbl">Total Solved</span>
+              </div>
             </div>
             <div className="leetcode-metrics-subrow">
               <div className="leetcode-metric-item">
