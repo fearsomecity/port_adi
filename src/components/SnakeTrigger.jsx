@@ -108,6 +108,26 @@ export default function SnakeTrigger() {
   );
 }
 
+const DEFAULT_HS = 32;
+const DEFAULT_HOLDER = "Pragati";
+
+const getInitialHighScore = () => {
+  try {
+    const raw = localStorage.getItem("as_snake_hs");
+    const saved = raw ? parseInt(raw, 10) : 0;
+    // Ensure Pragati's score of 32 is the benchmark record
+    if (!saved || isNaN(saved) || saved < DEFAULT_HS) {
+      localStorage.setItem("as_snake_hs", String(DEFAULT_HS));
+      localStorage.setItem("as_snake_hs_holder", DEFAULT_HOLDER);
+      return { score: DEFAULT_HS, holder: DEFAULT_HOLDER };
+    }
+    const holder = localStorage.getItem("as_snake_hs_holder") || (saved === DEFAULT_HS ? DEFAULT_HOLDER : "You");
+    return { score: saved, holder };
+  } catch {
+    return { score: DEFAULT_HS, holder: DEFAULT_HOLDER };
+  }
+};
+
 /* ─── Snake game (self-contained) ──────────────────────────── */
 function SnakeGame({ onClose }) {
   const canvasRef = useRef(null);
@@ -122,9 +142,7 @@ function SnakeGame({ onClose }) {
   });
   const intervalRef = useRef(null);
   const [score,    setScore]    = useState(0);
-  const [highScore, setHighScore] = useState(
-    () => parseInt(localStorage.getItem("as_snake_hs") || "0")
-  );
+  const [highScore, setHighScore] = useState(getInitialHighScore);
   const [phase, setPhase] = useState("idle");
 
   const draw = useCallback(() => {
@@ -182,9 +200,15 @@ function SnakeGame({ onClose }) {
       clearInterval(intervalRef.current);
       setPhase("dead");
       setHighScore((prev) => {
-        const next = Math.max(prev, g.score);
-        localStorage.setItem("as_snake_hs", next);
-        return next;
+        if (g.score > prev.score) {
+          const next = { score: g.score, holder: "You" };
+          try {
+            localStorage.setItem("as_snake_hs", String(next.score));
+            localStorage.setItem("as_snake_hs_holder", next.holder);
+          } catch {}
+          return next;
+        }
+        return prev;
       });
       draw();
       return;
@@ -302,7 +326,19 @@ function SnakeGame({ onClose }) {
                 <p className="sg-overlay-title">
                   {phase === "idle" ? "Snake" : "Game Over"}
                 </p>
-                {phase === "dead" && <p className="sg-overlay-sub">Score: {score}</p>}
+                {phase === "idle" && (
+                  <p className="sg-overlay-sub">
+                    Record: <strong>{highScore.score}</strong> ({highScore.holder})
+                  </p>
+                )}
+                {phase === "dead" && (
+                  <p className="sg-overlay-sub">
+                    Score: <strong>{score}</strong>
+                    {score > highScore.score
+                      ? " · 🏆 New High Score!"
+                      : ` · Record: ${highScore.score} (${highScore.holder})`}
+                  </p>
+                )}
                 <button className="sg-btn" onClick={startGame}>
                   {phase === "idle" ? "Start" : "Retry"}
                 </button>
@@ -322,7 +358,10 @@ function SnakeGame({ onClose }) {
           <div className="sg-scores">
             <span>Score <strong>{score}</strong></span>
             <span className="sg-sep">·</span>
-            <span>Best <strong>{highScore}</strong></span>
+            <span>
+              Best <strong>{highScore.score}</strong>{" "}
+              <span className="sg-holder">({highScore.holder})</span>
+            </span>
           </div>
         </div>
 

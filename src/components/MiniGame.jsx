@@ -30,6 +30,25 @@ const roundRect = (ctx, x, y, w, h, r) => {
   ctx.closePath();
 };
 
+const DEFAULT_HS = 32;
+const DEFAULT_HOLDER = "Pragati";
+
+const getInitialHighScore = () => {
+  try {
+    const raw = localStorage.getItem("as_snake_hs");
+    const saved = raw ? parseInt(raw, 10) : 0;
+    if (!saved || isNaN(saved) || saved < DEFAULT_HS) {
+      localStorage.setItem("as_snake_hs", String(DEFAULT_HS));
+      localStorage.setItem("as_snake_hs_holder", DEFAULT_HOLDER);
+      return { score: DEFAULT_HS, holder: DEFAULT_HOLDER };
+    }
+    const holder = localStorage.getItem("as_snake_hs_holder") || (saved === DEFAULT_HS ? DEFAULT_HOLDER : "You");
+    return { score: saved, holder };
+  } catch {
+    return { score: DEFAULT_HS, holder: DEFAULT_HOLDER };
+  }
+};
+
 export default function MiniGame() {
   const canvasRef = useRef(null);
   const wrapRef = useRef(null);
@@ -45,9 +64,7 @@ export default function MiniGame() {
   });
 
   const [uiScore, setUiScore] = useState(0);
-  const [highScore, setHighScore] = useState(
-    () => parseInt(localStorage.getItem("as_snake_hs") || "0")
-  );
+  const [highScore, setHighScore] = useState(getInitialHighScore);
   const [phase, setPhase] = useState("idle"); // idle | playing | dead
   const intervalRef = useRef(null);
 
@@ -130,9 +147,15 @@ export default function MiniGame() {
       clearInterval(intervalRef.current);
       setPhase("dead");
       setHighScore((prev) => {
-        const next = Math.max(prev, g.score);
-        localStorage.setItem("as_snake_hs", next);
-        return next;
+        if (g.score > prev.score) {
+          const next = { score: g.score, holder: "You" };
+          try {
+            localStorage.setItem("as_snake_hs", String(next.score));
+            localStorage.setItem("as_snake_hs_holder", next.holder);
+          } catch {}
+          return next;
+        }
+        return prev;
       });
       draw();
       return;
@@ -247,7 +270,7 @@ export default function MiniGame() {
             </span>
             <span className="mg-score-sep">·</span>
             <span className="mg-score-item">
-              Best <strong>{highScore}</strong>
+              Best <strong>{highScore.score}</strong> ({highScore.holder})
             </span>
           </div>
 
